@@ -1,0 +1,153 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "P-DAULE-01",
+        "canton": "daule",
+        "cultivo_actual": "arroz",
+        "hectareas": 4.5,
+        "riego": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.985,
+              -1.858
+            ],
+            [
+              -79.982,
+              -1.858
+            ],
+            [
+              -79.982,
+              -1.861
+            ],
+            [
+              -79.985,
+              -1.861
+            ],
+            [
+              -79.985,
+              -1.858
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "P-QUEVEDO-01",
+        "canton": "quevedo",
+        "cultivo_actual": "maiz_duro",
+        "hectareas": 6.0,
+        "riego": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.465,
+              -1.018
+            ],
+            [
+              -79.461,
+              -1.018
+            ],
+            [
+              -79.461,
+              -1.022
+            ],
+            [
+              -79.465,
+              -1.022
+            ],
+            [
+              -79.465,
+              -1.018
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "P-ROCAFUERTE-01",
+        "canton": "rocafuerte",
+        "cultivo_actual": "maiz_duro",
+        "hectareas": 3.5,
+        "riego": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.453,
+              -0.918
+            ],
+            [
+              -80.449,
+              -0.918
+            ],
+            [
+              -80.449,
+              -0.922
+            ],
+            [
+              -80.453,
+              -0.922
+            ],
+            [
+              -80.453,
+              -0.918
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "P-LATACUNGA-01",
+        "canton": "latacunga",
+        "cultivo_actual": "papa",
+        "hectareas": 2.8,
+        "riego": true
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -78.615,
+              -0.928
+            ],
+            [
+              -78.612,
+              -0.928
+            ],
+            [
+              -78.612,
+              -0.931
+            ],
+            [
+              -78.615,
+              -0.931
+            ],
+            [
+              -78.615,
+              -0.928
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
