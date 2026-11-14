@@ -393,7 +393,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 130.2,
+          "temp_c": 37.7,
+          "ndvi_modis": 0.434,
+          "smap_humedad_superficial": -6382.189,
+          "humedad_raiz_predicha": {
+            "neutro": 0.705,
+            "nino": 0.745,
+            "nina": 0.637
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 224.1,
+          "temp_c": 35.6,
+          "ndvi_modis": 0.448,
+          "smap_humedad_superficial": -7020.473,
+          "humedad_raiz_predicha": {
+            "neutro": 0.818,
+            "nino": 0.905,
+            "nina": 0.719
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 188.9,
+          "temp_c": 34.3,
+          "ndvi_modis": 0.41,
+          "smap_humedad_superficial": -5743.94,
+          "humedad_raiz_predicha": {
+            "neutro": 0.789,
+            "nino": 0.834,
+            "nina": 0.676
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 128.6,
+          "temp_c": 35.6,
+          "ndvi_modis": 0.28,
+          "smap_humedad_superficial": -6594.941,
+          "humedad_raiz_predicha": {
+            "neutro": 0.675,
+            "nino": 0.728,
+            "nina": 0.617
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 38.1,
+          "temp_c": 36.4,
+          "ndvi_modis": 0.273,
+          "smap_humedad_superficial": -6807.716,
+          "humedad_raiz_predicha": {
+            "neutro": 0.602,
+            "nino": 0.62,
+            "nina": 0.578
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 20.3,
+          "temp_c": 37.8,
+          "ndvi_modis": 0.497,
+          "smap_humedad_superficial": -5531.181,
+          "humedad_raiz_predicha": {
+            "neutro": 0.595,
+            "nino": 0.599,
+            "nina": 0.594
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 5.9,
+          "temp_c": 38.8,
+          "ndvi_modis": 0.419,
+          "smap_humedad_superficial": -6594.956,
+          "humedad_raiz_predicha": {
+            "neutro": 0.59,
+            "nino": 0.583,
+            "nina": 0.59
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 3.3,
+          "temp_c": 39.4,
+          "ndvi_modis": 0.437,
+          "smap_humedad_superficial": -6169.455,
+          "humedad_raiz_predicha": {
+            "neutro": 0.588,
+            "nino": 0.584,
+            "nina": 0.589
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 2.9,
+          "temp_c": 39.6,
+          "ndvi_modis": 0.345,
+          "smap_humedad_superficial": -6169.443,
+          "humedad_raiz_predicha": {
+            "neutro": 0.582,
+            "nino": 0.58,
+            "nina": 0.584
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 7.6,
+          "temp_c": 39.3,
+          "ndvi_modis": 0.299,
+          "smap_humedad_superficial": -6594.958,
+          "humedad_raiz_predicha": {
+            "neutro": 0.586,
+            "nino": 0.584,
+            "nina": 0.589
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 8.9,
+          "temp_c": 38.2,
+          "ndvi_modis": 0.21,
+          "smap_humedad_superficial": -5531.188,
+          "humedad_raiz_predicha": {
+            "neutro": 0.591,
+            "nino": 0.589,
+            "nina": 0.594
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 27.2,
+          "temp_c": 38.2,
+          "ndvi_modis": 0.452,
+          "smap_humedad_superficial": -6594.938,
+          "humedad_raiz_predicha": {
+            "neutro": 0.594,
+            "nino": 0.594,
+            "nina": 0.581
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "soya",
+          "nombre": "Soya de rotación (INIAP-308)",
+          "regiones": "['costa_central', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 105,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 620,
+          "ingreso_bruto_ha": 1190,
+          "ahorro_urea_ha": 180,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "frejol_caupi",
+          "nombre": "Fréjol caupí / tumbe",
+          "regiones": "['costa_central', 'costa_seca', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 75,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 480,
+          "ingreso_bruto_ha": 960,
+          "ahorro_urea_ha": 160,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "mani",
+          "nombre": "Maní (INIAP-381 Rosita)",
+          "regiones": "['costa_seca', 'costa_central']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 110,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 690,
+          "ingreso_bruto_ha": 1350,
+          "ahorro_urea_ha": 170,
+          "fuente": "INIAP Ecuador"
+        }
+      ]
     },
     "samborondon": {
       "nombre": "Samborondón, Guayas",
@@ -776,7 +969,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 130.2,
+          "temp_c": 37.7,
+          "ndvi_modis": 0.102,
+          "smap_humedad_superficial": -6382.189,
+          "humedad_raiz_predicha": {
+            "neutro": 0.707,
+            "nino": 0.735,
+            "nina": 0.646
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 224.1,
+          "temp_c": 35.6,
+          "ndvi_modis": 0.109,
+          "smap_humedad_superficial": -7020.479,
+          "humedad_raiz_predicha": {
+            "neutro": 0.839,
+            "nino": 0.918,
+            "nina": 0.722
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 188.9,
+          "temp_c": 34.3,
+          "ndvi_modis": 0.132,
+          "smap_humedad_superficial": -5743.952,
+          "humedad_raiz_predicha": {
+            "neutro": 0.806,
+            "nino": 0.849,
+            "nina": 0.681
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 128.6,
+          "temp_c": 35.6,
+          "ndvi_modis": 0.072,
+          "smap_humedad_superficial": -6594.948,
+          "humedad_raiz_predicha": {
+            "neutro": 0.691,
+            "nino": 0.724,
+            "nina": 0.637
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 38.1,
+          "temp_c": 36.4,
+          "ndvi_modis": 0.141,
+          "smap_humedad_superficial": -6807.726,
+          "humedad_raiz_predicha": {
+            "neutro": 0.602,
+            "nino": 0.622,
+            "nina": 0.576
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 20.3,
+          "temp_c": 37.8,
+          "ndvi_modis": 0.136,
+          "smap_humedad_superficial": -5531.191,
+          "humedad_raiz_predicha": {
+            "neutro": 0.596,
+            "nino": 0.601,
+            "nina": 0.584
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 5.9,
+          "temp_c": 38.8,
+          "ndvi_modis": 0.162,
+          "smap_humedad_superficial": -6594.957,
+          "humedad_raiz_predicha": {
+            "neutro": 0.604,
+            "nino": 0.6,
+            "nina": 0.603
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 3.3,
+          "temp_c": 39.4,
+          "ndvi_modis": 0.235,
+          "smap_humedad_superficial": -6169.463,
+          "humedad_raiz_predicha": {
+            "neutro": 0.594,
+            "nino": 0.593,
+            "nina": 0.597
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 2.9,
+          "temp_c": 39.6,
+          "ndvi_modis": 0.183,
+          "smap_humedad_superficial": -6169.445,
+          "humedad_raiz_predicha": {
+            "neutro": 0.599,
+            "nino": 0.596,
+            "nina": 0.598
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 7.6,
+          "temp_c": 39.3,
+          "ndvi_modis": 0.123,
+          "smap_humedad_superficial": -6594.963,
+          "humedad_raiz_predicha": {
+            "neutro": 0.589,
+            "nino": 0.588,
+            "nina": 0.592
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 8.9,
+          "temp_c": 38.2,
+          "ndvi_modis": 0.178,
+          "smap_humedad_superficial": -5531.193,
+          "humedad_raiz_predicha": {
+            "neutro": 0.593,
+            "nino": 0.591,
+            "nina": 0.597
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 27.2,
+          "temp_c": 38.2,
+          "ndvi_modis": 0.173,
+          "smap_humedad_superficial": -6594.943,
+          "humedad_raiz_predicha": {
+            "neutro": 0.602,
+            "nino": 0.609,
+            "nina": 0.59
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "soya",
+          "nombre": "Soya de rotación (INIAP-308)",
+          "regiones": "['costa_central', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 105,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 620,
+          "ingreso_bruto_ha": 1190,
+          "ahorro_urea_ha": 180,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "frejol_caupi",
+          "nombre": "Fréjol caupí / tumbe",
+          "regiones": "['costa_central', 'costa_seca', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 75,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 480,
+          "ingreso_bruto_ha": 960,
+          "ahorro_urea_ha": 160,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "mani",
+          "nombre": "Maní (INIAP-381 Rosita)",
+          "regiones": "['costa_seca', 'costa_central']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 110,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 690,
+          "ingreso_bruto_ha": 1350,
+          "ahorro_urea_ha": 170,
+          "fuente": "INIAP Ecuador"
+        }
+      ]
     },
     "quevedo": {
       "nombre": "Quevedo, Los Ríos",
@@ -1159,7 +1545,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 197.3,
+          "temp_c": 30.2,
+          "ndvi_modis": 0.254,
+          "smap_humedad_superficial": -6382.205,
+          "humedad_raiz_predicha": {
+            "neutro": 0.778,
+            "nino": 0.837,
+            "nina": 0.661
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 248.1,
+          "temp_c": 28.8,
+          "ndvi_modis": 0.356,
+          "smap_humedad_superficial": -7020.478,
+          "humedad_raiz_predicha": {
+            "neutro": 0.804,
+            "nino": 0.881,
+            "nina": 0.686
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 244.0,
+          "temp_c": 28.6,
+          "ndvi_modis": 0.353,
+          "smap_humedad_superficial": -5743.953,
+          "humedad_raiz_predicha": {
+            "neutro": 0.816,
+            "nino": 0.931,
+            "nina": 0.717
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 194.9,
+          "temp_c": 28.9,
+          "ndvi_modis": 0.358,
+          "smap_humedad_superficial": -6594.964,
+          "humedad_raiz_predicha": {
+            "neutro": 0.788,
+            "nino": 0.859,
+            "nina": 0.674
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 103.1,
+          "temp_c": 29.3,
+          "ndvi_modis": 0.335,
+          "smap_humedad_superficial": -6807.727,
+          "humedad_raiz_predicha": {
+            "neutro": 0.696,
+            "nino": 0.746,
+            "nina": 0.623
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 66.0,
+          "temp_c": 29.9,
+          "ndvi_modis": 0.334,
+          "smap_humedad_superficial": -5531.196,
+          "humedad_raiz_predicha": {
+            "neutro": 0.622,
+            "nino": 0.655,
+            "nina": 0.58
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 25.5,
+          "temp_c": 31.2,
+          "ndvi_modis": 0.236,
+          "smap_humedad_superficial": -6594.967,
+          "humedad_raiz_predicha": {
+            "neutro": 0.579,
+            "nino": 0.592,
+            "nina": 0.564
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 19.8,
+          "temp_c": 32.7,
+          "ndvi_modis": 0.295,
+          "smap_humedad_superficial": -6169.47,
+          "humedad_raiz_predicha": {
+            "neutro": 0.536,
+            "nino": 0.551,
+            "nina": 0.533
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 19.5,
+          "temp_c": 33.0,
+          "ndvi_modis": 0.265,
+          "smap_humedad_superficial": -6169.457,
+          "humedad_raiz_predicha": {
+            "neutro": 0.531,
+            "nino": 0.555,
+            "nina": 0.527
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 42.2,
+          "temp_c": 32.4,
+          "ndvi_modis": 0.145,
+          "smap_humedad_superficial": -6594.973,
+          "humedad_raiz_predicha": {
+            "neutro": 0.557,
+            "nino": 0.591,
+            "nina": 0.525
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 44.7,
+          "temp_c": 31.2,
+          "ndvi_modis": 0.213,
+          "smap_humedad_superficial": -5531.201,
+          "humedad_raiz_predicha": {
+            "neutro": 0.581,
+            "nino": 0.591,
+            "nina": 0.548
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 78.4,
+          "temp_c": 31.0,
+          "ndvi_modis": 0.313,
+          "smap_humedad_superficial": -6594.968,
+          "humedad_raiz_predicha": {
+            "neutro": 0.602,
+            "nino": 0.632,
+            "nina": 0.557
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "soya",
+          "nombre": "Soya de rotación (INIAP-308)",
+          "regiones": "['costa_central', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 105,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 620,
+          "ingreso_bruto_ha": 1190,
+          "ahorro_urea_ha": 180,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "frejol_caupi",
+          "nombre": "Fréjol caupí / tumbe",
+          "regiones": "['costa_central', 'costa_seca', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 75,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 480,
+          "ingreso_bruto_ha": 960,
+          "ahorro_urea_ha": 160,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "mani",
+          "nombre": "Maní (INIAP-381 Rosita)",
+          "regiones": "['costa_seca', 'costa_central']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 110,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 690,
+          "ingreso_bruto_ha": 1350,
+          "ahorro_urea_ha": 170,
+          "fuente": "INIAP Ecuador"
+        }
+      ]
     },
     "babahoyo": {
       "nombre": "Babahoyo, Los Ríos",
@@ -1542,7 +2121,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 129.8,
+          "temp_c": 32.2,
+          "ndvi_modis": 0.208,
+          "smap_humedad_superficial": -6382.195,
+          "humedad_raiz_predicha": {
+            "neutro": 0.689,
+            "nino": 0.733,
+            "nina": 0.617
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 199.4,
+          "temp_c": 30.5,
+          "ndvi_modis": 0.18,
+          "smap_humedad_superficial": -7020.477,
+          "humedad_raiz_predicha": {
+            "neutro": 0.816,
+            "nino": 0.879,
+            "nina": 0.702
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 181.4,
+          "temp_c": 30.0,
+          "ndvi_modis": 0.136,
+          "smap_humedad_superficial": -5743.955,
+          "humedad_raiz_predicha": {
+            "neutro": 0.786,
+            "nino": 0.868,
+            "nina": 0.707
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 138.9,
+          "temp_c": 30.8,
+          "ndvi_modis": 0.203,
+          "smap_humedad_superficial": -6594.953,
+          "humedad_raiz_predicha": {
+            "neutro": 0.725,
+            "nino": 0.841,
+            "nina": 0.683
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 63.6,
+          "temp_c": 31.4,
+          "ndvi_modis": 0.113,
+          "smap_humedad_superficial": -6807.733,
+          "humedad_raiz_predicha": {
+            "neutro": 0.653,
+            "nino": 0.669,
+            "nina": 0.603
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 45.7,
+          "temp_c": 32.5,
+          "ndvi_modis": 0.206,
+          "smap_humedad_superficial": -5531.195,
+          "humedad_raiz_predicha": {
+            "neutro": 0.593,
+            "nino": 0.615,
+            "nina": 0.56
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 22.6,
+          "temp_c": 33.7,
+          "ndvi_modis": 0.246,
+          "smap_humedad_superficial": -6594.961,
+          "humedad_raiz_predicha": {
+            "neutro": 0.561,
+            "nino": 0.595,
+            "nina": 0.545
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 21.3,
+          "temp_c": 34.6,
+          "ndvi_modis": 0.159,
+          "smap_humedad_superficial": -6169.468,
+          "humedad_raiz_predicha": {
+            "neutro": 0.571,
+            "nino": 0.589,
+            "nina": 0.556
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 16.9,
+          "temp_c": 34.8,
+          "ndvi_modis": 0.13,
+          "smap_humedad_superficial": -6169.45,
+          "humedad_raiz_predicha": {
+            "neutro": 0.554,
+            "nino": 0.57,
+            "nina": 0.541
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 33.3,
+          "temp_c": 34.1,
+          "ndvi_modis": 0.147,
+          "smap_humedad_superficial": -6594.966,
+          "humedad_raiz_predicha": {
+            "neutro": 0.564,
+            "nino": 0.596,
+            "nina": 0.539
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 35.9,
+          "temp_c": 32.6,
+          "ndvi_modis": 0.297,
+          "smap_humedad_superficial": -5531.198,
+          "humedad_raiz_predicha": {
+            "neutro": 0.556,
+            "nino": 0.569,
+            "nina": 0.528
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 48.6,
+          "temp_c": 32.7,
+          "ndvi_modis": 0.198,
+          "smap_humedad_superficial": -6594.949,
+          "humedad_raiz_predicha": {
+            "neutro": 0.572,
+            "nino": 0.61,
+            "nina": 0.538
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "soya",
+          "nombre": "Soya de rotación (INIAP-308)",
+          "regiones": "['costa_central', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 105,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 620,
+          "ingreso_bruto_ha": 1190,
+          "ahorro_urea_ha": 180,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "frejol_caupi",
+          "nombre": "Fréjol caupí / tumbe",
+          "regiones": "['costa_central', 'costa_seca', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 75,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 480,
+          "ingreso_bruto_ha": 960,
+          "ahorro_urea_ha": 160,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "mani",
+          "nombre": "Maní (INIAP-381 Rosita)",
+          "regiones": "['costa_seca', 'costa_central']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 110,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 690,
+          "ingreso_bruto_ha": 1350,
+          "ahorro_urea_ha": 170,
+          "fuente": "INIAP Ecuador"
+        }
+      ]
     },
     "rocafuerte": {
       "nombre": "Rocafuerte, Manabí",
@@ -1925,7 +2697,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 111.7,
+          "temp_c": 31.0,
+          "ndvi_modis": 0.268,
+          "smap_humedad_superficial": -6382.24,
+          "humedad_raiz_predicha": {
+            "neutro": 0.657,
+            "nino": 0.704,
+            "nina": 0.607
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 176.5,
+          "temp_c": 30.5,
+          "ndvi_modis": 0.271,
+          "smap_humedad_superficial": -7020.496,
+          "humedad_raiz_predicha": {
+            "neutro": 0.733,
+            "nino": 0.807,
+            "nina": 0.674
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 152.6,
+          "temp_c": 30.5,
+          "ndvi_modis": 0.276,
+          "smap_humedad_superficial": -5743.982,
+          "humedad_raiz_predicha": {
+            "neutro": 0.739,
+            "nino": 0.812,
+            "nina": 0.666
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 91.1,
+          "temp_c": 30.7,
+          "ndvi_modis": 0.277,
+          "smap_humedad_superficial": -6594.984,
+          "humedad_raiz_predicha": {
+            "neutro": 0.636,
+            "nino": 0.693,
+            "nina": 0.599
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 34.1,
+          "temp_c": 30.7,
+          "ndvi_modis": 0.283,
+          "smap_humedad_superficial": -6807.75,
+          "humedad_raiz_predicha": {
+            "neutro": 0.567,
+            "nino": 0.59,
+            "nina": 0.558
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 17.4,
+          "temp_c": 30.3,
+          "ndvi_modis": 0.425,
+          "smap_humedad_superficial": -5531.233,
+          "humedad_raiz_predicha": {
+            "neutro": 0.565,
+            "nino": 0.57,
+            "nina": 0.564
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 4.8,
+          "temp_c": 30.6,
+          "ndvi_modis": 0.315,
+          "smap_humedad_superficial": -6594.993,
+          "humedad_raiz_predicha": {
+            "neutro": 0.559,
+            "nino": 0.558,
+            "nina": 0.558
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 2.0,
+          "temp_c": 30.7,
+          "ndvi_modis": 0.27,
+          "smap_humedad_superficial": -6169.496,
+          "humedad_raiz_predicha": {
+            "neutro": 0.551,
+            "nino": 0.548,
+            "nina": 0.55
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 2.2,
+          "temp_c": 30.7,
+          "ndvi_modis": 0.232,
+          "smap_humedad_superficial": -6169.484,
+          "humedad_raiz_predicha": {
+            "neutro": 0.554,
+            "nino": 0.55,
+            "nina": 0.554
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 3.6,
+          "temp_c": 30.7,
+          "ndvi_modis": 0.233,
+          "smap_humedad_superficial": -6594.992,
+          "humedad_raiz_predicha": {
+            "neutro": 0.546,
+            "nino": 0.544,
+            "nina": 0.546
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 4.3,
+          "temp_c": 30.4,
+          "ndvi_modis": 0.205,
+          "smap_humedad_superficial": -5531.249,
+          "humedad_raiz_predicha": {
+            "neutro": 0.552,
+            "nino": 0.548,
+            "nina": 0.55
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 21.4,
+          "temp_c": 31.0,
+          "ndvi_modis": 0.295,
+          "smap_humedad_superficial": -6594.977,
+          "humedad_raiz_predicha": {
+            "neutro": 0.536,
+            "nino": 0.53,
+            "nina": 0.535
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "soya",
+          "nombre": "Soya de rotación (INIAP-308)",
+          "regiones": "['costa_central', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 105,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 620,
+          "ingreso_bruto_ha": 1190,
+          "ahorro_urea_ha": 180,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "frejol_caupi",
+          "nombre": "Fréjol caupí / tumbe",
+          "regiones": "['costa_central', 'costa_seca', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 75,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 480,
+          "ingreso_bruto_ha": 960,
+          "ahorro_urea_ha": 160,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "mani",
+          "nombre": "Maní (INIAP-381 Rosita)",
+          "regiones": "['costa_seca', 'costa_central']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 110,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 690,
+          "ingreso_bruto_ha": 1350,
+          "ahorro_urea_ha": 170,
+          "fuente": "INIAP Ecuador"
+        }
+      ]
     },
     "chone": {
       "nombre": "Chone, Manabí",
@@ -2308,7 +3273,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 212.2,
+          "temp_c": 33.9,
+          "ndvi_modis": 0.594,
+          "smap_humedad_superficial": -6382.251,
+          "humedad_raiz_predicha": {
+            "neutro": 0.798,
+            "nino": 0.876,
+            "nina": 0.698
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 264.9,
+          "temp_c": 31.9,
+          "ndvi_modis": 0.708,
+          "smap_humedad_superficial": -7020.5,
+          "humedad_raiz_predicha": {
+            "neutro": 0.878,
+            "nino": 0.928,
+            "nina": 0.815
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 253.4,
+          "temp_c": 31.3,
+          "ndvi_modis": 0.678,
+          "smap_humedad_superficial": -5743.999,
+          "humedad_raiz_predicha": {
+            "neutro": 0.88,
+            "nino": 0.949,
+            "nina": 0.772
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 199.6,
+          "temp_c": 31.6,
+          "ndvi_modis": 0.803,
+          "smap_humedad_superficial": -6594.997,
+          "humedad_raiz_predicha": {
+            "neutro": 0.83,
+            "nino": 0.887,
+            "nina": 0.717
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 103.0,
+          "temp_c": 31.5,
+          "ndvi_modis": 0.615,
+          "smap_humedad_superficial": -6807.755,
+          "humedad_raiz_predicha": {
+            "neutro": 0.714,
+            "nino": 0.731,
+            "nina": 0.643
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 56.4,
+          "temp_c": 32.2,
+          "ndvi_modis": 0.574,
+          "smap_humedad_superficial": -5531.244,
+          "humedad_raiz_predicha": {
+            "neutro": 0.602,
+            "nino": 0.647,
+            "nina": 0.575
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 19.4,
+          "temp_c": 34.0,
+          "ndvi_modis": 0.463,
+          "smap_humedad_superficial": -6595.0,
+          "humedad_raiz_predicha": {
+            "neutro": 0.571,
+            "nino": 0.585,
+            "nina": 0.56
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 11.1,
+          "temp_c": 35.6,
+          "ndvi_modis": 0.496,
+          "smap_humedad_superficial": -6169.503,
+          "humedad_raiz_predicha": {
+            "neutro": 0.562,
+            "nino": 0.571,
+            "nina": 0.564
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 12.6,
+          "temp_c": 36.0,
+          "ndvi_modis": 0.728,
+          "smap_humedad_superficial": -6169.5,
+          "humedad_raiz_predicha": {
+            "neutro": 0.562,
+            "nino": 0.581,
+            "nina": 0.561
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 23.5,
+          "temp_c": 35.8,
+          "ndvi_modis": 0.459,
+          "smap_humedad_superficial": -6595.005,
+          "humedad_raiz_predicha": {
+            "neutro": 0.584,
+            "nino": 0.596,
+            "nina": 0.563
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 22.7,
+          "temp_c": 35.3,
+          "ndvi_modis": 0.449,
+          "smap_humedad_superficial": -5531.248,
+          "humedad_raiz_predicha": {
+            "neutro": 0.574,
+            "nino": 0.588,
+            "nina": 0.563
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 65.5,
+          "temp_c": 35.1,
+          "ndvi_modis": 0.51,
+          "smap_humedad_superficial": -6594.995,
+          "humedad_raiz_predicha": {
+            "neutro": 0.606,
+            "nino": 0.631,
+            "nina": 0.577
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "soya",
+          "nombre": "Soya de rotación (INIAP-308)",
+          "regiones": "['costa_central', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 105,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 620,
+          "ingreso_bruto_ha": 1190,
+          "ahorro_urea_ha": 180,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "frejol_caupi",
+          "nombre": "Fréjol caupí / tumbe",
+          "regiones": "['costa_central', 'costa_seca', 'costa_humeda']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 75,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 480,
+          "ingreso_bruto_ha": 960,
+          "ahorro_urea_ha": 160,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "mani",
+          "nombre": "Maní (INIAP-381 Rosita)",
+          "regiones": "['costa_seca', 'costa_central']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 110,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 690,
+          "ingreso_bruto_ha": 1350,
+          "ahorro_urea_ha": 170,
+          "fuente": "INIAP Ecuador"
+        }
+      ]
     },
     "latacunga": {
       "nombre": "Latacunga, Cotopaxi",
@@ -2691,7 +3849,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 129.1,
+          "temp_c": 19.1,
+          "ndvi_modis": 0.241,
+          "smap_humedad_superficial": -6595.026,
+          "humedad_raiz_predicha": {
+            "neutro": 0.784,
+            "nino": 0.791,
+            "nina": 0.718
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 155.8,
+          "temp_c": 18.9,
+          "ndvi_modis": 0.205,
+          "smap_humedad_superficial": -7020.527,
+          "humedad_raiz_predicha": {
+            "neutro": 0.828,
+            "nino": 0.869,
+            "nina": 0.762
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 170.9,
+          "temp_c": 18.7,
+          "ndvi_modis": 0.281,
+          "smap_humedad_superficial": -5744.029,
+          "humedad_raiz_predicha": {
+            "neutro": 0.855,
+            "nino": 0.887,
+            "nina": 0.797
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 165.7,
+          "temp_c": 18.7,
+          "ndvi_modis": 0.264,
+          "smap_humedad_superficial": -6595.031,
+          "humedad_raiz_predicha": {
+            "neutro": 0.859,
+            "nino": 0.905,
+            "nina": 0.788
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 121.5,
+          "temp_c": 18.6,
+          "ndvi_modis": 0.337,
+          "smap_humedad_superficial": -6169.522,
+          "humedad_raiz_predicha": {
+            "neutro": 0.823,
+            "nino": 0.855,
+            "nina": 0.757
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 104.8,
+          "temp_c": 18.1,
+          "ndvi_modis": 0.218,
+          "smap_humedad_superficial": -6169.527,
+          "humedad_raiz_predicha": {
+            "neutro": 0.812,
+            "nino": 0.862,
+            "nina": 0.739
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 65.1,
+          "temp_c": 18.0,
+          "ndvi_modis": 0.202,
+          "smap_humedad_superficial": -6595.031,
+          "humedad_raiz_predicha": {
+            "neutro": 0.753,
+            "nino": 0.795,
+            "nina": 0.678
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 59.4,
+          "temp_c": 18.7,
+          "ndvi_modis": 0.187,
+          "smap_humedad_superficial": -5531.285,
+          "humedad_raiz_predicha": {
+            "neutro": 0.724,
+            "nino": 0.75,
+            "nina": 0.666
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 52.3,
+          "temp_c": 19.6,
+          "ndvi_modis": 0.185,
+          "smap_humedad_superficial": -6595.027,
+          "humedad_raiz_predicha": {
+            "neutro": 0.685,
+            "nino": 0.663,
+            "nina": 0.635
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 100.2,
+          "temp_c": 19.6,
+          "ndvi_modis": 0.213,
+          "smap_humedad_superficial": -6807.779,
+          "humedad_raiz_predicha": {
+            "neutro": 0.753,
+            "nino": 0.762,
+            "nina": 0.68
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 103.2,
+          "temp_c": 19.4,
+          "ndvi_modis": 0.299,
+          "smap_humedad_superficial": -5531.282,
+          "humedad_raiz_predicha": {
+            "neutro": 0.732,
+            "nino": 0.768,
+            "nina": 0.688
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 105.3,
+          "temp_c": 19.1,
+          "ndvi_modis": 0.234,
+          "smap_humedad_superficial": -6595.03,
+          "humedad_raiz_predicha": {
+            "neutro": 0.741,
+            "nino": 0.769,
+            "nina": 0.69
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "haba",
+          "nombre": "Haba verde / grano (INIAP-440)",
+          "regiones": "['sierra_centro']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 140,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 780,
+          "ingreso_bruto_ha": 1420,
+          "ahorro_urea_ha": 190,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "arveja",
+          "nombre": "Arveja (INIAP-436 Liliana)",
+          "regiones": "['sierra_centro']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 115,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 720,
+          "ingreso_bruto_ha": 1340,
+          "ahorro_urea_ha": 175,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "avena_vicia",
+          "nombre": "Avena + Vicia (cobertura forrajera)",
+          "regiones": "['sierra_centro']",
+          "tipo": "cobertura",
+          "dias_ciclo": 95,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": true,
+          "fija_nitrogeno": true,
+          "protege_suelo": 5,
+          "costo_insumos_ha": 340,
+          "ingreso_bruto_ha": 520,
+          "ahorro_urea_ha": 240,
+          "fuente": "INIAP / FAO"
+        }
+      ]
     },
     "riobamba": {
       "nombre": "Riobamba, Chimborazo",
@@ -3074,7 +4425,200 @@
           }
         ]
       },
-      "ndvi_historico": []
+      "ndvi_historico": [],
+      "serie_satelital_ml": [
+        {
+          "mes": 1,
+          "lluvia_mm": 129.6,
+          "temp_c": 18.4,
+          "ndvi_modis": 0.123,
+          "smap_humedad_superficial": -6595.023,
+          "humedad_raiz_predicha": {
+            "neutro": 0.809,
+            "nino": 0.804,
+            "nina": 0.716
+          }
+        },
+        {
+          "mes": 2,
+          "lluvia_mm": 160.1,
+          "temp_c": 18.2,
+          "ndvi_modis": 0.153,
+          "smap_humedad_superficial": -7020.524,
+          "humedad_raiz_predicha": {
+            "neutro": 0.84,
+            "nino": 0.888,
+            "nina": 0.759
+          }
+        },
+        {
+          "mes": 3,
+          "lluvia_mm": 170.4,
+          "temp_c": 18.1,
+          "ndvi_modis": 0.144,
+          "smap_humedad_superficial": -5744.026,
+          "humedad_raiz_predicha": {
+            "neutro": 0.877,
+            "nino": 0.904,
+            "nina": 0.802
+          }
+        },
+        {
+          "mes": 4,
+          "lluvia_mm": 169.8,
+          "temp_c": 18.0,
+          "ndvi_modis": 0.17,
+          "smap_humedad_superficial": -6595.029,
+          "humedad_raiz_predicha": {
+            "neutro": 0.892,
+            "nino": 0.922,
+            "nina": 0.801
+          }
+        },
+        {
+          "mes": 5,
+          "lluvia_mm": 130.1,
+          "temp_c": 18.0,
+          "ndvi_modis": 0.147,
+          "smap_humedad_superficial": -6169.521,
+          "humedad_raiz_predicha": {
+            "neutro": 0.855,
+            "nino": 0.89,
+            "nina": 0.755
+          }
+        },
+        {
+          "mes": 6,
+          "lluvia_mm": 126.4,
+          "temp_c": 17.4,
+          "ndvi_modis": 0.134,
+          "smap_humedad_superficial": -6169.526,
+          "humedad_raiz_predicha": {
+            "neutro": 0.855,
+            "nino": 0.909,
+            "nina": 0.754
+          }
+        },
+        {
+          "mes": 7,
+          "lluvia_mm": 86.1,
+          "temp_c": 17.3,
+          "ndvi_modis": 0.139,
+          "smap_humedad_superficial": -6595.028,
+          "humedad_raiz_predicha": {
+            "neutro": 0.781,
+            "nino": 0.832,
+            "nina": 0.693
+          }
+        },
+        {
+          "mes": 8,
+          "lluvia_mm": 83.6,
+          "temp_c": 18.1,
+          "ndvi_modis": 0.129,
+          "smap_humedad_superficial": -5531.282,
+          "humedad_raiz_predicha": {
+            "neutro": 0.774,
+            "nino": 0.804,
+            "nina": 0.689
+          }
+        },
+        {
+          "mes": 9,
+          "lluvia_mm": 65.4,
+          "temp_c": 19.1,
+          "ndvi_modis": 0.128,
+          "smap_humedad_superficial": -6595.021,
+          "humedad_raiz_predicha": {
+            "neutro": 0.706,
+            "nino": 0.681,
+            "nina": 0.633
+          }
+        },
+        {
+          "mes": 10,
+          "lluvia_mm": 115.9,
+          "temp_c": 19.2,
+          "ndvi_modis": 0.125,
+          "smap_humedad_superficial": -6807.777,
+          "humedad_raiz_predicha": {
+            "neutro": 0.752,
+            "nino": 0.787,
+            "nina": 0.723
+          }
+        },
+        {
+          "mes": 11,
+          "lluvia_mm": 114.6,
+          "temp_c": 19.2,
+          "ndvi_modis": 0.154,
+          "smap_humedad_superficial": -5531.276,
+          "humedad_raiz_predicha": {
+            "neutro": 0.742,
+            "nino": 0.784,
+            "nina": 0.719
+          }
+        },
+        {
+          "mes": 12,
+          "lluvia_mm": 112.4,
+          "temp_c": 18.6,
+          "ndvi_modis": 0.136,
+          "smap_humedad_superficial": -6595.024,
+          "humedad_raiz_predicha": {
+            "neutro": 0.755,
+            "nino": 0.798,
+            "nina": 0.697
+          }
+        }
+      ],
+      "top_rotaciones_ml": [
+        {
+          "id": "haba",
+          "nombre": "Haba verde / grano (INIAP-440)",
+          "regiones": "['sierra_centro']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 140,
+          "demanda_agua": "media",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 780,
+          "ingreso_bruto_ha": 1420,
+          "ahorro_urea_ha": 190,
+          "fuente": "INIAP / FAO GAEZ"
+        },
+        {
+          "id": "arveja",
+          "nombre": "Arveja (INIAP-436 Liliana)",
+          "regiones": "['sierra_centro']",
+          "tipo": "leguminosa",
+          "dias_ciclo": 115,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": false,
+          "fija_nitrogeno": true,
+          "protege_suelo": 4,
+          "costo_insumos_ha": 720,
+          "ingreso_bruto_ha": 1340,
+          "ahorro_urea_ha": 175,
+          "fuente": "INIAP Ecuador"
+        },
+        {
+          "id": "avena_vicia",
+          "nombre": "Avena + Vicia (cobertura forrajera)",
+          "regiones": "['sierra_centro']",
+          "tipo": "cobertura",
+          "dias_ciclo": 95,
+          "demanda_agua": "baja",
+          "tolera_encharcamiento": true,
+          "fija_nitrogeno": true,
+          "protege_suelo": 5,
+          "costo_insumos_ha": 340,
+          "ingreso_bruto_ha": 520,
+          "ahorro_urea_ha": 240,
+          "fuente": "INIAP / FAO"
+        }
+      ]
     }
   },
   "cultivos": [
@@ -3275,5 +4819,28 @@
       "ahorro_urea_ha": 240,
       "fuente": "INIAP / FAO"
     }
-  ]
+  ],
+  "ml_metadata": {
+    "modelo_seleccionado": "GradientBoosting",
+    "hiperparametros": {
+      "learning_rate": "0.1",
+      "max_depth": "3",
+      "n_estimators": "150"
+    },
+    "validacion_temporal": "Train: 2005-2020 | Out-of-Sample Test: 2021-2025 (TimeSeriesSplit)",
+    "r2_test": 0.922,
+    "mae_test": 0.0164,
+    "variables_predictoras": [
+      "mes_sin",
+      "mes_cos",
+      "lluvia_mm_mes",
+      "lluvia_lag1",
+      "lluvia_acum_3m",
+      "temp_max_c",
+      "nino12_anom",
+      "nino_lag1",
+      "ndvi_modis",
+      "smap_sm"
+    ]
+  }
 }
