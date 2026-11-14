@@ -1,12 +1,5 @@
 id,nombre,regiones,tipo,dias_ciclo,demanda_agua,tolera_encharcamiento,fija_nitrogeno,protege_suelo,costo_insumos_ha,ingreso_bruto_ha,ahorro_urea_ha,fuente
-arroz,Arroz (INIAP-14 / SFL-11),"['costa_humeda', 'costa_central']",cereal,130,alta,True,False,3,980,1650,0,INIAP / MAG SIPA
-maiz_duro,Maíz duro amarillo (INIAP H-551),"['costa_central', 'costa_seca', 'costa_humeda']",cereal,120,media,False,False,2,850,1480,0,INIAP / MAG SIPA
-soya,Soya de rotación (INIAP-308),"['costa_central', 'costa_humeda']",leguminosa,105,media,False,True,4,620,1190,180,INIAP / FAO GAEZ
-frejol_caupi,Fréjol caupí / tumbe,"['costa_central', 'costa_seca', 'costa_humeda']",leguminosa,75,baja,False,True,4,480,960,160,INIAP Ecuador
-mani,Maní (INIAP-381 Rosita),"['costa_seca', 'costa_central']",leguminosa,110,baja,False,True,4,690,1350,170,INIAP Ecuador
-sorgo,Sorgo granífero / forrajero,"['costa_seca', 'costa_central']",cereal_resiliente,100,baja,True,False,3,540,980,0,FAO GAEZ
-mucuna,Mucuna / Crotalaria (abono verde),"['costa_humeda', 'costa_central', 'costa_seca']",cobertura,65,baja,True,True,5,220,0,290,FAO Cover Crops
-papa,Papa (INIAP-Fripapa / Superchola),['sierra_centro'],tuberculo,150,media,False,False,2,1850,3100,0,INIAP / MAG SIPA
-haba,Haba verde / grano (INIAP-440),['sierra_centro'],leguminosa,140,media,False,True,4,780,1420,190,INIAP / FAO GAEZ
-arveja,Arveja (INIAP-436 Liliana),['sierra_centro'],leguminosa,115,baja,False,True,4,720,1340,175,INIAP Ecuador
-avena_vicia,Avena + Vicia (cobertura forrajera),['sierra_centro'],cobertura,95,baja,True,True,5,340,520,240,INIAP / FAO
+soya_iniap_308,Soya de rotación (INIAP-308),costa_aluvial,leguminosa_grano,105,media,baja,85.0,alta,520.0,1180.0,185.0,INIAP Estación Experimental Boliche — Ficha Varietal Soya INIAP-308; FAO (2016) Fijación Biológica de Nitrógeno; MAG SIPA
+frejol_caupi_iniap_463,Fréjol Caupí (INIAP-463),costa_aluvial,leguminosa_grano,75,baja_media,media,68.0,alta,430.0,980.0,148.0,INIAP Programa Nacional de Leguminosas — Guía Técnica Caupí INIAP-463 (Litoral Ecuatoriano); MAG SIPA
+mani_iniap_381,Maní de rotación (INIAP-381),costa_aluvial,leguminosa_oleaginosa,115,baja,baja,72.0,media_alta,610.0,1420.0,156.0,INIAP Estación Experimental Portoviejo/Boliche — Variedad INIAP-381; MAG SIPA Boletín Precios Insumos
+mucuna_pruriens,Mucuna (Mucuna pruriens — Abono verde),costa_aluvial,abono_verde_cobertura,75,media_alta,media_alta,110.0,muy_alta,195.0,410.0,235.0,INIAP Estación Experimental Boliche/Pichilingue — Abonos Verdes (Mucuna pruriens) en Litoral; FAO (2016)

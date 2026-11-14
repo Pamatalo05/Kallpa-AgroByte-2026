@@ -1,0 +1,68 @@
+{
+  "fecha_ejecucion_utc": "2026-11-14T18:37:35.359221+00:00",
+  "cantones_incluidos": [
+    "daule",
+    "babahoyo"
+  ],
+  "semilla_reproducibilidad": 42,
+  "particion_temporal": {
+    "entrenamiento": "2005-2020",
+    "prueba_out_of_sample": "2021-2025",
+    "n_filas_train": 382,
+    "n_filas_test": 120,
+    "garantia_sin_fuga": "Rezagos t-1 calculados por cantón y estadísticos de baseline ajustados únicamente en 2005-2020."
+  },
+  "features_utilizadas": [
+    "canton_code",
+    "mes",
+    "mes_sin",
+    "mes_cos",
+    "lluvia_mm_mes",
+    "temp_max_c",
+    "temp_min_c",
+    "radiacion_mj_m2",
+    "humedad_relativa_pct",
+    "nino12_anom",
+    "oni_anom",
+    "lluvia_mm_mes_lag1",
+    "humedad_raiz_lag1",
+    "humedad_superficial_lag1",
+    "nino12_anom_lag1",
+    "oni_anom_lag1"
+  ],
+  "modelo_seleccionado": "Ridge",
+  "metricas_modelo_seleccionado": {
+    "cv_tscv5_mae_train": 0.013,
+    "cv_tscv5_r2_train": 0.9652,
+    "r2_test_2021_2025": 0.9561,
+    "mae_test_2021_2025": 0.0161,
+    "rmse_test_2021_2025": 0.0212
+  },
+  "comparativa_modelos": {
+    "GradientBoostingRegressor": {
+      "cv_tscv5_mae_train": 0.0174,
+      "cv_tscv5_r2_train": 0.9055,
+      "r2_test_2021_2025": 0.9644,
+      "mae_test_2021_2025": 0.014,
+      "rmse_test_2021_2025": 0.0191
+    },
+    "RandomForestRegressor": {
+      "cv_tscv5_mae_train": 0.0209,
+      "cv_tscv5_r2_train": 0.8616,
+      "r2_test_2021_2025": 0.9415,
+      "mae_test_2021_2025": 0.0167,
+      "rmse_test_2021_2025": 0.0245
+    },
+    "Ridge": {
+      "cv_tscv5_mae_train": 0.013,
+      "cv_tscv5_r2_train": 0.9652,
+      "r2_test_2021_2025": 0.9561,
+      "mae_test_2021_2025": 0.0161,
+      "rmse_test_2021_2025": 0.0212
+    }
+  },
+  "baseline_climatologia_2005_2020": {
+    "r2_test_2021_2025": 0.5133,
+    "mae_test_2021_2025": 0.0477
+  }
+}
