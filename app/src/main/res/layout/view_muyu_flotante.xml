@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Muyu flotante: se toca para abrir el chat y se arrastra para moverlo. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/muyuFlotante"
+    android:layout_width="68dp"
+    android:layout_height="68dp"
+    android:background="@drawable/bg_muyu_flotante"
+    android:clickable="true"
+    android:contentDescription="Preguntarle a Muyu. Puedes arrastrarlo para moverlo."
+    android:elevation="12dp"
+    android:focusable="true"
+    android:padding="8dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_kallpa" />
+</FrameLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- Paisaje agrícola inferior -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:src="@drawable/hills"
+        android:scaleType="fitXY"
+        android:contentDescription="@null" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingStart="28dp"
+            android:paddingEnd="28dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="110dp">
+
+            <Space
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- Ilustración de Muyu -->
+            <ImageView
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                android:src="@drawable/ic_kallpa"
+                android:contentDescription="Muyu, asistente de Kallpa" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="¡Bienvenido a Kallpa!"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/forest_dark" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="¡Empecemos por tu parcela!"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="@color/forest" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Cuéntanos un poco sobre tu terreno para ayudarte a conocerlo mejor y planificar tu próxima siembra."
+                android:textSize="15sp"
+                android:lineSpacingExtra="5dp"
+                android:gravity="center"
+                android:textColor="@color/muted" />
+
+            <Button
+                android:id="@+id/btnAddFirstParcel"
+                style="@style/KallpaButton"
+                android:layout_marginTop="38dp"
+                android:text="+ Añadir mi primera parcela" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Tu información se guardará en este dispositivo."
+                android:textSize="12sp"
+                android:gravity="center"
+                android:textColor="@color/muted" />
+
+            <Space
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

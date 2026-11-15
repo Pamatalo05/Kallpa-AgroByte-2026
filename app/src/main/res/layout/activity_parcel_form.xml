@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- Paisaje agrícola decorativo -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_gravity="bottom"
+        android:src="@drawable/hills"
+        android:scaleType="fitXY"
+        android:contentDescription="@null" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="26dp"
+            android:paddingEnd="26dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="110dp">
+
+            <!-- Regresar -->
+            <TextView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:text="← Volver"
+                android:textSize="16sp"
+                android:textColor="@color/forest"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <!-- Identidad visual -->
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_kallpa"
+                android:contentDescription="Kallpa" />
+
+            <TextView
+                style="@style/TitleLarge"
+                android:layout_marginTop="8dp"
+                android:text="Registrar parcela" />
+
+            <TextView
+                style="@style/Subtitle"
+                android:layout_marginTop="5dp"
+                android:text="Cuéntanos un poco sobre tu terreno" />
+
+            <!-- Nombre -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="Nombre de tu parcela"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/forest_dark" />
+
+            <EditText
+                android:id="@+id/inputParcelName"
+                style="@style/KallpaInput"
+                android:layout_marginTop="8dp"
+                android:hint="Ej. Finca Los Girasoles"
+                android:inputType="textCapWords"
+                android:maxLength="60" />
+
+            <!-- Cultivo -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="¿Qué cultivas actualmente?"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/forest_dark" />
+
+            <Spinner
+                android:id="@+id/spinnerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:spinnerMode="dropdown" />
+
+            <!-- Última siembra -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Fecha de última siembra"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/forest_dark" />
+
+            <TextView
+                android:id="@+id/inputSowingDate"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input"
+                android:paddingStart="17dp"
+                android:paddingEnd="17dp"
+                android:gravity="center_vertical"
+                android:hint="Seleccionar fecha"
+                android:textColor="@color/text_dark"
+                android:textColorHint="@color/muted"
+                android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <!-- Cosecha -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Fecha de cosecha"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/forest_dark" />
+
+            <TextView
+                android:id="@+id/inputHarvestDate"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_input"
+                android:paddingStart="17dp"
+                android:paddingEnd="17dp"
+                android:gravity="center_vertical"
+                android:hint="Seleccionar fecha"
+                android:textColor="@color/text_dark"
+                android:textColorHint="@color/muted"
+                android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <!-- Riego -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="¿Dispones de riego?"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/forest_dark" />
+
+            <RadioGroup
+                android:id="@+id/groupIrrigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sí"
+                    android:textColor="@color/text_dark"
+                    android:buttonTint="@color/forest" />
+
+                <RadioButton
+                    android:id="@+id/radioNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:text="No"
+                    android:textColor="@color/text_dark"
+                    android:buttonTint="@color/forest" />
+
+            </RadioGroup>
+
+            <!-- Hectáreas -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Superficie cultivada (hectáreas)"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/forest_dark" />
+
+            <EditText
+                android:id="@+id/inputHectares"
+                style="@style/KallpaInput"
+                android:layout_marginTop="8dp"
+                android:hint="Ej. 5.5"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                style="@style/Subtitle"
+                android:layout_marginTop="8dp"
+                android:text="Nuestro piloto está enfocado en parcelas de 1 a 50 hectáreas."
+                android:gravity="start"
+                android:textSize="12sp" />
+
+            <!-- Continuar -->
+            <Button
+                android:id="@+id/btnNextLocation"
+                style="@style/KallpaButton"
+                android:layout_marginTop="30dp"
+                android:text="Continuar a ubicación" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

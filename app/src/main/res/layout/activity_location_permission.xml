@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_screen">
+    <ImageView android:layout_width="match_parent" android:layout_height="94dp" android:layout_gravity="bottom" android:scaleType="fitXY" android:src="@drawable/hills" android:contentDescription="" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center"
+            android:orientation="vertical" android:padding="28dp">
+            <ImageView android:layout_width="110dp" android:layout_height="134dp" android:src="@drawable/ic_pin" android:contentDescription="" />
+            <TextView style="@style/TitleLarge" android:layout_marginTop="24dp" android:text="@string/location_title" />
+            <TextView style="@style/Subtitle" android:layout_marginTop="12dp" android:lineSpacingExtra="4dp" android:text="@string/location_subtitle" />
+            <Button android:id="@+id/btnAllow" style="@style/KallpaButton" android:layout_marginTop="38dp" android:text="@string/btn_location" />
+            <Button android:id="@+id/btnManual" style="@style/KallpaOutlineButton" android:layout_marginTop="14dp" android:text="@string/btn_manual" />
+            <TextView style="@style/Subtitle" android:layout_marginTop="22dp" android:text="Puedes cambiar la ubicación más adelante." android:textSize="12sp" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

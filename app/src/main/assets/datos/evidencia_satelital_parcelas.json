@@ -1,0 +1,428 @@
+{
+  "fuentes": {
+    "cobertura_vegetal": "NASA Terra MODIS MOD13Q1 v061 — NDVI cada 16 días (250 m)",
+    "humedad_superficial": "NASA SMAP Enhanced L3 SPL3SMP_E v006 — Humedad superficial (9 km)"
+  },
+  "parcelas_satelitales": {
+    "daule": {
+      "canton": "daule",
+      "coordenadas": {
+        "lat": -1.86,
+        "lon": -79.98
+      },
+      "resumen_actual": {
+        "ndvi_ultimo": 0.216,
+        "fecha_ndvi": "2026-10-16",
+        "estado_cobertura": "Suelo descubierto / post-cosecha inmediata",
+        "smap_humedad_ultima": 0.494,
+        "fecha_smap": "2026-11-11"
+      },
+      "serie_ndvi_modis": [
+        {
+          "fecha": "2025-10-16",
+          "ndvi": 0.14
+        },
+        {
+          "fecha": "2025-11-01",
+          "ndvi": 0.21
+        },
+        {
+          "fecha": "2025-11-17",
+          "ndvi": 0.164
+        },
+        {
+          "fecha": "2025-12-03",
+          "ndvi": 0.21
+        },
+        {
+          "fecha": "2025-12-19",
+          "ndvi": 0.481
+        },
+        {
+          "fecha": "2026-01-01",
+          "ndvi": 0.389
+        },
+        {
+          "fecha": "2026-01-17",
+          "ndvi": 0.078
+        },
+        {
+          "fecha": "2026-02-02",
+          "ndvi": 0.06
+        },
+        {
+          "fecha": "2026-02-18",
+          "ndvi": 0.542
+        },
+        {
+          "fecha": "2026-03-06",
+          "ndvi": 0.124
+        },
+        {
+          "fecha": "2026-03-22",
+          "ndvi": 0.058
+        },
+        {
+          "fecha": "2026-04-07",
+          "ndvi": 0.256
+        },
+        {
+          "fecha": "2026-04-23",
+          "ndvi": 0.276
+        },
+        {
+          "fecha": "2026-05-09",
+          "ndvi": 0.266
+        },
+        {
+          "fecha": "2026-05-25",
+          "ndvi": 0.215
+        },
+        {
+          "fecha": "2026-06-10",
+          "ndvi": 0.441
+        },
+        {
+          "fecha": "2026-06-26",
+          "ndvi": 0.479
+        },
+        {
+          "fecha": "2026-07-12",
+          "ndvi": 0.571
+        },
+        {
+          "fecha": "2026-07-28",
+          "ndvi": 0.221
+        },
+        {
+          "fecha": "2026-08-13",
+          "ndvi": 0.354
+        },
+        {
+          "fecha": "2026-08-29",
+          "ndvi": 0.471
+        },
+        {
+          "fecha": "2026-09-14",
+          "ndvi": 0.162
+        },
+        {
+          "fecha": "2026-09-30",
+          "ndvi": 0.667
+        },
+        {
+          "fecha": "2026-10-16",
+          "ndvi": 0.216
+        }
+      ],
+      "serie_humedad_smap": [
+        {
+          "fecha": "2026-09-08",
+          "humedad_m3_m3": 0.311
+        },
+        {
+          "fecha": "2026-09-11",
+          "humedad_m3_m3": 0.302
+        },
+        {
+          "fecha": "2026-09-14",
+          "humedad_m3_m3": 0.26
+        },
+        {
+          "fecha": "2026-09-16",
+          "humedad_m3_m3": 0.303
+        },
+        {
+          "fecha": "2026-09-19",
+          "humedad_m3_m3": 0.303
+        },
+        {
+          "fecha": "2026-09-22",
+          "humedad_m3_m3": 0.25
+        },
+        {
+          "fecha": "2026-09-24",
+          "humedad_m3_m3": 0.435
+        },
+        {
+          "fecha": "2026-09-27",
+          "humedad_m3_m3": 0.513
+        },
+        {
+          "fecha": "2026-09-30",
+          "humedad_m3_m3": 0.439
+        },
+        {
+          "fecha": "2026-10-02",
+          "humedad_m3_m3": 0.415
+        },
+        {
+          "fecha": "2026-10-05",
+          "humedad_m3_m3": 0.436
+        },
+        {
+          "fecha": "2026-10-08",
+          "humedad_m3_m3": 0.391
+        },
+        {
+          "fecha": "2026-10-10",
+          "humedad_m3_m3": 0.401
+        },
+        {
+          "fecha": "2026-10-13",
+          "humedad_m3_m3": 0.401
+        },
+        {
+          "fecha": "2026-10-16",
+          "humedad_m3_m3": 0.404
+        },
+        {
+          "fecha": "2026-10-21",
+          "humedad_m3_m3": 0.44
+        },
+        {
+          "fecha": "2026-10-24",
+          "humedad_m3_m3": 0.442
+        },
+        {
+          "fecha": "2026-10-26",
+          "humedad_m3_m3": 0.497
+        },
+        {
+          "fecha": "2026-10-29",
+          "humedad_m3_m3": 0.473
+        },
+        {
+          "fecha": "2026-11-01",
+          "humedad_m3_m3": 0.531
+        },
+        {
+          "fecha": "2026-11-03",
+          "humedad_m3_m3": 0.589
+        },
+        {
+          "fecha": "2026-11-06",
+          "humedad_m3_m3": 0.513
+        },
+        {
+          "fecha": "2026-11-09",
+          "humedad_m3_m3": 0.468
+        },
+        {
+          "fecha": "2026-11-11",
+          "humedad_m3_m3": 0.494
+        }
+      ]
+    },
+    "babahoyo": {
+      "canton": "babahoyo",
+      "coordenadas": {
+        "lat": -1.8,
+        "lon": -79.53
+      },
+      "resumen_actual": {
+        "ndvi_ultimo": 0.141,
+        "fecha_ndvi": "2026-10-16",
+        "estado_cobertura": "Suelo descubierto / post-cosecha inmediata",
+        "smap_humedad_ultima": 0.603,
+        "fecha_smap": "2026-11-11"
+      },
+      "serie_ndvi_modis": [
+        {
+          "fecha": "2025-10-16",
+          "ndvi": 0.034
+        },
+        {
+          "fecha": "2025-11-01",
+          "ndvi": 0.297
+        },
+        {
+          "fecha": "2025-11-17",
+          "ndvi": 0.102
+        },
+        {
+          "fecha": "2025-12-03",
+          "ndvi": 0.213
+        },
+        {
+          "fecha": "2025-12-19",
+          "ndvi": 0.137
+        },
+        {
+          "fecha": "2026-01-01",
+          "ndvi": 0.137
+        },
+        {
+          "fecha": "2026-01-17",
+          "ndvi": 0.098
+        },
+        {
+          "fecha": "2026-02-02",
+          "ndvi": 0.284
+        },
+        {
+          "fecha": "2026-02-18",
+          "ndvi": 0.096
+        },
+        {
+          "fecha": "2026-03-06",
+          "ndvi": 0.058
+        },
+        {
+          "fecha": "2026-03-22",
+          "ndvi": 0.177
+        },
+        {
+          "fecha": "2026-04-07",
+          "ndvi": 0.16
+        },
+        {
+          "fecha": "2026-04-23",
+          "ndvi": 0.254
+        },
+        {
+          "fecha": "2026-05-09",
+          "ndvi": 0.1
+        },
+        {
+          "fecha": "2026-05-25",
+          "ndvi": 0.077
+        },
+        {
+          "fecha": "2026-06-10",
+          "ndvi": 0.14
+        },
+        {
+          "fecha": "2026-06-26",
+          "ndvi": 0.148
+        },
+        {
+          "fecha": "2026-07-12",
+          "ndvi": 0.237
+        },
+        {
+          "fecha": "2026-07-28",
+          "ndvi": 0.274
+        },
+        {
+          "fecha": "2026-08-13",
+          "ndvi": 0.226
+        },
+        {
+          "fecha": "2026-08-29",
+          "ndvi": 0.158
+        },
+        {
+          "fecha": "2026-09-14",
+          "ndvi": 0.086
+        },
+        {
+          "fecha": "2026-09-30",
+          "ndvi": 0.103
+        },
+        {
+          "fecha": "2026-10-16",
+          "ndvi": 0.141
+        }
+      ],
+      "serie_humedad_smap": [
+        {
+          "fecha": "2026-09-08",
+          "humedad_m3_m3": 0.237
+        },
+        {
+          "fecha": "2026-09-11",
+          "humedad_m3_m3": 0.313
+        },
+        {
+          "fecha": "2026-09-14",
+          "humedad_m3_m3": 0.263
+        },
+        {
+          "fecha": "2026-09-16",
+          "humedad_m3_m3": 0.239
+        },
+        {
+          "fecha": "2026-09-19",
+          "humedad_m3_m3": 0.256
+        },
+        {
+          "fecha": "2026-09-22",
+          "humedad_m3_m3": 0.241
+        },
+        {
+          "fecha": "2026-09-24",
+          "humedad_m3_m3": 0.353
+        },
+        {
+          "fecha": "2026-09-27",
+          "humedad_m3_m3": 0.457
+        },
+        {
+          "fecha": "2026-09-30",
+          "humedad_m3_m3": 0.462
+        },
+        {
+          "fecha": "2026-10-02",
+          "humedad_m3_m3": 0.412
+        },
+        {
+          "fecha": "2026-10-05",
+          "humedad_m3_m3": 0.42
+        },
+        {
+          "fecha": "2026-10-08",
+          "humedad_m3_m3": 0.491
+        },
+        {
+          "fecha": "2026-10-10",
+          "humedad_m3_m3": 0.516
+        },
+        {
+          "fecha": "2026-10-13",
+          "humedad_m3_m3": 0.459
+        },
+        {
+          "fecha": "2026-10-16",
+          "humedad_m3_m3": 0.515
+        },
+        {
+          "fecha": "2026-10-21",
+          "humedad_m3_m3": 0.477
+        },
+        {
+          "fecha": "2026-10-24",
+          "humedad_m3_m3": 0.51
+        },
+        {
+          "fecha": "2026-10-26",
+          "humedad_m3_m3": 0.483
+        },
+        {
+          "fecha": "2026-10-29",
+          "humedad_m3_m3": 0.541
+        },
+        {
+          "fecha": "2026-11-01",
+          "humedad_m3_m3": 0.563
+        },
+        {
+          "fecha": "2026-11-03",
+          "humedad_m3_m3": 0.512
+        },
+        {
+          "fecha": "2026-11-06",
+          "humedad_m3_m3": 0.571
+        },
+        {
+          "fecha": "2026-11-09",
+          "humedad_m3_m3": 0.603
+        },
+        {
+          "fecha": "2026-11-11",
+          "humedad_m3_m3": 0.603
+        }
+      ]
+    }
+  }
+}

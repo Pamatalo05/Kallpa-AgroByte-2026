@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Logo de Kallpa con margen: el teléfono recorta los íconos en círculo o gota
+     y, sin este margen, el logo salía cortado. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_kallpa"
+    android:inset="24%" />
