@@ -11,7 +11,7 @@ from sklearn.model_selection import TimeSeriesSplit
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 PROC_DIR = BASE_DIR / "datos" / "procesados"
 CANTONES_OBJETIVO = ["daule", "babahoyo"]
 RANDOM_STATE = 42
@@ -61,7 +61,7 @@ def corregir_indice_enso() -> pd.DataFrame:
 
 
 def construir_catalogo_rotaciones() -> dict:
-    """Genera cultivos_ecuador.csv con las 13 columnas exactas y los 4 cultivos validados."""
+    """Construye el catálogo de cultivos de rotación con parámetros INIAP y MAG SIPA"""
     catalogo = [
         {
             "id": "soya_iniap_308",

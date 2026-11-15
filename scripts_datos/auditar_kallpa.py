@@ -3,7 +3,7 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 PROC_DIR = BASE_DIR / "datos" / "procesados"
 CANTONES_ESPERADOS = {"daule", "babahoyo"}
 CULTIVOS_ESPERADOS = ["soya", "caup", "man", "mucuna"]
@@ -51,18 +51,18 @@ def verificar_archivos():
         if ruta.exists() and ruta.stat().st_size > 0:
             ok(f"{nombre} existe ({ruta.stat().st_size:,} bytes)")
         else:
-            mal(f"Falta o estÃ¡ vacÃ­o: {ruta}")
+            mal(f"Falta o está vacío: {ruta}")
 
     for canton in ["daule", "babahoyo"]:
         ruta_s = resolver_serie(canton)
         if ruta_s and ruta_s.stat().st_size > 0:
             ok(f"{ruta_s.name} existe ({ruta_s.stat().st_size:,} bytes)")
         else:
-            mal(f"Falta serie histÃ³rica de {canton}")
+            mal(f"Falta serie histórica de {canton}")
 
 
 def verificar_enso():
-    print("\n=== 2. CLASIFICACIÃ“N ENSO (NOAA) ===")
+    print("\n=== 2. CLASIFICACIÓN ENSO (NOAA) ===")
     ruta = PROC_DIR / "indice_enso_noaa.csv"
     if not ruta.exists():
         return
@@ -87,17 +87,17 @@ def verificar_enso():
 
     desajustes = (df["fase_enso"] != df.apply(regla_oficial, axis=1)).sum()
     if desajustes == 0:
-        ok(f"100% de filas bien clasificadas segÃºn umbral oficial NOAA ({df['fase_enso'].value_counts().to_dict()})")
+        ok(f"100% de filas bien clasificadas según umbral oficial NOAA ({df['fase_enso'].value_counts().to_dict()})")
     else:
         mal(f"{desajustes} filas mal clasificadas")
 
 
 def verificar_series_cantones():
-    print("\n=== 3. SERIES HISTÃ“RICAS (DAULE Y BABAHOYO) ===")
+    print("\n=== 3. SERIES HISTÓRICAS (DAULE Y BABAHOYO) ===")
     for canton in ["daule", "babahoyo"]:
         ruta = resolver_serie(canton)
         if not ruta:
-            mal(f"No se encontrÃ³ archivo histÃ³rico para {canton}")
+            mal(f"No se encontró archivo histórico para {canton}")
             continue
         df = pd.read_csv(ruta)
 
@@ -116,7 +116,7 @@ def verificar_series_cantones():
 
         h_min, h_max = df["humedad_raiz"].min(), df["humedad_raiz"].max()
         if 0.0 <= h_min and h_max <= 1.0:
-            ok(f"{canton}: humedad_raiz en rango fÃ­sico vÃ¡lido [{h_min:.3f}, {h_max:.3f}]")
+            ok(f"{canton}: humedad_raiz en rango físico válido [{h_min:.3f}, {h_max:.3f}]")
         else:
             mal(f"{canton}: humedad_raiz fuera de rango [{h_min}, {h_max}]")
 
@@ -128,7 +128,7 @@ def verificar_series_cantones():
 
 
 def verificar_cultivos():
-    print("\n=== 4. CATÃLOGO DE 4 CULTIVOS (DAULE Y BABAHOYO) ===")
+    print("\n=== 4. CATÁLOGO DE 4 CULTIVOS (DAULE Y BABAHOYO) ===")
     ruta = PROC_DIR / "cultivos_ecuador.csv"
     if not ruta.exists():
         return
@@ -143,18 +143,18 @@ def verificar_cultivos():
     nombres_lower = " | ".join(df[col_nombre].str.lower().tolist())
     for c in CULTIVOS_ESPERADOS:
         if c in nombres_lower:
-            ok(f"Cultivo '{c}' presente en el catÃ¡logo")
+            ok(f"Cultivo '{c}' presente en el catálogo")
         else:
             mal(f"Falta el cultivo '{c}' en cultivos_ecuador.csv")
 
     if (df["ahorro_urea_ha"] > 0).all() and (df["fija_nitrogeno"] > 0).all():
-        ok("Valores positivos de fijaciÃ³n de nitrÃ³geno y ahorro de urea en los 4 cultivos")
+        ok("Valores positivos de fijación de nitrógeno y ahorro de urea en los 4 cultivos")
     else:
         mal("Hay valores <= 0 en fija_nitrogeno o ahorro_urea_ha")
 
 
 def verificar_auditoria_ml():
-    print("\n=== 5. VALIDACIÃ“N Y AUDITORÃA DEL MODELO ML ===")
+    print("\n=== 5. VALIDACIÓN Y AUDITORÍA DEL MODELO ML ===")
     ruta = PROC_DIR / "validacion_ml_auditoria.json"
     if not ruta.exists():
         return
@@ -168,9 +168,9 @@ def verificar_auditoria_ml():
 
     part = aud.get("particion_temporal", {})
     if part.get("entrenamiento") == "2005-2020" and part.get("prueba_out_of_sample") == "2021-2025":
-        ok(f"ParticiÃ³n temporal estricta verificada (Train: {part.get('n_filas_train')} filas, Test ciego: {part.get('n_filas_test')} filas)")
+        ok(f"Partición temporal estricta verificada (Train: {part.get('n_filas_train')} filas, Test ciego: {part.get('n_filas_test')} filas)")
     else:
-        mal("ParticiÃ³n temporal incorrecta")
+        mal("Partición temporal incorrecta")
 
     met = aud.get("metricas_modelo_seleccionado", {})
     base = aud.get("baseline_climatologia_2005_2020", {})
@@ -179,15 +179,15 @@ def verificar_auditoria_ml():
     mae_base = base.get("mae_test_2021_2025", 0)
 
     if r2 >= 0.75:
-        ok(f"RÂ² out-of-sample sÃ³lido: {r2} ({r2*100:.1f}% de varianza explicada en 2021-2025)")
+        ok(f"R² out-of-sample sólido: {r2} ({r2*100:.1f}% de varianza explicada en 2021-2025)")
     else:
-        mal(f"RÂ² bajo: {r2}")
+        mal(f"R² bajo: {r2}")
 
     if mae < mae_base:
         mejora = ((mae_base - mae) / mae_base) * 100
-        ok(f"Supera al baseline climatolÃ³gico (MAE={mae} vs baseline={mae_base}, mejora del {mejora:.1f}%)")
+        ok(f"Supera al baseline climatológico (MAE={mae} vs baseline={mae_base}, mejora del {mejora:.1f}%)")
     else:
-        mal("No supera al baseline climatolÃ³gico")
+        mal("No supera al baseline climatológico")
 
     ruta_joblib = PROC_DIR / "modelo_kallpa_gb.joblib"
     if ruta_joblib.exists():
@@ -211,7 +211,7 @@ def verificar_paquete_frontend():
         mal("Cantones incorrectos en paquete_canton.json")
 
     if len(paq.get("fuentes_metodologia", {})) >= 4:
-        ok(f"Fuentes y metodologÃ­a documentadas ({len(paq.get('fuentes_metodologia', {}))} bloques)")
+        ok(f"Fuentes y metodología documentadas ({len(paq.get('fuentes_metodologia', {}))} bloques)")
     else:
         mal("Falta documentar fuentes_metodologia")
 
@@ -227,9 +227,9 @@ def verificar_paquete_frontend():
             if not (m["humedad_raiz_predicha"]["nino"] >= m["humedad_raiz_predicha"]["neutro"] >= m["humedad_raiz_predicha"]["nina"])
         )
         if incons == 0:
-            ok(f"{c_id}: coherencia climÃ¡tica perfecta en los 12 meses (humedad El NiÃ±o >= Neutro >= La NiÃ±a)")
+            ok(f"{c_id}: coherencia climática perfecta en los 12 meses (humedad El Niño >= Neutro >= La Niña)")
         else:
-            aviso(f"{c_id}: en {incons} mes(es) El NiÃ±o/La NiÃ±a se cruzan ligeramente")
+            aviso(f"{c_id}: en {incons} mes(es) El Niño/La Niña se cruzan ligeramente")
 
         rots = c_data.get("top_rotaciones_por_enso", {})
         if set(rots.keys()) == {"neutro", "nino", "nina"} and all(len(rots[k]) == 3 for k in rots):
@@ -240,7 +240,7 @@ def verificar_paquete_frontend():
 
 if __name__ == "__main__":
     print("==========================================================")
-    print("   AUDITORÃA INTEGRAL DE DATOS Y MODELO ML â€” KALLPA       ")
+    print("   AUDITORÍA INTEGRAL DE DATOS Y MODELO ML — KALLPA       ")
     print("==========================================================")
     verificar_archivos()
     verificar_enso()
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     print("\n==========================================================")
     print(f"RESUMEN FINAL: {ok_count} pruebas [BIEN] | {len(advertencias)} [OJO] | {len(errores)} [MAL]")
     if len(errores) == 0:
-        print("VEREDICTO: TODO ESTÃ BIEN. Los datos y el modelo estÃ¡n listos para producciÃ³n/demo.")
+        print("VEREDICTO: TODO ESTÁ BIEN. Los datos y el modelo están listos para producción/demo.")
     else:
         print("VEREDICTO: HAY ERRORES QUE CORREGIR ANTES DE LA DEMO:")
         for e in errores:

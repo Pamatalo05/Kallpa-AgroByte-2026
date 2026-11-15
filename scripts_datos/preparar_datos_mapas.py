@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 import pandas as pd
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 CRUDOS_DIR = BASE_DIR / "datos" / "crudos"
 PROC_DIR = BASE_DIR / "datos" / "procesados"
 PUBLIC_DATOS_DIR = BASE_DIR / "public" / "datos"

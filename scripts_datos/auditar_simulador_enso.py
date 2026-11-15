@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 PUBLIC_DATOS = BASE_DIR / "public" / "datos"
 
 
@@ -11,7 +11,7 @@ def auditar():
 
     ruta_sim = PUBLIC_DATOS / "simulador_enso_historico.json"
     ruta_sat = PUBLIC_DATOS / "evidencia_satelital_parcelas.json"
-    ruta_geo = PUBLIC_DATOS / "parcelas_piloto.geojson"
+    ruta_geo = PUBLIC_DATOS / "parcelas.geojson"
 
     for r in [ruta_sim, ruta_sat, ruta_geo]:
         if not r.exists():
