@@ -23,6 +23,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".view.ScienceActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".view.ParcelDetailsActivity"
             android:exported="false" />
 

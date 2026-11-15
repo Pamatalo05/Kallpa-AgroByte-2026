@@ -1,125 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/bg_screen">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_gravity="bottom"
-        android:src="@drawable/hills"
-        android:scaleType="fitXY"
-        android:contentDescription="@null" />
+    <ImageView android:layout_width="match_parent" android:layout_height="92dp"
+        android:layout_gravity="bottom" android:src="@drawable/hills"
+        android:scaleType="fitXY" android:contentDescription="@null" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent"
         android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="26dp"
-            android:paddingEnd="26dp"
-            android:paddingTop="26dp"
-            android:paddingBottom="120dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:src="@drawable/ic_kallpa"
-                    android:contentDescription="Logo de Kallpa" />
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="12dp">
-                    <TextView
-                        android:id="@+id/txtHello"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="¡Hola!"
-                        android:textColor="@color/forest_dark"
-                        android:textSize="23sp"
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:paddingStart="22dp" android:paddingEnd="22dp"
+            android:paddingTop="18dp" android:paddingBottom="116dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical">
+                <ImageView android:layout_width="57dp" android:layout_height="57dp"
+                    android:src="@drawable/ic_kallpa" android:contentDescription="Logo de Kallpa" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="10dp">
+                    <TextView android:id="@+id/txtHello" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:text="¡Hola!"
+                        android:textColor="@color/forest_dark" android:textSize="23sp"
                         android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Bienvenido a Kallpa"
-                        android:textSize="14sp"
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="Cultivemos buenas decisiones" android:textSize="13sp"
                         android:textColor="@color/muted" />
                 </LinearLayout>
+                <Button android:id="@+id/btnMenu" android:layout_width="55dp" android:layout_height="55dp"
+                    android:text="☰" android:textSize="27sp" android:textColor="@color/forest_dark"
+                    android:background="@drawable/bg_soft" android:contentDescription="Abrir menú principal" />
+            </LinearLayout>
+            <TextView android:id="@+id/txtConnection" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginTop="15dp"
+                android:background="@drawable/bg_soft" android:padding="10dp"
+                android:text="Sin conexión · datos locales" android:textSize="12sp"
+                android:textColor="@color/forest" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" android:text="Mi parcela activa"
+                android:textColor="@color/forest_dark" android:textSize="19sp" android:textStyle="bold" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" android:orientation="vertical"
+                android:background="@drawable/bg_card" android:padding="17dp">
+                <TextView android:id="@+id/txtParcelName" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:text="Mi parcela"
+                    android:textColor="@color/forest_dark" android:textSize="21sp" android:textStyle="bold" />
+                <TextView android:id="@+id/txtParcelDetails" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                    android:textColor="@color/text_dark" android:textSize="14sp"
+                    android:lineSpacingExtra="4dp" />
+                <TextView android:id="@+id/txtParcelCount" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:layout_marginTop="8dp"
+                    android:textColor="@color/muted" android:textSize="12sp" />
+                <Button android:id="@+id/btnMyParcels" style="@style/KallpaOutlineButton"
+                    android:layout_marginTop="12dp" android:text="Mis parcelas  ›" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Mi parcela activa"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                android:textColor="@color/forest_dark" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical"
-                android:background="@drawable/bg_card"
-                android:padding="19dp">
-                <TextView
-                    android:id="@+id/txtParcelName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mi parcela"
-                    android:textSize="21sp"
-                    android:textColor="@color/forest_dark"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/txtParcelDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="5dp"
-                    android:textColor="@color/text_dark" />
-                <TextView
-                    android:id="@+id/txtParcelCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/muted"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btnMyParcels"
-                style="@style/KallpaButton"
-                android:layout_marginTop="26dp"
-                android:text="Ver mis parcelas" />
-
-            <Button
-                android:id="@+id/btnAddParcel"
-                style="@style/KallpaOutlineButton"
-                android:layout_marginTop="12dp"
-                android:text="+ Añadir parcela" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:text="En el próximo paso conectaremos el diagnóstico satelital y las rotaciones usando esta parcela."
-                android:textSize="13sp"
-                android:textColor="@color/muted"
-                android:gravity="center" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="21dp" android:text="Explora tu terreno"
+                android:textColor="@color/forest_dark" android:textSize="19sp" android:textStyle="bold" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" android:text="Tres pasos sencillos para tu próxima siembra"
+                android:textColor="@color/muted" android:textSize="13sp" />
+            <Button android:id="@+id/btnDiagnosis" style="@style/KallpaButton"
+                android:layout_marginTop="13dp" android:text="01  Presente · Diagnóstico satelital" />
+            <Button android:id="@+id/btnFuture" style="@style/KallpaOutlineButton"
+                android:layout_marginTop="10dp" android:text="02  Futuro · Mi próxima siembra" />
+            <Button android:id="@+id/btnPast" style="@style/KallpaOutlineButton"
+                android:layout_marginTop="10dp" android:text="03  Pasado · El Niño y La Niña" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="22dp" android:text="Tu espacio en Kallpa"
+                android:textColor="@color/forest_dark" android:textSize="19sp" android:textStyle="bold" />
+            <Button android:id="@+id/btnMuyu" style="@style/KallpaOutlineButton"
+                android:layout_marginTop="12dp" android:text="✿  Pregúntale a Muyu" />
+            <Button android:id="@+id/btnAddParcel" style="@style/KallpaOutlineButton"
+                android:layout_marginTop="10dp" android:text="+  Registrar otra parcela" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" android:textColor="@color/muted"
+                android:textSize="12sp" android:gravity="center"
+                android:text="Datos NASA y NOAA de escala regional. Kallpa acompaña tus decisiones; no reemplaza la revisión del suelo en campo." />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
