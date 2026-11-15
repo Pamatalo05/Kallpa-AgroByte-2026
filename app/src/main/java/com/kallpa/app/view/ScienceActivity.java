@@ -135,45 +135,37 @@ public class ScienceActivity extends ActividadBase {
         JSONObject dato = objetoCanton(satelites, "parcelas_satelitales");
         JSONObject info = dato == null ? null : dato.optJSONObject("resumen_actual");
         JSONObject clima = objetoCanton(paquete, "cantones");
-        if (info == null) { bloque("Sin datos del satélite", "Todavía no tenemos fotos del satélite para tu cantón."); return; }
-        LinearLayout resumen = tarjeta(contenido);
-        texto(resumen, parcela.getNombre(), 19, OSCURO, true);
-        texto(resumen, "Cultivo en curso: " + parcela.getCultivoActual(), 17, VERDE, true);
-        texto(resumen, Formato.hectareas(parcela.getHectareas()) + " · "
-                + (parcela.isTieneRiego() ? "Con riego" : "Sin riego") + " · " + nombreCanton(), 15, GRIS, false);
+        LinearLayout resumen = SeccionDesplegable.crear(contenido, "presente_parcela", "Datos de tu parcela", parcela.getNombre(), true);
+        texto(resumen, "Nombre: " + parcela.getNombre() + "\nCultivo actual: " + parcela.getCultivoActual()
+                + "\nSuperficie: " + Formato.hectareas(parcela.getHectareas())
+                + "\nRiego: " + (parcela.isTieneRiego() ? "Disponible" : "Sin riego")
+                + "\nUbicación: " + nombreCanton(), 15, OSCURO, false);
         enlace(resumen, "Cambiar o añadir parcela", () -> startActivity(new Intent(this, MyParcelsActivity.class)));
-
-        texto(contenido, "¿Qué ven los satélites?", 19, OSCURO, true);
-        texto(contenido, "Los satélites miran toda la zona, no cada metro de tu parcela. "
-                + "Compáralo con lo que ves en tu terreno.", 15, GRIS, false);
-        double ndvi = info.optDouble("ndvi_ultimo");
-        bloque("Verdor de las plantas: " + Formato.verdor(ndvi),
-                info.optString("estado_cobertura") + "\nÚltima foto: " + fechaCorta(info.optString("fecha_ndvi")));
-        double smap = info.optDouble("smap_humedad_ultima");
-        bloque("Humedad en la superficie: " + Formato.porcentaje(smap),
-                "Es el agua en la capa de arriba del suelo.\nÚltima medición: " + fechaCorta(info.optString("fecha_smap")));
-        if (clima != null) bloque("Tipo de suelo de la zona", clima.optString("suelo_referencia")
-                + "\nEs el suelo más común en tu cantón; el tuyo puede ser distinto.");
-        // Mapa desactivado TEMPORALMENTE para separar el diagnóstico JSON de
-        // los posibles bloqueos del visor OpenStreetMap en dispositivos físicos.
-        // crearMapa();
-        graficoSatelital(dato, "serie_ndvi_modis", "ndvi", "Verdor de las plantas en el último año",
-                "Cada punto es una foto del satélite. Más arriba = más plantas verdes. "
-                + "La línea punteada es el promedio.", 0xFF4E9A2E,
-                v -> Math.round(v * 100) + "/100", "verde");
-        graficoSatelital(dato, "serie_humedad_smap", "humedad_m3_m3", "Humedad de la superficie en los últimos meses",
-                "Cada punto es una medición. Más arriba = suelo más mojado. "
-                + "La línea punteada es el promedio.", 0xFF2A7FA8,
-                v -> Math.round(v * 100) + " %", "húmeda");
-        enlace(contenido, "¿De dónde salen estos datos?", () -> explicar("¿De dónde salen estos datos?",
-                "Verdor de las plantas: satélite MODIS de la NASA. Toma una foto de tu zona "
-                + "cada 16 días y mira cuadros de unos 250 metros.\n\n"
-                + "Humedad de la superficie: satélite SMAP de la NASA. Mide el agua en los primeros "
-                + "centímetros del suelo cada 2 o 3 días, en cuadros de unos 9 kilómetros.\n\n"
-                + "Tipo de suelo: mapas de suelos del MAG y del INIAP para tu cantón.\n\n"
-                + "Por eso son datos de tu zona, no de tu parcela exacta. El equipo AgroByte "
-                + "descargó y revisó estos datos."));
-        boton(contenido, "¿Qué siembro después?  ›", true, () -> mostrar(MODE_FUTURE));
+        if (info == null) {
+            bloque("Observaciones de tu zona", "Las observaciones aparecerán aquí cuando estén disponibles para tu cantón."); return;
+        }
+        LinearLayout observaciones = SeccionDesplegable.crear(contenido, "presente_observaciones",
+                "¿Cómo está mi zona?", "Vegetación y humedad disponibles", true);
+        texto(observaciones, "Cobertura vegetal: " + info.optString("estado_cobertura")
+                + "\nVerdor: " + Formato.verdor(info.optDouble("ndvi_ultimo"))
+                + "\nFecha de observación: " + fechaCorta(info.optString("fecha_ndvi"))
+                + "\nHumedad superficial: " + Formato.porcentaje(info.optDouble("smap_humedad_ultima"))
+                + "\nFecha de humedad: " + fechaCorta(info.optString("fecha_smap")), 15, OSCURO, false);
+        texto(observaciones, "Las estimaciones describen las condiciones a nivel cantonal y complementan lo que observas en tu terreno.",14,GRIS,false);
+        if(clima!=null) {
+            LinearLayout suelo=SeccionDesplegable.crear(contenido,"presente_suelo","Suelo de la zona","Caracterización de referencia",false);
+            texto(suelo,"Tipo de suelo: "+clima.optString("suelo_referencia")+"\nAlcance: caracterización cantonal.",15,GRIS,false);
+        }
+        LinearLayout panel=SeccionDesplegable.crear(contenido,"presente_panel","Comparar Daule y Babahoyo",
+                "Un indicador a la vez · misma escala",false);
+        panel.addView(new PanelCantonal(this,satelites),new LinearLayout.LayoutParams(-1,-2));
+        LinearLayout fuentes=SeccionDesplegable.crear(contenido,"presente_fuentes","Origen de la información",
+                "Fechas, fuentes y alcance",false);
+        texto(fuentes,"Vegetación: NASA MODIS · Observaciones cada 16 días.\nEscala de vegetación: 250 m."
+                +"\nHumedad superficial: NASA SMAP · Capa superficial del suelo.\nEscala de humedad: aproximadamente 9 km."
+                +"\nSuelo: cartografía de referencia del MAG y del INIAP."
+                +"\nAlcance: estimaciones a nivel cantonal, preparadas por AgroByte para acompañar tus decisiones.",14,GRIS,false);
+        boton(contenido,"¿Qué siembro después?  ›",true,()->mostrar(MODE_FUTURE));
     }
 
     /** Gráfico de una serie del satélite con fechas legibles y una frase que lo resume. */
@@ -273,7 +265,7 @@ public class ScienceActivity extends ActividadBase {
         texto(contenido, "Elige el mes en que piensas sembrar y mira las variedades del INIAP "
                 + "que te convienen, con el ahorro y la ganancia aproximada.", 15, GRIS, false);
         bloque("Tu parcela", parcela.getNombre() + " · " + nombreCanton() + "\n"
-                + "Cultivo actual: " + parcela.getCultivoActual() + " · " + Formato.hectareas(parcela.getHectareas())
+                + "Cultivo actual: " + parcela.getCultivoActual() + "\nSuperficie: " + Formato.hectareas(parcela.getHectareas())
                 + " · " + (parcela.isTieneRiego() ? "Con riego" : "Sin riego"));
 
         final JSONArray serie = cantonMl.optJSONArray("serie_satelital_ml");
@@ -333,7 +325,7 @@ public class ScienceActivity extends ActividadBase {
                 + "nitrógeno que deja el cultivo, con el precio del MAG (unos $38 el saco de 50 kg).\n\n"
                 + "La ganancia: es lo que podrías vender menos lo que gastarías en semillas e insumos. "
                 + "No incluye todos los gastos (por ejemplo, mano de obra o transporte).\n\n"
-                + "Todo es aproximado. Es una guía para decidir mejor, no una promesa."));
+                + "Son estimaciones a nivel cantonal para acompañar tu planificación."));
         boton(contenido, "Ver cómo fue en años de El Niño y La Niña  ›", true,
                 () -> mostrar(MODE_PAST));
     }
@@ -367,7 +359,7 @@ public class ScienceActivity extends ActividadBase {
         mes.setGravity(Gravity.CENTER);
         mes.setTextSize(22);
         mes.setTextColor(OSCURO);
-        mes.setTypeface(null, Typeface.BOLD);
+        mes.setTypeface(null, Typeface.NORMAL);
         mes.setLetterSpacing(0.05f);
         fila.addView(mes, new LinearLayout.LayoutParams(0, -1, 1f));
         fila.addView(flechaMes("›", "Mes siguiente", siguiente), new LinearLayout.LayoutParams(dp(60), -1));
@@ -414,18 +406,19 @@ public class ScienceActivity extends ActividadBase {
             double kgHa = opcion.optDouble("ahorro_urea_kg_ha", Double.NaN);
             double costoHa = opcion.optDouble("costo_insumos_ha", Double.NaN);
             double ingresoHa = opcion.optDouble("ingreso_bruto_ha", Double.NaN);
-            LinearLayout card = tarjeta(destino);
+            LinearLayout card = SeccionDesplegable.crear(destino, "cultivo_" + cultivo,
+                    (i + 1) + ". " + cultivo, Formato.evaluacionCultivo(estado), i == 0);
             if (i == 0) {
-                TextView insignia = texto(card, "La que más te conviene", 13, 0xFF6B4E00, true);
+                TextView insignia = texto(card, "Primera alternativa para explorar", 13, 0xFF6B4E00, true);
                 insignia.setBackgroundResource(R.drawable.bg_chip_oro);
                 insignia.setPadding(dp(12), dp(4), dp(12), dp(4));
                 insignia.setLayoutParams(new LinearLayout.LayoutParams(-2, -2));
             }
-            texto(card, (i + 1) + ". " + cultivo, 18, OSCURO, true);
+
             int estadoColor = "Óptimo".equalsIgnoreCase(estado) ? VERDE
                     : ("No recomendado".equalsIgnoreCase(estado)
                         ? 0xFFAE4132 : 0xFF986B22);
-            texto(card, Formato.evaluacionCultivo(estado), 15, estadoColor, true);
+
             texto(card, opcion.optString("nota_agronomica",
                     "Revisa tu terreno antes de elegir."),
                     14, GRIS, false);
@@ -441,9 +434,9 @@ public class ScienceActivity extends ActividadBase {
                         costoHa, ingresoHa, kgHa, ha, semaforo);
                 String enTuParcela = " en tus " + Formato.hectareas(ha);
                 texto(card, "Ahorro en urea: " + Formato.unos(economia.ahorroUreaUsd), 16, VERDE, true);
-                texto(card, "Dejarías de poner " + Formato.kilos(kgHa * ha) + " de urea"
+                texto(card, "Urea que podrías ahorrar: " + Formato.kilos(kgHa * ha)
                         + enTuParcela + ".", 14, OSCURO, false);
-                texto(card, "Podrías ganar " + Formato.unos(economia.margenNetoUsd)
+                texto(card, "Ganancia estimada: " + Formato.unos(economia.margenNetoUsd)
                         + enTuParcela + ", después de pagar semillas e insumos (unos "
                         + Formato.dinero(economia.costoTotalUsd) + ").", 14, OSCURO, false);
                 texto(card, Formato.NOTA_APROXIMADO, 13, GRIS, false);
@@ -454,8 +447,7 @@ public class ScienceActivity extends ActividadBase {
                         + ", a unos $38 el saco de 50 kg: " + Formato.unos(economia.ahorroUreaUsd) + ".\n\n"
                         + "Ganancia: lo que podrías vender, menos semillas e insumos, más el ahorro en urea: "
                         + Formato.unos(economia.margenNetoUsd) + ". No incluye mano de obra ni transporte.\n\n"
-                        + "Son cuentas aproximadas con datos de años anteriores: no son ganancias "
-                        + "ni pérdidas seguras."));
+                        + "Alcance: estimaciones cantonales con datos históricos para acompañar la planificación de tu campaña."));
             } else {
                 texto(card, "Elige un mes arriba para ver cuánto podrías ahorrar y ganar.",
                         14, GRIS, false);
@@ -495,7 +487,7 @@ public class ScienceActivity extends ActividadBase {
         if (cantonEnso == null) { bloque("Aún no hay datos", "Todavía no tenemos años anteriores para tu cantón."); return; }
         texto(contenido,"¿Cómo le fue a mi zona en otros años?",19,OSCURO,true);
         texto(contenido,"El Niño suele traer más lluvia y La Niña, menos. Aquí ves qué pasó en tu zona "
-                + "entre 2005 y 2025. Sirve para prepararte; no dice qué va a pasar este año.",15,GRIS,false);
+                + "entre 2005 y 2025. Los escenarios históricos te ayudan a preparar la próxima siembra.",15,GRIS,false);
         texto(contenido,"Elige qué tipo de año quieres ver",18,OSCURO,true);
         String[] opciones={"Año normal","Año de El Niño (más lluvia)","Año de La Niña (menos lluvia)"};
         String[] claves={"neutro","nino","nina"};
@@ -511,17 +503,16 @@ public class ScienceActivity extends ActividadBase {
                 if(e==null){texto(resultado,"Todavía no tenemos datos de este tipo de año.",15,GRIS,false);return;}
                 JSONArray anios=e.optJSONArray("anios_referencia");
                 JSONObject indicadores=e.optJSONObject("indicadores_historicos");
-                // Aquí solo van las curvas del año: lluvia y humedad, mes a mes.
+                LinearLayout historia=SeccionDesplegable.crear(resultado,"enso_panel","El año de un vistazo",
+                        "Lluvia y humedad · "+opciones[pos],true);
                 JSONArray perfil=e.optJSONArray("perfil_mensual");
-                if(perfil!=null){
-                    graficosMensuales(resultado, perfil);
-                }
-                if(anios!=null) texto(resultado,"Años que tomamos en cuenta: "+unirAnios(anios)+".",13,GRIS,false);
+                if(perfil!=null) graficosMensuales(historia,perfil);
+                if(anios!=null) texto(historia,"Años de referencia: "+unirAnios(anios)+".",13,GRIS,false);
                 texto(resultado,"Cultivos que funcionaron en años así",18,OSCURO,true);
                 JSONObject r=e.optJSONObject("recomendacion_por_parcela");
                 mostrarRotacionesEn(resultado,r==null?null:r.optJSONArray(parcela.isTieneRiego()?"con_riego":"sin_riego"));
                 texto(resultado,Formato.NOTA_APROXIMADO+" Datos de la NASA, la NOAA y el INIAP.",13,GRIS,false);
-                boton(resultado, "Compartir este resumen", false,
+                boton(historia, "Compartir este resumen", false,
                         () -> compartirResumenEnso(e,
                                 opciones[pos],
                                 indicadores,
@@ -578,7 +569,7 @@ public class ScienceActivity extends ActividadBase {
             }
         }
         mensaje.append("\nCifras aproximadas con datos de 2005 a 2025 (NASA, NOAA, INIAP, MAG). ")
-                .append("No es un pronóstico ni una promesa de resultados.");
+                .append("Referencias cantonales para planificar; los resultados dependen de las condiciones de cada campaña.");
         Intent compartir = new Intent(Intent.ACTION_SEND);
         compartir.setType("text/plain");
         compartir.putExtra(Intent.EXTRA_TEXT, mensaje.toString());
@@ -602,11 +593,15 @@ public class ScienceActivity extends ActividadBase {
     }
     private void bloque(String cabecera,String cuerpo){bloqueEn(contenido,cabecera,cuerpo);}
     private void bloqueEn(LinearLayout padre,String cabecera,String cuerpo){
-        LinearLayout c=tarjeta(padre);texto(c,cabecera,17,OSCURO,true);texto(c,cuerpo,15,GRIS,false);
+        int separador=cabecera.indexOf(": ");
+        String tituloSeccion=separador<0?cabecera:cabecera.substring(0,separador);
+        String detalle=separador<0?cuerpo:cabecera+"\n"+cuerpo;
+        LinearLayout c=SeccionDesplegable.crear(padre,modo+"_"+tituloSeccion,tituloSeccion,null,false);
+        texto(c,detalle,15,GRIS,false);
     }
     private TextView texto(LinearLayout padre,String valor,int size,int color,boolean bold){
-        TextView t=new TextView(this);t.setText(valor);t.setTextSize(size);t.setTextColor(color);
-        if (bold) t.setTypeface(null, Typeface.BOLD);t.setLineSpacing(dp(3),1.0f);
+        TextView t=new TextView(this);TextoDato.aplicar(t,valor,bold);t.setTextSize(size);t.setTextColor(color);
+        t.setLineSpacing(dp(3),1.0f);
         t.setPadding(0,dp(4),0,dp(4));padre.addView(t,new LinearLayout.LayoutParams(-1,-2));return t;
     }
     private Button boton(LinearLayout padre,String texto,boolean principal,Runnable click){

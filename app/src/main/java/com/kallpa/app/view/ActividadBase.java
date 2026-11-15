@@ -217,7 +217,7 @@ public abstract class ActividadBase extends AppCompatActivity {
             luz.setVisibility(View.VISIBLE);
         }
         ((TextView) vista.findViewById(R.id.dialogoTitulo)).setText(titulo);
-        ((TextView) vista.findViewById(R.id.dialogoMensaje)).setText(texto);
+        TextoDato.aplicar((TextView) vista.findViewById(R.id.dialogoMensaje), texto, false);
         AlertDialog dialogo = new AlertDialog.Builder(this).setView(vista).create();
         vista.findViewById(R.id.dialogoBoton).setOnClickListener(v -> dialogo.dismiss());
         if (textoAccion != null && accion != null) {

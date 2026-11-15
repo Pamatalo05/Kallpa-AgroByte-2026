@@ -18,6 +18,19 @@ import com.kallpa.app.R;
  * - el punto o barra destacada (por ejemplo, el mes actual) en color fuerte.
  */
 public class GraficoSencillo extends View {
+    public static final int ZONA_ROJA = 0x26B3261E;
+    public static final int ZONA_AMARILLA = 0x33E8B52B;
+    public static final int ZONA_VERDE = 0x2667A83C;
+
+    private static final class Zona {
+        final float desde, hasta;
+        final int color;
+        final String texto;
+        Zona(float desde, float hasta, int color, String texto) {
+            this.desde = desde; this.hasta = hasta; this.color = color; this.texto = texto;
+        }
+    }
+    private final java.util.ArrayList<Zona> zonas = new java.util.ArrayList<>();
 
     /** Convierte un valor del gráfico en texto con unidad: 187 -> "187 mm". */
     public interface Etiqueta {
@@ -95,6 +108,27 @@ public class GraficoSencillo extends View {
         return this;
     }
 
+    /** Resalta el primer máximo finito y conserva el encadenamiento de configuración. */
+    public GraficoSencillo pico(String rotulo) {
+        int indice = -1;
+        for (int i = 0; i < valores.length; i++) {
+            if (Float.isFinite(valores[i]) && (indice < 0 || valores[i] > valores[indice])) indice = i;
+        }
+        destacar(indice, rotulo);
+        invalidate();
+        return this;
+    }
+
+    /** Añade una banda de referencia, recortada al rango visible de la gráfica. */
+    public GraficoSencillo zona(float desde, float hasta, int colorZona, String rotulo) {
+        if (!Float.isFinite(desde) || !Float.isFinite(hasta) || desde >= hasta) {
+            throw new IllegalArgumentException("La zona requiere límites finitos y ascendentes");
+        }
+        zonas.add(new Zona(desde, hasta, colorZona, rotulo));
+        invalidate();
+        return this;
+    }
+
     /** Dibuja una línea punteada con el promedio, para comparar de un vistazo. */
     public GraficoSencillo conPromedio() {
         conPromedio = true;
@@ -108,7 +142,20 @@ public class GraficoSencillo extends View {
     @Override protected void onDraw(Canvas c) {
         super.onDraw(c);
         if (valores.length == 0) return;
-        float izq = dp(46), der = getWidth() - dp(14), arriba = dp(24), abajo = getHeight() - dp(30);
+        float izq = dp(46), der = getWidth() - dp(14), arriba = dp(32), abajo = getHeight() - dp(30);
+
+        // Las bandas son fondo de referencia; no alteran la escala ni los datos.
+        for (Zona zona : zonas) {
+            float desde = Math.max(zona.desde, minimo), hasta = Math.min(zona.hasta, maximo);
+            if (desde >= hasta) continue;
+            float y1 = y(hasta, arriba, abajo), y2 = y(desde, arriba, abajo);
+            pincel.setStyle(Paint.Style.FILL);
+            pincel.setColor(zona.color);
+            c.drawRect(izq, y1, der, y2, pincel);
+            if (zona.texto != null && y2 - y1 >= dp(20)) {
+                texto(c, zona.texto, der - dp(4), y1 + dp(13), 10, 0xFF42543C, Paint.Align.RIGHT, false);
+            }
+        }
 
         // Franja "buena" en verde claro.
         if (!Float.isNaN(franjaDesde)) {
@@ -166,7 +213,9 @@ public class GraficoSencillo extends View {
                 rect.set(cx - anchoBarra / 2, tope, cx + anchoBarra / 2, abajo);
                 c.drawRoundRect(rect, dp(4), dp(4), pincel);
                 if (caben || i == indiceMax || i == destacado) {
-                    texto(c, String.valueOf(Math.round(valores[i])), cx, tope - dp(4), 10,
+                    String rotulo = i == destacado && textoDestacado != null
+                            ? textoDestacado + ": " + etiqueta.texto(valores[i]) : String.valueOf(Math.round(valores[i]));
+                    texto(c, rotulo, cx, tope - dp(4), 10,
                             0xFF16371E, Paint.Align.CENTER, fuerte);
                 }
             }

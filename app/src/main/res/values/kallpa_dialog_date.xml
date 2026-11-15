@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- DatePickerDialog de Android: misma funcionalidad, colores de marca Kallpa. -->
+    <style name="KallpaDatePickerTheme" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">#0B5D2A</item>
+        <item name="android:colorControlActivated">#67A83C</item>
+        <item name="android:windowBackground">#FFFCF5</item>
+        <item name="android:textColorPrimary">#07391E</item>
+    </style>
+</resources>

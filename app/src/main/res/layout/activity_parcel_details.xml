@@ -1,68 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_screen">
-    <ImageView android:layout_width="match_parent" android:layout_height="85dp"
-        android:layout_gravity="bottom" android:scaleType="fitXY"
-        android:src="@drawable/hills" android:contentDescription="@null" />
-    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="26dp"
-            android:paddingEnd="26dp"
-            android:paddingTop="18dp"
-            android:paddingBottom="120dp">
-            <TextView
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:text="← Mis parcelas"
-                android:clickable="true"
-                android:focusable="true"
-                android:textSize="16sp"
-                android:textColor="@color/forest" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="Mi parcela"
-                android:textColor="@color/forest_dark"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/txtName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/forest" />
-            <TextView
-                android:id="@+id/txtData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:padding="20dp"
-                android:background="@drawable/bg_card"
-                android:lineSpacingExtra="9dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_dark" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                android:text="La ubicación indicada pertenece a esta parcela, no al perfil del agricultor. Los datos agrícolas del piloto cubren Daule y Babahoyo."
-                android:textColor="@color/muted"
-                android:textSize="13sp" />
-            <Button
-                android:id="@+id/btnSelect"
-                style="@style/KallpaButton"
-                android:layout_marginTop="24dp"
-                android:text="Seleccionar esta parcela" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="#FCF9EF">
+    <androidx.core.widget.NestedScrollView android:id="@+id/parcelScroll" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="24dp">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="106dp">
+                <ImageView android:layout_width="170dp" android:layout_height="48dp" android:layout_gravity="bottom|end" android:src="@drawable/hills" android:scaleType="fitXY" android:alpha=".65" android:contentDescription="@null" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center_vertical" android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="48dp" android:layout_height="48dp" android:text="←" android:textColor="#073B24" android:textSize="28sp" android:gravity="center" android:clickable="true" android:focusable="true" android:background="@drawable/bg_plot_white" android:contentDescription="Volver" android:id="@+id/btnBack" />
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mi parcela" android:textColor="#073B24" android:textSize="28sp" android:textStyle="bold" />
+                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textColor="#61665D" android:textSize="13sp" android:layout_marginTop="4dp" android:id="@+id/txtName" />
+                    </LinearLayout>
+                    <ImageButton android:id="@+id/btnLayers" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_plot_layers" android:padding="12dp" android:background="@drawable/bg_plot_pale" android:contentDescription="Cambiar capa del mapa" />
+                </LinearLayout>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/mapFrame" android:layout_width="match_parent" android:layout_height="300dp" android:background="@drawable/bg_plot_map" android:clipToOutline="true">
+                <org.osmdroid.views.MapView android:id="@+id/parcelMap" android:layout_width="match_parent" android:layout_height="match_parent" />
+                <TextView android:layout_width="wrap_content" android:layout_height="48dp" android:text="Vista satelital  ⌄" android:textColor="#073B24" android:textSize="14sp" android:gravity="center" android:clickable="true" android:focusable="true" android:background="@drawable/bg_plot_white" android:layout_margin="14dp" android:paddingHorizontal="16dp" android:drawableStart="@drawable/ic_plot_layers" android:drawablePadding="8dp" android:elevation="3dp" android:textStyle="bold" android:id="@+id/btnMapType" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textColor="#FFFFFF" android:textSize="18sp" android:layout_gravity="center" android:gravity="center" android:textStyle="bold" android:shadowColor="#A0000000" android:shadowRadius="5" android:padding="8dp" android:id="@+id/txtMapParcel" />
+                <LinearLayout android:layout_width="48dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="end|bottom" android:layout_marginEnd="14dp" android:layout_marginBottom="40dp">
+                    <ImageButton android:id="@+id/btnCenterMap" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_plot_target" android:padding="12dp" android:background="@drawable/bg_plot_white" android:contentDescription="Centrar en mi parcela" />
+                    <TextView android:layout_width="48dp" android:layout_height="48dp" android:text="+" android:textColor="#073B24" android:textSize="28sp" android:gravity="center" android:clickable="true" android:focusable="true" android:background="@drawable/bg_plot_white" android:layout_marginTop="10dp" android:contentDescription="Acercar mapa" android:id="@+id/btnZoomIn" />
+                    <TextView android:layout_width="48dp" android:layout_height="48dp" android:text="−" android:textColor="#073B24" android:textSize="28sp" android:gravity="center" android:clickable="true" android:focusable="true" android:background="@drawable/bg_plot_white" android:contentDescription="Alejar mapa" android:id="@+id/btnZoomOut" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textColor="#073B24" android:textSize="9sp" android:layout_gravity="bottom|end" android:background="#DDFFFFFF" android:padding="4dp" android:id="@+id/txtAttribution" />
+            </FrameLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textColor="#59634F" android:textSize="12sp" android:paddingHorizontal="18dp" android:paddingVertical="10dp" android:id="@+id/txtMapStatus" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:id="@+id/editToolbar" android:paddingHorizontal="16dp" android:visibility="gone">
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnUndoPoint" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="Deshacer" android:textAllCaps="false" android:textSize="13sp" android:textColor="#174919" />
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnClearPoints" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="Reiniciar" android:textAllCaps="false" android:textSize="13sp" android:textColor="#174919" />
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnSaveLimits" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="Guardar" android:textAllCaps="false" android:textSize="13sp" android:textColor="#174919" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginHorizontal="14dp" android:layout_marginTop="4dp" android:padding="18dp" android:background="@drawable/bg_plot_card" android:elevation="2dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView android:layout_width="52dp" android:layout_height="52dp" android:src="@drawable/ic_plot_leaf" android:padding="10dp" android:background="@drawable/bg_plot_pale" android:contentDescription="@null" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="Cobertura del terreno" android:textColor="#073B24" android:textSize="20sp" android:layout_weight="1" android:layout_marginStart="12dp" android:textStyle="bold" />
+                </LinearLayout>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textColor="#073B24" android:textSize="16sp" android:layout_marginTop="12dp" android:background="@drawable/bg_plot_badge" android:paddingHorizontal="12dp" android:paddingVertical="7dp" android:textStyle="bold" android:id="@+id/txtCoverageState" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textColor="#61665D" android:textSize="14sp" android:layout_marginTop="9dp" android:lineSpacingExtra="3dp" android:id="@+id/txtCoverageDescription" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="" android:textColor="#3E5636" android:textSize="12sp" android:layout_marginTop="12dp" android:id="@+id/txtObservationDate" />
+                <TextView android:layout_width="match_parent" android:layout_height="48dp" android:text="Ver datos y fuentes  →" android:textColor="#073B24" android:textSize="14sp" android:gravity="center" android:clickable="true" android:focusable="true" android:background="@drawable/bg_plot_white" android:id="@+id/btnCoverageSources" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginHorizontal="14dp" android:layout_marginTop="14dp" android:padding="18dp" android:background="@drawable/bg_plot_card" android:elevation="2dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Evolución de la cobertura" android:textColor="#073B24" android:textSize="20sp" android:textStyle="bold" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Compara las observaciones de tu zona en el tiempo." android:textColor="#61665D" android:textSize="13sp" android:layout_marginTop="5dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:id="@+id/comparisonCards" android:gravity="center_vertical" android:layout_marginTop="16dp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="140dp" android:orientation="vertical" android:id="@+id/chartContainer" android:layout_marginTop="14dp" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="MODIS NDVI · 250 m · Serie de observaciones a nivel cantonal." android:textColor="#68725C" android:textSize="11sp" android:layout_marginTop="8dp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginHorizontal="14dp" android:layout_marginTop="20dp">
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnEditLimits" android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="Editar límites" android:textAllCaps="false" android:textSize="13sp" android:textColor="#FFFFFF" android:background="@drawable/bg_plot_primary" android:backgroundTint="@null" android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnCompareDates" android:layout_width="0dp" android:layout_weight="1" android:layout_height="60dp" android:text="Comparar fechas" android:textAllCaps="false" android:textSize="13sp" android:textColor="#174919" android:background="@drawable/bg_plot_outline" android:backgroundTint="@null" android:textStyle="bold" android:layout_marginStart="10dp" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginHorizontal="16dp" android:layout_marginTop="12dp">
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnParcelData" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="Datos de parcela" android:textAllCaps="false" android:textSize="13sp" android:textColor="#174919" />
+                <androidx.appcompat.widget.AppCompatButton android:id="@+id/btnSelect" android:layout_width="0dp" android:layout_weight="1" android:layout_height="56dp" android:text="Usar esta parcela" android:textAllCaps="false" android:textSize="13sp" android:textColor="#174919" />
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

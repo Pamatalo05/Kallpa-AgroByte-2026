@@ -134,23 +134,24 @@ public class CompanionActivity extends ActividadBase {
             String explicacion = cobertura.toLowerCase(Locale.ROOT).contains("descubierto")
                     ? "El satélite ve poca vegetación en tu zona: mucho suelo descubierto."
                     : "El satélite ve vegetación verde en tu zona.";
-            section("Lo que ve el satélite", explicacion
-                    + "\nMira toda la zona, no solo tu parcela.");
+            LinearLayout observacion=SeccionDesplegable.crear(body,"bitacora_satelite","Lo que ve el satélite",
+                    "Observaciones de tu cantón",false);
+            text(observacion,explicacion+"\nAlcance: estimación a nivel cantonal.",15,MUTED,false);
 
             // Fechas, fuentes, unidades y resolución siguen disponibles bajo demanda.
             LinearLayout fila = new LinearLayout(this);
             fila.setOrientation(LinearLayout.HORIZONTAL);
-            body.addView(fila, new LinearLayout.LayoutParams(-1, -2));
+            observacion.addView(fila, new LinearLayout.LayoutParams(-1, -2));
             button(fila, "Ver cifras", false, () -> explicar("Lo que ve el satélite",
                     "Verdor de las plantas: " + Formato.verdor(s.optDouble("ndvi_ultimo", 0))
-                    + "\nÚltima foto: " + s.optString("fecha_ndvi", "sin fecha")
+                    + "\nÚltima observación: " + s.optString("fecha_ndvi", "sin fecha")
                     + "\n\nHumedad en la superficie: " + Formato.porcentaje(s.optDouble("smap_humedad_ultima", 0))
                     + "\nÚltima medición: " + s.optString("fecha_smap", "sin fecha")
-                    + "\n\nDatos de satélites de la NASA. Miran toda la zona, no solo tu parcela."));
+                    + "\n\nFuente: NASA · Observaciones a nivel cantonal."));
 
             // Una sola acción abre las tres respuestas; no sobrecargamos la Bitácora.
             button(fila, "¿Se ve así?", true, () ->
-                    new AlertDialog.Builder(this)
+                    new DialogoKallpa(this)
                             .setTitle("¿Tu terreno se ve así?")
                             .setItems(new String[]{"Sí, se ve así", "No, se ve distinto", "No estoy seguro"},
                                     (dialog, which) -> {
@@ -168,7 +169,7 @@ public class CompanionActivity extends ActividadBase {
     private void verifySatellite(String status, JSONObject snapshot) {
         // No se altera el archivo NASA: guardamos únicamente la opinión de campo.
         final EditText note = input("¿Qué viste en tu parcela? (si quieres)",true);
-        new AlertDialog.Builder(this).setTitle("Cuéntanos qué viste")
+        new DialogoKallpa(this).setTitle("Cuéntanos qué viste")
                 .setMessage("Respuesta: " + status.toLowerCase(Locale.ROOT) + ". Lo guardamos en tu bitácora.")
                 .setView(note)
                 .setNegativeButton("Cancelar",null)
@@ -202,7 +203,7 @@ public class CompanionActivity extends ActividadBase {
         text(form,"Algo más que quieras anotar (si quieres)",15,DARK,true);
         EditText note = input("Ej.: sembré maíz; el suelo estaba húmedo",false);
         form.addView(note,new LinearLayout.LayoutParams(-1,dp(100)));
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = new DialogoKallpa(this)
                 .setTitle("Anotar en mi bitácora")
                 .setView(form)
                 .setNegativeButton("Cancelar",null)
@@ -258,8 +259,9 @@ public class CompanionActivity extends ActividadBase {
                 + "Te respondo aunque no tengas internet.");
         section("Tu parcela",active.getNombre()+" · "+Formato.hectareas(active.getHectareas())+" · "
                 +(active.isTieneRiego()?"Con riego":"Sin riego"));
-        text(body,"Preguntas frecuentes",18,DARK,true);
-        questionGrid(new int[]{R.drawable.ic_home_rotation,R.drawable.ic_home_calendar,R.drawable.ic_brote,
+        LinearLayout preguntas=SeccionDesplegable.crear(body,"muyu_preguntas","Preguntas frecuentes",
+                "Cultivos, siembra y cuidado del suelo",true);
+        questionGrid(preguntas,new int[]{R.drawable.ic_home_rotation,R.drawable.ic_home_calendar,R.drawable.ic_brote,
                         R.drawable.ic_home_weather,R.drawable.ic_home_plot,R.drawable.ic_home_diary},
                 new String[]{"¿Qué siembro después?","¿Es buen mes para sembrar?","¿Cuánto ahorro en urea?",
                         "¿Qué es El Niño y La Niña?","¿Qué ven los satélites?","¿De dónde sacas los datos?"},
@@ -285,8 +287,7 @@ public class CompanionActivity extends ActividadBase {
                     + "El Niño y La Niña, y lo que ven los satélites. Prueba con una de las preguntas de arriba.\n\n"
                     + "Para algo muy puntual de tu terreno, lo mejor es conversar con un técnico agrícola.");
         });
-        text(body,"Muyu te orienta, pero no reemplaza a un técnico ni un análisis de suelo. "
-                + "Los datos son de tu zona, no de tu terreno exacto.",14,MUTED,false);
+        text(body,"Muyu te acompaña con estimaciones cantonales. Puedes complementarlas con tus observaciones y asesoría agrícola.",14,MUTED,false);
     }
 
     /**
@@ -296,7 +297,7 @@ public class CompanionActivity extends ActividadBase {
     private void askMonth() {
         int saved=getSharedPreferences("kallpa_ui",MODE_PRIVATE).getInt("mes_siembra",0);
         if(saved>=1&&saved<=12){showTrafficLight(saved);return;}
-        new AlertDialog.Builder(this).setTitle("¿En qué mes quieres sembrar?")
+        new DialogoKallpa(this).setTitle("¿En qué mes quieres sembrar?")
                 .setItems(MONTHS,(d,which)->showTrafficLight(which+1))
                 .setNegativeButton("Cancelar",null).show();
     }
@@ -312,10 +313,10 @@ public class CompanionActivity extends ActividadBase {
                 String text="En ese mes el suelo de tu zona suele estar "+Formato.humedadEnPalabras(moisture)+".\n"
                         +friendlyMeaning(risk.color,moisture)+"\n\n"
                         +rainTrend(month,datum.optDouble("lluvia_mm",Double.NaN))
-                        +"\n\nEs lo que suele pasar en ese mes, no el pronóstico del tiempo.";
+                        +"\n\nAlcance: estimaciones mensuales a nivel cantonal para planificar tu siembra.";
                 explicarConSemaforo("Sembrar en "+MONTHS[month-1].toLowerCase(Locale.ROOT),
                         risk.color,Formato.semaforo(risk.color),text,
-                        "Elegir otro mes",()->new AlertDialog.Builder(this).setTitle("¿En qué mes quieres sembrar?")
+                        "Elegir otro mes",()->new DialogoKallpa(this).setTitle("¿En qué mes quieres sembrar?")
                                 .setItems(MONTHS,(d,which)->showTrafficLight(which+1))
                                 .setNegativeButton("Cancelar",null).show());
                 return;
@@ -357,7 +358,7 @@ public class CompanionActivity extends ActividadBase {
     }
     private String friendlyMeaning(String risk,double humidity) {
         if("Verde".equals(risk))return humidity<0.55
-                ?"Como tienes riego, puedes sembrar tranquilo. Solo revisa que tu riego funcione bien."
+                ?"El riego puede respaldar tu siembra. Revisa su disponibilidad antes de decidir."
                 :"Es un buen mes. Igual mira cómo está tu terreno antes de sembrar.";
         if("Amarillo".equals(risk))return humidity>0.78
                 ?"Podría sobrar agua: revisa que no se encharque y que el agua corra bien."
@@ -370,10 +371,10 @@ public class CompanionActivity extends ActividadBase {
                     .getJSONObject("parcelas_satelitales").getJSONObject(canton)
                     .getJSONObject("resumen_actual");
             return "Verdor de las plantas en tu zona: "+Formato.verdor(d.getDouble("ndvi_ultimo"))
-                    +" (foto del "+d.optString("fecha_ndvi")+"). Mientras más alto, más plantas verdes hay.\n\n"
+                    +" (observación del "+d.optString("fecha_ndvi")+"). Mientras más alto, más plantas verdes hay.\n\n"
                     +"Humedad en la superficie del suelo: "+Formato.porcentaje(d.getDouble("smap_humedad_ultima"))
                     +" (medida el "+d.optString("fecha_smap")+").\n\n"
-                    +"Son satélites de la NASA que miran toda la zona, no solo tu parcela. "
+                    +"Las observaciones de la NASA se presentan a nivel cantonal. "
                     +"Compáralo con lo que ves en tu terreno.";
         }catch(Exception e){return "Todavía no tengo datos del satélite para tu parcela. Por ahora solo tengo Daule y Babahoyo.";}
     }
@@ -414,7 +415,7 @@ public class CompanionActivity extends ActividadBase {
                 +"El Niño: suele traer más lluvia y riesgo de inundaciones.\n"
                 +"La Niña: suele traer menos lluvia.\n\n"
                 +"En \"El Niño y La Niña\" puedes ver cómo le fue a tu zona en esos años (de 2005 a 2025). "
-                +"Sirve para prepararte, pero nadie sabe con certeza cuándo vendrá el próximo.";
+                +"Los escenarios históricos te ayudan a explorar condiciones de tu cantón y prepararte para la próxima campaña.";
     }
     private String sourcesAnswer() {
         return "Uso datos de fuentes confiables:\n\n"
@@ -422,7 +423,7 @@ public class CompanionActivity extends ActividadBase {
                 +"NOAA: los años de El Niño y La Niña.\n"
                 +"INIAP y FAO: información de los cultivos.\n"
                 +"MAG: precio de la urea (unos $38 el saco de 50 kg).\n\n"
-                +"El equipo AgroByte juntó todo esto. Son datos de tu zona, no de tu terreno exacto, "
+                +"El equipo AgroByte preparó las estimaciones a nivel cantonal, "
                 +"y las cifras son aproximadas.";
     }
     private JSONObject cantonInfo() throws Exception {
@@ -445,16 +446,12 @@ public class CompanionActivity extends ActividadBase {
     // ---------------- Helpers de interfaz ----------------
     private void intro(String title,String subtitle){text(body,title,20,DARK,true);text(body,subtitle,15,MUTED,false);}
     private void section(String title,String info){
-        LinearLayout card=new LinearLayout(this);card.setOrientation(LinearLayout.VERTICAL);
-        card.setPadding(dp(15),dp(14),dp(15),dp(14));card.setBackgroundResource(R.drawable.bg_card);
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);
-        lp.topMargin=dp(12);lp.bottomMargin=dp(3);body.addView(card,lp);
-        text(card,title,17,DARK,true);text(card,info,15,MUTED,false);
+        LinearLayout card=SeccionDesplegable.crear(body,mode+"_"+title,title,null,false);
+        text(card,info,15,MUTED,false);
     }
     private TextView text(LinearLayout parent,String s,int size,int color,boolean bold){
-        TextView v=new TextView(this);v.setText(s);v.setTextSize(size);v.setTextColor(color);
+        TextView v=new TextView(this);TextoDato.aplicar(v,s,bold);v.setTextSize(size);v.setTextColor(color);
         v.setPadding(0,dp(4),0,dp(4));v.setLineSpacing(dp(3),1f);
-        if(bold)v.setTypeface(null,Typeface.BOLD);
         parent.addView(v,new LinearLayout.LayoutParams(-1,-2));return v;
     }
     private Spinner spinner(LinearLayout parent,String[] values){
@@ -484,13 +481,13 @@ public class CompanionActivity extends ActividadBase {
         parent.addView(b,lp);b.setOnClickListener(v->callback.run());
     }
     /** Preguntas frecuentes en dos columnas de tarjetas, en vez de seis botones apilados. */
-    private void questionGrid(int[] icons,String[] labels,Runnable[] actions){
+    private void questionGrid(LinearLayout parent,int[] icons,String[] labels,Runnable[] actions){
         LinearLayout row=null;
         for(int i=0;i<labels.length;i++){
             if(i%2==0){
                 row=new LinearLayout(this);row.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams rl=new LinearLayout.LayoutParams(-1,-2);rl.topMargin=dp(10);
-                body.addView(row,rl);
+                parent.addView(row,rl);
             }
             LinearLayout card=new LinearLayout(this);card.setOrientation(LinearLayout.VERTICAL);
             card.setBackgroundResource(R.drawable.bg_card_pregunta);
