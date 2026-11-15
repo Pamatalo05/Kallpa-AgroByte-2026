@@ -34,6 +34,20 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Semáforo del mes (solo en las respuestas de Muyu que lo usan). -->
+    <TextView
+        android:id="@+id/dialogoInsignia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:paddingStart="14dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="8dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/dialogoScroll"
         android:layout_width="match_parent"
@@ -49,6 +63,19 @@
             android:textColor="@color/text_dark"
             android:textSize="16sp" />
     </ScrollView>
+
+    <TextView
+        android:id="@+id/dialogoSecundario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:textColor="@color/forest"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/dialogoBoton"

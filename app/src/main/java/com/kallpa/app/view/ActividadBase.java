@@ -195,11 +195,37 @@ public abstract class ActividadBase extends AppCompatActivity {
 
     /** Ventana de explicación: título, texto grande y un único botón "Entendido". */
     protected void explicar(String titulo, String texto) {
+        explicarConSemaforo(titulo, null, null, texto, null, null);
+    }
+
+    /**
+     * Explicación con la luz del semáforo arriba (verde, amarilla o roja) y,
+     * si se da, una acción secundaria (por ejemplo, "Elegir otro mes").
+     */
+    protected void explicarConSemaforo(String titulo, String color, String insignia, String texto,
+                                       String textoAccion, Runnable accion) {
         View vista = LayoutInflater.from(this).inflate(R.layout.view_dialogo, null, false);
+        if (insignia != null) {
+            TextView luz = vista.findViewById(R.id.dialogoInsignia);
+            android.graphics.drawable.GradientDrawable fondo = new android.graphics.drawable.GradientDrawable();
+            fondo.setCornerRadius(px(100));
+            boolean verde = "Verde".equalsIgnoreCase(color), amarillo = "Amarillo".equalsIgnoreCase(color);
+            fondo.setColor(verde ? 0xFFDDF0CF : amarillo ? 0xFFFCEBB8 : 0xFFF8D3CC);
+            luz.setBackground(fondo);
+            luz.setTextColor(verde ? 0xFF0B5D2A : amarillo ? 0xFF6B4E00 : 0xFF8A1F11);
+            luz.setText("● " + insignia);
+            luz.setVisibility(View.VISIBLE);
+        }
         ((TextView) vista.findViewById(R.id.dialogoTitulo)).setText(titulo);
         ((TextView) vista.findViewById(R.id.dialogoMensaje)).setText(texto);
         AlertDialog dialogo = new AlertDialog.Builder(this).setView(vista).create();
         vista.findViewById(R.id.dialogoBoton).setOnClickListener(v -> dialogo.dismiss());
+        if (textoAccion != null && accion != null) {
+            TextView secundario = vista.findViewById(R.id.dialogoSecundario);
+            secundario.setText(textoAccion);
+            secundario.setVisibility(View.VISIBLE);
+            secundario.setOnClickListener(v -> { dialogo.dismiss(); accion.run(); });
+        }
         dialogo.show();
         // Si el texto es largo, se desplaza dentro de la ventana y el botón sigue a la vista.
         View scroll = vista.findViewById(R.id.dialogoScroll);

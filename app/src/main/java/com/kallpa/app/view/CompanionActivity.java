@@ -289,29 +289,71 @@ public class CompanionActivity extends ActividadBase {
                 + "Los datos son de tu zona, no de tu terreno exacto.",14,MUTED,false);
     }
 
+    /**
+     * Semáforo Día Cero: responde para el mes de siembra elegido en "Siembra"
+     * (o el próximo mes) y deja cambiarlo desde la misma respuesta.
+     */
     private void askMonth() {
-        String[] months=MONTHS;
+        int saved=getSharedPreferences("kallpa_ui",MODE_PRIVATE).getInt("mes_siembra",0);
+        if(saved>=1&&saved<=12){showTrafficLight(saved);return;}
         new AlertDialog.Builder(this).setTitle("¿En qué mes quieres sembrar?")
-                .setItems(months,(d,which)->answer(trafficLightAnswer(which+1)))
+                .setItems(MONTHS,(d,which)->showTrafficLight(which+1))
                 .setNegativeButton("Cancelar",null).show();
     }
-    private String trafficLightAnswer(int month) {
+    private void showTrafficLight(int month) {
+        getSharedPreferences("kallpa_ui",MODE_PRIVATE).edit().putInt("mes_siembra",month).apply();
         try {
-            JSONObject local=cantonInfo();
-            JSONArray series=local.getJSONArray("serie_satelital_ml");
+            JSONArray series=cantonInfo().getJSONArray("serie_satelital_ml");
             for(int i=0;i<series.length();i++){
                 JSONObject datum=series.getJSONObject(i);
-                if(datum.optInt("mes")==month){
-                    double moisture=datum.getJSONObject("humedad_raiz_predicha").getDouble("neutro");
-                    MotorSemaforo.Resultado risk=MotorSemaforo.evaluar(moisture,active.isTieneRiego());
-                    return MONTHS[month-1]+": "+Formato.semaforo(risk.color)+"\n\n"
-                            +"En ese mes el suelo de tu zona suele estar "+Formato.humedadEnPalabras(moisture)+".\n"
-                            +friendlyMeaning(risk.color,moisture)
-                            +"\n\nEs lo que suele pasar en ese mes en años normales, no el pronóstico del tiempo.";
-                }
+                if(datum.optInt("mes")!=month)continue;
+                double moisture=datum.getJSONObject("humedad_raiz_predicha").getDouble("neutro");
+                MotorSemaforo.Resultado risk=MotorSemaforo.evaluar(moisture,active.isTieneRiego());
+                String text="En ese mes el suelo de tu zona suele estar "+Formato.humedadEnPalabras(moisture)+".\n"
+                        +friendlyMeaning(risk.color,moisture)+"\n\n"
+                        +rainTrend(month,datum.optDouble("lluvia_mm",Double.NaN))
+                        +"\n\nEs lo que suele pasar en ese mes, no el pronóstico del tiempo.";
+                explicarConSemaforo("Sembrar en "+MONTHS[month-1].toLowerCase(Locale.ROOT),
+                        risk.color,Formato.semaforo(risk.color),text,
+                        "Elegir otro mes",()->new AlertDialog.Builder(this).setTitle("¿En qué mes quieres sembrar?")
+                                .setItems(MONTHS,(d,which)->showTrafficLight(which+1))
+                                .setNegativeButton("Cancelar",null).show());
+                return;
             }
-            return "Todavía no tengo datos de ese mes.";
-        } catch(Exception e){return "Por ahora no tengo datos del clima para tu zona. Solo tengo Daule y Babahoyo.";}
+            answer("Todavía no tengo datos de ese mes.");
+        } catch(Exception e){answer("Por ahora no tengo datos del clima para tu zona. Solo tengo Daule y Babahoyo.");}
+    }
+    /**
+     * Indicador orientativo de clima: lluvia normal del mes y cuánto cambia en años
+     * de El Niño y La Niña (por ejemplo, +25 %), según el historial 2005–2025.
+     */
+    private String rainTrend(int month,double normalMm) {
+        StringBuilder t=new StringBuilder();
+        if(Double.isFinite(normalMm))t.append("Lluvia normal del mes: unos ").append(Formato.numero(normalMm)).append(" mm.");
+        try {
+            JSONObject esc=readData("simulador_enso_historico.json").getJSONObject("cantones")
+                    .getJSONObject(canton).getJSONObject("escenarios");
+            double neutro=monthRain(esc,"neutro",month),nino=monthRain(esc,"nino",month),nina=monthRain(esc,"nina",month);
+            if(neutro>0){
+                t.append("\nSi viene El Niño: ").append(percent(nino,neutro)).append(" de lluvia.");
+                t.append("\nSi viene La Niña: ").append(percent(nina,neutro)).append(" de lluvia.");
+            }
+        } catch(Exception ignored){ }
+        return t.toString().trim();
+    }
+    private double monthRain(JSONObject esc,String key,int month) throws Exception {
+        JSONArray perfil=esc.getJSONObject(key).getJSONArray("perfil_mensual");
+        for(int i=0;i<perfil.length();i++){
+            JSONObject x=perfil.getJSONObject(i);
+            if(x.optInt("mes")==month)return x.optDouble("lluvia_mm",0);
+        }
+        return 0;
+    }
+    /** 125 mm frente a 100 mm -> "+25 %"; parecido -> "cerca de lo normal". */
+    private String percent(double value,double normal) {
+        long p=Math.round((value-normal)/normal*100);
+        if(Math.abs(p)<10)return "cerca de lo normal";
+        return (p>0?"+":"")+p+" %";
     }
     private String friendlyMeaning(String risk,double humidity) {
         if("Verde".equals(risk))return humidity<0.55

@@ -143,7 +143,9 @@ public class MuyuWebActivity extends ActividadBase {
             json.put("nombreParcela", activa.getNombre());
             json.put("hectareas", activa.getHectareas());
             json.put("conRiego", activa.isTieneRiego());
-            json.put("mes", Calendar.getInstance().get(Calendar.MONTH) + 1);
+            // Mes de siembra elegido en "Siembra" (si no, el mes actual).
+            int elegido = getSharedPreferences("kallpa_ui", MODE_PRIVATE).getInt("mes_siembra", 0);
+            json.put("mes", elegido >= 1 && elegido <= 12 ? elegido : Calendar.getInstance().get(Calendar.MONTH) + 1);
         } catch (Exception ignorado) {
             // Sin contexto, Muyu usa su parcela por defecto.
         }

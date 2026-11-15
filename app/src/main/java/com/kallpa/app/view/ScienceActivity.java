@@ -138,8 +138,9 @@ public class ScienceActivity extends ActividadBase {
         if (info == null) { bloque("Sin datos del satélite", "Todavía no tenemos fotos del satélite para tu cantón."); return; }
         LinearLayout resumen = tarjeta(contenido);
         texto(resumen, parcela.getNombre(), 19, OSCURO, true);
-        texto(resumen, parcela.getCultivoActual() + " · " + Formato.hectareas(parcela.getHectareas())
-                + " · " + (parcela.isTieneRiego() ? "Con riego" : "Sin riego") + "\n" + nombreCanton(), 15, GRIS, false);
+        texto(resumen, "Cultivo en curso: " + parcela.getCultivoActual(), 17, VERDE, true);
+        texto(resumen, Formato.hectareas(parcela.getHectareas()) + " · "
+                + (parcela.isTieneRiego() ? "Con riego" : "Sin riego") + " · " + nombreCanton(), 15, GRIS, false);
         enlace(resumen, "Cambiar o añadir parcela", () -> startActivity(new Intent(this, MyParcelsActivity.class)));
 
         texto(contenido, "¿Qué ven los satélites?", 19, OSCURO, true);
@@ -267,26 +268,15 @@ public class ScienceActivity extends ActividadBase {
             return;
         }
 
-        texto(contenido, "¿Cuándo quieres sembrar?", 19, OSCURO, true);
-        texto(contenido, "Elige el mes. Te decimos si el suelo suele estar bien para sembrar "
-                + "y qué cultivos te pueden convenir.", 15, GRIS, false);
+        texto(contenido, "¿Qué siembro después del " + parcela.getCultivoActual().toLowerCase(Locale.ROOT) + "?",
+                19, OSCURO, true);
+        texto(contenido, "Elige el mes en que piensas sembrar y mira las variedades del INIAP "
+                + "que te convienen, con el ahorro y la ganancia aproximada.", 15, GRIS, false);
         bloque("Tu parcela", parcela.getNombre() + " · " + nombreCanton() + "\n"
-                + parcela.getCultivoActual() + " · " + Formato.hectareas(parcela.getHectareas())
+                + "Cultivo actual: " + parcela.getCultivoActual() + " · " + Formato.hectareas(parcela.getHectareas())
                 + " · " + (parcela.isTieneRiego() ? "Con riego" : "Sin riego"));
 
-        texto(contenido, "1. Mes de siembra", 18, OSCURO, true);
-        final String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-        Spinner selector = selectorGrande(contenido, meses);
-        LinearLayout resultado = tarjeta(contenido);
         final JSONArray serie = cantonMl.optJSONArray("serie_satelital_ml");
-
-        texto(contenido, "2. Cultivos que te pueden convenir", 18, OSCURO, true);
-        texto(contenido, "Son plantas que devuelven nitrógeno a la tierra (leguminosas). "
-                + "Van en orden: la primera es la que mejor resultó en años normales "
-                + "para una parcela " + (parcela.isTieneRiego() ? "con riego." : "sin riego."),
-                15, GRIS, false);
-
         JSONArray opciones = null;
         if (cantonEnso != null) {
             JSONObject escenarios = cantonEnso.optJSONObject("escenarios");
@@ -295,73 +285,105 @@ public class ScienceActivity extends ActividadBase {
             opciones = porRiego == null ? null : porRiego.optJSONArray(
                     parcela.isTieneRiego() ? "con_riego" : "sin_riego");
         }
-        final JSONArray opcionesAuditorias = opciones;
+        final JSONArray opcionesOrdenadas = opciones;
+
+        texto(contenido, "Mes de siembra", 18, OSCURO, true);
+        TextView[] etiquetaMes = new TextView[1];
+        TextView tituloLista = new TextView(this);
         LinearLayout listado = new LinearLayout(this);
         listado.setOrientation(LinearLayout.VERTICAL);
-        contenido.addView(listado, new LinearLayout.LayoutParams(-1, -2));
+        int[] mes = {mesDeSiembraGuardado()};
+        Runnable actualizar = () -> {
+            String nombreMes = NOMBRES_MES[mes[0] - 1];
+            etiquetaMes[0].setText(nombreMes.toUpperCase(Locale.ROOT));
+            tituloLista.setText("Variedades del INIAP para sembrar en " + nombreMes.toLowerCase(Locale.ROOT));
+            guardarMesDeSiembra(mes[0]);
+            listado.removeAllViews();
+            // El semáforo del mes solo se usa para el cálculo; el riesgo lo explica Muyu.
+            JSONObject datoMes = buscarMes(serie, mes[0]);
+            JSONObject pred = datoMes == null ? null : datoMes.optJSONObject("humedad_raiz_predicha");
+            double humedad = pred == null ? Double.NaN : pred.optDouble("neutro", Double.NaN);
+            MotorSemaforo.Resultado semaforo = MotorSemaforo.evaluar(
+                    Double.isFinite(humedad) ? humedad : 0.6, parcela.isTieneRiego());
+            mostrarRotacionesParaProximaSiembra(listado, opcionesOrdenadas, semaforo);
+        };
+        etiquetaMes[0] = selectorDeMes(contenido,
+                () -> { mes[0] = mes[0] == 1 ? 12 : mes[0] - 1; actualizar.run(); },
+                () -> { mes[0] = mes[0] == 12 ? 1 : mes[0] + 1; actualizar.run(); });
 
+        tituloLista.setTextSize(18);
+        tituloLista.setTextColor(OSCURO);
+        tituloLista.setTypeface(null, Typeface.BOLD);
+        tituloLista.setPadding(0, dp(14), 0, dp(2));
+        contenido.addView(tituloLista, new LinearLayout.LayoutParams(-1, -2));
+        texto(contenido, "Van en orden: la primera es la que mejor resultó en años normales para una parcela "
+                + (parcela.isTieneRiego() ? "con riego." : "sin riego."), 14, GRIS, false);
+        contenido.addView(listado, new LinearLayout.LayoutParams(-1, -2));
+        actualizar.run();
+
+        enlace(contenido, "¿Es buen mes para sembrar? Pregúntale a Muyu", this::abrirMuyu);
         bloque("¿Y si siembro otra vez " + parcela.getCultivoActual().toLowerCase(Locale.ROOT) + "?",
                 "Puedes hacerlo, pero no ahorrarías urea: el mismo cultivo seguido "
                 + "no le devuelve nitrógeno a la tierra.");
-
         enlace(contenido, "¿De dónde salen estas cifras?", () -> explicar(
                 "¿De dónde salen estas cifras?",
-                "El mes: miramos cómo estuvo el suelo de tu zona en ese mes durante "
-                + "los últimos 20 años (datos de la NASA) y si tienes riego.\n\n"
-                + "Los cultivos: comparamos soya, fréjol caupí, maní y mucuna con fichas del INIAP "
-                + "y de la FAO.\n\n"
+                "Los cultivos: comparamos soya, fréjol caupí, maní y mucuna con fichas del INIAP "
+                + "y de la FAO, en años normales de tu zona.\n\n"
                 + "El ahorro en urea: calculamos cuánta urea dejarías de poner gracias al "
                 + "nitrógeno que deja el cultivo, con el precio del MAG (unos $38 el saco de 50 kg).\n\n"
                 + "La ganancia: es lo que podrías vender menos lo que gastarías en semillas e insumos. "
                 + "No incluye todos los gastos (por ejemplo, mano de obra o transporte).\n\n"
-                + "Todo es aproximado. Es una guía para decidir mejor, no una promesa. "
-                + "Antes de invertir, revisa tu terreno y, si puedes, conversa con un técnico."));
+                + "Todo es aproximado. Es una guía para decidir mejor, no una promesa."));
         boton(contenido, "Ver cómo fue en años de El Niño y La Niña  ›", true,
                 () -> mostrar(MODE_PAST));
+    }
 
-        // Actualiza a la vez humedad, semáforo, factor de riesgo y montos de cada cultivo.
-        selector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view,
-                                                  int posicion, long id) {
-                resultado.removeAllViews();
-                listado.removeAllViews();
-                JSONObject datoMes = buscarMes(serie, posicion + 1);
-                if (datoMes == null) {
-                    texto(resultado, "Todavía no tenemos datos de " + meses[posicion] + ".", 15, GRIS, false);
-                    mostrarRotacionesParaProximaSiembra(listado, opcionesAuditorias, null);
-                    return;
-                }
-                JSONObject predicciones = datoMes.optJSONObject("humedad_raiz_predicha");
-                double humedad = predicciones == null ? Double.NaN
-                        : predicciones.optDouble("neutro", Double.NaN);
-                if (!Double.isFinite(humedad)) {
-                    texto(resultado, "Todavía no sabemos cómo suele estar el suelo en "
-                            + meses[posicion] + ".", 15, GRIS, false);
-                    mostrarRotacionesParaProximaSiembra(listado, opcionesAuditorias, null);
-                    return;
-                }
+    private static final String[] NOMBRES_MES = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 
-                MotorSemaforo.Resultado semaforo =
-                        MotorSemaforo.evaluar(humedad, parcela.isTieneRiego());
-                int colorSemaforo = "Verde".equals(semaforo.color) ? VERDE
-                        : ("Amarillo".equals(semaforo.color) ? 0xFF956521 : 0xFFB32625);
-                texto(resultado, "Si siembras en " + meses[posicion].toLowerCase(Locale.ROOT) + ":",
-                        15, OSCURO, true);
-                texto(resultado, Formato.semaforo(semaforo.color), 21, colorSemaforo, true);
-                texto(resultado, "En ese mes el suelo de tu zona suele estar "
-                        + Formato.humedadEnPalabras(humedad) + " (humedad cerca de "
-                        + Formato.porcentaje(humedad) + ")."
-                        + (datoMes.has("lluvia_mm") ? " Normalmente llueven unos "
-                            + Formato.numero(datoMes.optDouble("lluvia_mm")) + " mm en el mes." : ""),
-                        15, OSCURO, false);
-                texto(resultado, consejoDelMes(humedad, semaforo), 15, OSCURO, false);
-                texto(resultado, "Es lo que suele pasar en ese mes, no el pronóstico del tiempo.",
-                        13, GRIS, false);
+    /** Mes que el agricultor eligió (lo comparten Siembra y Muyu); por defecto, el próximo mes. */
+    private int mesDeSiembraGuardado() {
+        int siguiente = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH) + 2;
+        int porDefecto = siguiente > 12 ? 1 : siguiente;
+        int guardado = getSharedPreferences("kallpa_ui", MODE_PRIVATE).getInt("mes_siembra", porDefecto);
+        return guardado >= 1 && guardado <= 12 ? guardado : porDefecto;
+    }
 
-                mostrarRotacionesParaProximaSiembra(listado, opcionesAuditorias, semaforo);
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) { }
-        });
+    private void guardarMesDeSiembra(int mes) {
+        getSharedPreferences("kallpa_ui", MODE_PRIVATE).edit().putInt("mes_siembra", mes).apply();
+    }
+
+    /** Botón "‹ MARZO ›": se cambia el mes con un toque, sin listas desplegables. */
+    private TextView selectorDeMes(LinearLayout padre, Runnable anterior, Runnable siguiente) {
+        LinearLayout fila = new LinearLayout(this);
+        fila.setOrientation(LinearLayout.HORIZONTAL);
+        fila.setGravity(Gravity.CENTER_VERTICAL);
+        fila.setBackgroundResource(R.drawable.bg_input);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, dp(60));
+        lp.topMargin = dp(6);
+        padre.addView(fila, lp);
+        fila.addView(flechaMes("‹", "Mes anterior", anterior), new LinearLayout.LayoutParams(dp(60), -1));
+        TextView mes = new TextView(this);
+        mes.setGravity(Gravity.CENTER);
+        mes.setTextSize(22);
+        mes.setTextColor(OSCURO);
+        mes.setTypeface(null, Typeface.BOLD);
+        mes.setLetterSpacing(0.05f);
+        fila.addView(mes, new LinearLayout.LayoutParams(0, -1, 1f));
+        fila.addView(flechaMes("›", "Mes siguiente", siguiente), new LinearLayout.LayoutParams(dp(60), -1));
+        return mes;
+    }
+
+    private TextView flechaMes(String simbolo, String descripcion, Runnable accion) {
+        TextView t = new TextView(this);
+        t.setText(simbolo);
+        t.setTextSize(30);
+        t.setTextColor(VERDE);
+        t.setGravity(Gravity.CENTER);
+        t.setContentDescription(descripcion);
+        t.setBackgroundResource(android.R.drawable.list_selector_background);
+        t.setOnClickListener(v -> accion.run());
+        return t;
     }
 
     /** Busca el mes real indicado en el JSON; no presupone que esté ordenado. */
@@ -424,11 +446,6 @@ public class ScienceActivity extends ActividadBase {
                 texto(card, "Podrías ganar " + Formato.unos(economia.margenNetoUsd)
                         + enTuParcela + ", después de pagar semillas e insumos (unos "
                         + Formato.dinero(economia.costoTotalUsd) + ").", 14, OSCURO, false);
-                texto(card, economia.capitalEnRiesgoUsd <= 0
-                        ? "Ese mes se ve bien: es poco probable que pierdas lo invertido por falta o exceso de agua."
-                        : "Si el clima sale mal ese mes, podrías perder " + Formato.unos(economia.capitalEnRiesgoUsd)
-                            + " de lo que inviertas.",
-                        14, economia.capitalEnRiesgoUsd <= 0 ? VERDE : 0xFF865C21, false);
                 texto(card, Formato.NOTA_APROXIMADO, 13, GRIS, false);
                 enlace(card, "¿Cómo se calculó?", () -> explicar(cultivo,
                         "Ahorro en urea: este cultivo deja unos " + Formato.kilos(kgHa)
@@ -437,9 +454,6 @@ public class ScienceActivity extends ActividadBase {
                         + ", a unos $38 el saco de 50 kg: " + Formato.unos(economia.ahorroUreaUsd) + ".\n\n"
                         + "Ganancia: lo que podrías vender, menos semillas e insumos, más el ahorro en urea: "
                         + Formato.unos(economia.margenNetoUsd) + ". No incluye mano de obra ni transporte.\n\n"
-                        + "Dinero en riesgo: depende del semáforo del mes. En verde casi no hay riesgo; "
-                        + "en amarillo podrías perder cerca de un tercio de lo invertido; en rojo, casi todo. "
-                        + "Para ti sería " + Formato.unos(economia.capitalEnRiesgoUsd) + ".\n\n"
                         + "Son cuentas aproximadas con datos de años anteriores: no son ganancias "
                         + "ni pérdidas seguras."));
             } else {
@@ -447,16 +461,6 @@ public class ScienceActivity extends ActividadBase {
                         14, GRIS, false);
             }
         }
-    }
-
-    /** Qué hacer según cómo suele estar el suelo ese mes. */
-    private String consejoDelMes(double humedad, MotorSemaforo.Resultado semaforo) {
-        if (humedad > 0.78) return "Revisa que el agua corra bien y no se encharque antes de sembrar.";
-        if (humedad < 0.55) return parcela.isTieneRiego()
-                ? "Tu riego te ayuda. Revisa que funcione bien antes de sembrar."
-                : "Podría faltar agua. Piensa en regar o en un cultivo que aguante la sequía.";
-        if (!"Verde".equals(semaforo.color)) return "Revisa tu terreno con calma antes de invertir.";
-        return "Igual revisa tu terreno antes de comprar semillas e insumos.";
     }
 
     /** Selector de opciones con letra grande y fondo claro. */
@@ -507,17 +511,12 @@ public class ScienceActivity extends ActividadBase {
                 if(e==null){texto(resultado,"Todavía no tenemos datos de este tipo de año.",15,GRIS,false);return;}
                 JSONArray anios=e.optJSONArray("anios_referencia");
                 JSONObject indicadores=e.optJSONObject("indicadores_historicos");
-                bloqueEn(resultado,"Lo que pasó en tu zona", e.optString("resumen_impacto_suelo")
-                        + (anios==null?"":"\n\nAños que tomamos en cuenta: "+unirAnios(anios)));
-                if(indicadores!=null) bloqueEn(resultado,"En un mes promedio de esos años",
-                        "Lluvia: unos "+Formato.numero(indicadores.optDouble("lluvia_mensual_prom_mm"))+" mm\n"
-                        +"Suelo "+Formato.humedadEnPalabras(indicadores.optDouble("humedad_raiz_prom"))
-                        +" (humedad cerca de "+Formato.porcentaje(indicadores.optDouble("humedad_raiz_prom"))+")\n"
-                        +"Calor máximo: unos "+Formato.numero(indicadores.optDouble("temp_max_prom_c"))+" °C");
+                // Aquí solo van las curvas del año: lluvia y humedad, mes a mes.
                 JSONArray perfil=e.optJSONArray("perfil_mensual");
                 if(perfil!=null){
                     graficosMensuales(resultado, perfil);
                 }
+                if(anios!=null) texto(resultado,"Años que tomamos en cuenta: "+unirAnios(anios)+".",13,GRIS,false);
                 texto(resultado,"Cultivos que funcionaron en años así",18,OSCURO,true);
                 JSONObject r=e.optJSONObject("recomendacion_por_parcela");
                 mostrarRotacionesEn(resultado,r==null?null:r.optJSONArray(parcela.isTieneRiego()?"con_riego":"sin_riego"));
@@ -620,10 +619,13 @@ public class ScienceActivity extends ActividadBase {
         b.setMinHeight(dp(54));b.setPadding(dp(16),dp(10),dp(16),dp(10));
         padre.addView(b,lp);return b;
     }
-    /** Lluvia (barras) y humedad (línea con franja buena) mes a mes, con el mes actual resaltado. */
+    /**
+     * Curvas del año en un escenario (normal, El Niño o La Niña):
+     * lluvia y humedad en líneas paralelas (la humedad con zonas de color), cada una con su frase de cierre.
+     */
     private void graficosMensuales(LinearLayout padre, JSONArray perfil) {
-        final String[] meses = {"enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
-                "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
+        final String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+                "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
         float[] lluvia = new float[12], humedad = new float[12];
         for (int i = 0; i < perfil.length() && i < 12; i++) {
             JSONObject x = perfil.optJSONObject(i);
@@ -632,41 +634,59 @@ public class ScienceActivity extends ActividadBase {
             lluvia[mes] = (float) x.optDouble("lluvia_mm", 0);
             humedad[mes] = (float) x.optDouble("humedad_raiz", 0);
         }
-        int hoy = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
-        int masLluvia = 0, menosLluvia = 0;
-        for (int i = 1; i < 12; i++) {
-            if (lluvia[i] > lluvia[masLluvia]) masLluvia = i;
-            if (lluvia[i] < lluvia[menosLluvia]) menosLluvia = i;
-        }
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.topMargin = dp(6);
 
+        // Lluvia: línea continua de enero a diciembre, mes más lluvioso marcado.
         texto(padre, "Lluvia de cada mes", 18, OSCURO, true);
-        texto(padre, "Cada barra es un mes (E = enero … D = diciembre). El número es la lluvia en milímetros.",
-                14, GRIS, false);
-        padre.addView(GraficoSencillo.barras(this, lluvia, GraficoSencillo.MESES_CORTOS, 0xFF2A7FA8,
-                v -> Math.round(v) + " mm").destacar(hoy), lp);
-        texto(padre, "Llueve más en " + meses[masLluvia] + " (unos " + Math.round(lluvia[masLluvia])
-                + " mm) y menos en " + meses[menosLluvia] + " (unos " + Math.round(lluvia[menosLluvia])
-                + " mm). Resaltado: " + meses[hoy] + ", el mes actual.", 14, OSCURO, false);
+        padre.addView(GraficoSencillo.linea(this, lluvia, GraficoSencillo.MESES_CORTOS, 0xFF2A7FA8,
+                v -> Math.round(v) + " mm").escala(0f, 0f).pico("Mes más lluvioso"), lp);
+        int[] lluviosos = dosMayores(lluvia);
+        texto(padre, "En este escenario, llueve más en " + meses[lluviosos[0]].toLowerCase(Locale.ROOT)
+                + " y " + meses[lluviosos[1]].toLowerCase(Locale.ROOT) + ".", 15, OSCURO, true);
 
-        texto(padre, "Humedad del suelo cada mes", 18, OSCURO, true);
-        texto(padre, "La franja verde es la humedad buena para sembrar (entre 55 % y 78 %).",
-                14, GRIS, false);
+        // Humedad: línea sobre zonas de color con los mismos límites del semáforo.
+        texto(padre, "Humedad del suelo", 18, OSCURO, true);
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(-1, -2);
         lp2.topMargin = dp(6);
-        padre.addView(GraficoSencillo.linea(this, humedad, GraficoSencillo.MESES_CORTOS, 0xFF4E9A2E,
-                v -> Math.round(v * 100) + " %").escala(0.40f, 0.90f)
-                .franja(0.55f, 0.78f, "Bueno para sembrar").destacar(hoy), lp2);
-        StringBuilder buenos = new StringBuilder();
+        padre.addView(GraficoSencillo.linea(this, humedad, GraficoSencillo.MESES_CORTOS, 0xFF0B5D2A,
+                        v -> Math.round(v * 100) + " %")
+                .escala(0.40f, 0.95f)
+                .zona(0.84f, 1.0f, GraficoSencillo.ZONA_ROJA, "Exceso de agua")
+                .zona(0.78f, 0.84f, GraficoSencillo.ZONA_AMARILLA, null)
+                .zona(0.55f, 0.78f, GraficoSencillo.ZONA_VERDE, "Bueno para sembrar")
+                .zona(0.48f, 0.55f, GraficoSencillo.ZONA_AMARILLA, null)
+                .zona(0f, 0.48f, GraficoSencillo.ZONA_ROJA, "Muy seco")
+                .pico("Pico de humedad"), lp2);
+        texto(padre, conclusionHumedad(humedad, meses), 15, OSCURO, true);
+    }
+
+    /** Índices de los dos valores más altos. */
+    private int[] dosMayores(float[] v) {
+        int a = 0, b = -1;
+        for (int i = 1; i < v.length; i++) if (v[i] > v[a]) a = i;
+        for (int i = 0; i < v.length; i++) if (i != a && (b < 0 || v[i] > v[b])) b = i;
+        return new int[]{a, Math.max(b, 0)};
+    }
+
+    /** Una frase de cierre: dónde está el riesgo de agua en este escenario. */
+    private String conclusionHumedad(float[] humedad, String[] meses) {
+        List<String> exceso = new ArrayList<>(), seco = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
-            if (humedad[i] >= 0.55f && humedad[i] <= 0.78f) {
-                if (buenos.length() > 0) buenos.append(", ");
-                buenos.append(meses[i]);
-            }
+            if (humedad[i] > 0.78f) exceso.add(meses[i]);
+            else if (humedad[i] < 0.55f) seco.add(meses[i]);
         }
-        texto(padre, buenos.length() == 0 ? "En años así, ningún mes quedó dentro de la franja buena."
-                : "Meses con humedad buena: " + buenos + ".", 14, OSCURO, false);
+        if (!exceso.isEmpty()) return "En este escenario, los meses de mayor riesgo de agua son "
+                + unirNombres(exceso) + ".";
+        if (!seco.isEmpty()) return "En este escenario, el riesgo es que falte agua en "
+                + unirNombres(seco).toLowerCase(Locale.ROOT) + ".";
+        return "En este escenario, la humedad del suelo se mantiene buena todo el año.";
+    }
+
+    /** ["Enero","Febrero","Marzo"] -> "Enero, Febrero y Marzo". */
+    private String unirNombres(List<String> nombres) {
+        if (nombres.size() == 1) return nombres.get(0);
+        return String.join(", ", nombres.subList(0, nombres.size() - 1)) + " y " + nombres.get(nombres.size() - 1);
     }
     private int dp(float n){return (int)(n*getResources().getDisplayMetrics().density+.5f);}
     @Override protected void onResume(){super.onResume();if(mapa!=null)mapa.onResume();}
