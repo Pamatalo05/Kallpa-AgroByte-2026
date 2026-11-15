@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@drawable/bg_screen"
+    android:padding="18dp">
+    <TextView android:id="@+id/btnBack" android:layout_width="match_parent"
+        android:layout_height="48dp" android:gravity="center_vertical"
+        android:text="← Volver" android:textColor="@color/forest_dark"
+        android:textSize="18sp" android:clickable="true" android:focusable="true" />
+    <TextView android:id="@+id/txtParcelName" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="Mi parcela"
+        android:textColor="@color/forest_dark" android:textSize="28sp" android:textStyle="bold" />
+    <TextView android:id="@+id/txtParcelInfo" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="6dp"
+        android:textColor="@color/muted" android:textSize="15sp" />
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:layout_marginTop="18dp" android:layout_marginBottom="12dp">
+        <org.osmdroid.views.MapView android:id="@+id/mapView"
+            android:layout_width="match_parent" android:layout_height="match_parent" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start" android:background="#EEFFFFFF"
+            android:padding="7dp" android:text="Imagery © Esri y proveedores de imágenes"
+            android:textSize="10sp" android:textColor="#333333" />
+    </FrameLayout>
+    <TextView android:id="@+id/txtMapInfo" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:textColor="@color/muted" android:textSize="13sp"
+        android:text="El marcador muestra la ubicación guardada, no los límites del terreno. Las imágenes requieren conexión." />
+</LinearLayout>

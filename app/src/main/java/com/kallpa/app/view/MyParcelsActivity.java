@@ -103,6 +103,18 @@ public class MyParcelsActivity extends ActividadBase {
             LinearLayout.LayoutParams eLp = new LinearLayout.LayoutParams(0, dp(50), 1f);
             eLp.leftMargin = dp(10);
             acciones.addView(elegir, eLp);
+
+            Button verMapa = new Button(this);
+            verMapa.setText("Ver mapa satelital");
+            estiloBoton(verMapa, false);
+            LinearLayout.LayoutParams mapaLp = new LinearLayout.LayoutParams(-1, dp(48));
+            mapaLp.topMargin = dp(8);
+            tarjeta.addView(verMapa, mapaLp);
+            verMapa.setOnClickListener(v -> {
+                Intent intent = new Intent(this, SatelliteParcelActivity.class);
+                intent.putExtra(SatelliteParcelActivity.EXTRA_ID, p.getId());
+                startActivity(intent);
+            });
             elegir.setOnClickListener(v -> {
                 getSharedPreferences("kallpa_seleccion", MODE_PRIVATE).edit().putString(key, p.getId()).apply();
                 Intent i = new Intent(this, HomeActivity.class);
