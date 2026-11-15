@@ -56,7 +56,7 @@ public class RegisterActivity extends ActividadBase {
             return;
         }
 
-        mensaje("¡Cuenta creada correctamente!");
+        avisoExito("¡Bienvenido! Tu cuenta quedó creada.");
 
         // Continuar con el registro de ubicación
 

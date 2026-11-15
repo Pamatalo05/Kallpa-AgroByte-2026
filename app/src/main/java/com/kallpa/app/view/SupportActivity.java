@@ -66,10 +66,6 @@ public class SupportActivity extends ActividadBase {
         heading = findViewById(R.id.txtSupportHeading);
         parcelLabel = findViewById(R.id.txtSupportParcel);
         findViewById(R.id.btnSupportBack).setOnClickListener(v -> finish());
-        findViewById(R.id.btnSupportHome).setOnClickListener(v -> {
-            startActivity(new Intent(this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-        });
         auth = new ControladorAutenticacion(this);
         if (!auth.sesionActiva() || auth.usuarioActual() == null) {
             startActivity(new Intent(this, LoginActivity.class)); finish(); return;
@@ -87,15 +83,18 @@ public class SupportActivity extends ActividadBase {
                 activeParcel.getCanton().toLowerCase(Locale.ROOT).trim();
         mode = getIntent().getStringExtra(EXTRA_MODE);
         if (mode == null) mode = MODE_ALERTS;
+        // Perfil no es una sección de la barra; Clima y Calendario van juntos.
+        activarBarraInferior(MODE_PROFILE.equals(mode) ? -1 : SECCION_CLIMA, MODE_ALERTS.equals(mode));
         parcelLabel.setText(activeParcel.getNombre() + " · " + zoneLabel());
         if (MODE_PROFILE.equals(mode)) {
-            heading.setText("Perfil y datos locales");
+            heading.setText("Mi perfil");
             showProfile(parcels);
             return;
         }
         if (!"daule".equals(canton) && !"babahoyo".equals(canton)) {
-            heading.setText("Datos no disponibles");
-            card("Parcela fuera del piloto", "La versión científica de Kallpa solo contiene información de Daule y Babahoyo. Selecciona una parcela de uno de esos cantones.");
+            heading.setText("Aún no tenemos tu zona");
+            card("Por ahora solo Daule y Babahoyo", "Kallpa todavía no tiene datos de tu cantón. "
+                    + "Si tienes una parcela en Daule o Babahoyo, elígela en \"Mi parcela\".");
             return;
         }
         try {
@@ -104,15 +103,16 @@ public class SupportActivity extends ActividadBase {
             monthly = cantons.getJSONObject(canton).getJSONArray("serie_satelital_ml");
             if (monthly.length() != 12) throw new IllegalStateException("No hay 12 meses en el paquete local");
         } catch (Exception e) {
-            heading.setText("Datos no disponibles");
-            card("No se pudo abrir el paquete local", "Revisa app/src/main/assets/datos/paquete_canton.json.\nDetalle: " + e.getMessage());
+            heading.setText("No pudimos abrir los datos");
+            card("Algo salió mal", "Kallpa no encontró la información de tu zona en este teléfono. "
+                    + "Prueba cerrando y abriendo la app; si sigue igual, vuelve a instalarla.");
             return;
         }
         if (MODE_CALENDAR.equals(mode)) {
-            heading.setText("Calendario de mi zona");
+            heading.setText("Calendario de tu zona");
             showCalendar();
         } else {
-            heading.setText("Clima y alertas");
+            heading.setText("Clima para sembrar");
             showAlerts();
         }
     }
@@ -143,12 +143,12 @@ public class SupportActivity extends ActividadBase {
     }
 
     private void showAlerts() {
-        intro("¿Qué debo vigilar antes de sembrar?",
-                "Consulta un mes para revisar riesgos hídricos de planificación. "
-                + "No son alertas meteorológicas de hoy ni pronósticos de lluvia.");
-        card("Tu parcela", activeParcel.getNombre() + " · " + f(activeParcel.getHectareas(), 2)
-                + " ha · Riego: " + (activeParcel.isTieneRiego() ? "Sí" : "No"));
-        TextView label = text(content, "Selecciona el mes de tu próxima siembra", 15, DARK, true);
+        intro("¿Cómo estará el suelo para sembrar?",
+                "Elige el mes en que piensas sembrar. Te decimos cómo suele estar el suelo "
+                + "de tu zona en ese mes. No es el pronóstico del tiempo de hoy.");
+        card("Tu parcela", activeParcel.getNombre() + " · " + Formato.hectareas(activeParcel.getHectareas())
+                + " · " + (activeParcel.isTieneRiego() ? "Con riego" : "Sin riego"));
+        text(content, "¿En qué mes piensas sembrar?", 18, DARK, true);
         Spinner picker = monthPicker(content);
         LinearLayout result = new LinearLayout(this);
         result.setOrientation(LinearLayout.VERTICAL);
@@ -159,49 +159,52 @@ public class SupportActivity extends ActividadBase {
                 JSONObject datum = monthData(position + 1);
                 MotorSemaforo.Resultado risk = evaluate(datum);
                 if (datum == null || risk == null) {
-                    cardIn(result, "Datos insuficientes", "No hay predicción Ridge disponible para este mes."); return;
+                    cardIn(result, "Aún no hay datos", "Todavía no sabemos cómo suele estar el suelo en "
+                            + MONTHS[position].toLowerCase(Locale.ROOT) + "."); return;
                 }
                 double moisture = datum.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
-                String colorMeaning = explanation(moisture, risk);
-                TextView h = text(result, "Semáforo Día Cero: " + risk.color,
-                        21, colorFor(risk.color), true);
-                cardIn(result, "¿Qué significa para tu siembra?", colorMeaning);
-                cardIn(result, "Indicadores de referencia · " + MONTHS[position],
-                        "Humedad estimada en la raíz: " + f(moisture,3) + " m³/m³\n"
-                        + "Lluvia mensual de referencia: " + f(datum.optDouble("lluvia_mm"),1) + " mm\n"
-                        + "Temperatura de referencia: " + f(datum.optDouble("temp_c"),1) + " °C\n"
-                        + "Fuente: paquete_canton.json · NASA POWER y modelo Ridge");
+                text(result, Formato.semaforo(risk.color), 21, colorFor(risk.color), true);
+                cardIn(result, "¿Qué quiere decir?", explanation(moisture, risk));
                 cardIn(result, "¿Qué puedes hacer?", advice(moisture, risk));
-                button(result, "Ver rotaciones y costos para este mes", true,
+                button(result, "Ver qué sembrar y cuánto ahorrar", true,
                         () -> openScience(ScienceActivity.MODE_FUTURE));
+                button(result, "Ver las cifras de " + MONTHS[position].toLowerCase(Locale.ROOT), false,
+                        () -> explicar("Cifras de " + MONTHS[position].toLowerCase(Locale.ROOT),
+                                "🌧️ Lluvia normal del mes: unos " + Formato.numero(datum.optDouble("lluvia_mm")) + " mm\n"
+                                + "💧 Humedad del suelo en las raíces: cerca de " + Formato.porcentaje(moisture) + "\n"
+                                + "🌡️ Calor máximo: unos " + Formato.numero(datum.optDouble("temp_c")) + " °C\n\n"
+                                + "Son promedios de tu zona en los últimos 20 años (datos de la NASA). "
+                                + "Tu terreno puede estar un poco distinto."));
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
         picker.setSelection((Calendar.getInstance().get(Calendar.MONTH) + 1) % 12);
-        text(content, "Información histórica y predictiva a escala regional. Verifica las condiciones de tu terreno "
-                + "y consulta asesoría agrícola antes de invertir. Los datos son para Daule y Babahoyo, no por lote.",
-                12, SECONDARY, false);
-        button(content, "Abrir escenario histórico de El Niño / La Niña", false,
+        text(content, "Los datos son de toda la zona de " + zoneLabel().split(",")[0]
+                + ", no de tu lote. Antes de invertir, mira tu terreno y, si puedes, pide consejo a un técnico.",
+                14, SECONDARY, false);
+        button(content, "Ver cómo fue en años de El Niño y La Niña", false,
                 () -> openScience(ScienceActivity.MODE_PAST));
     }
 
     private String explanation(double moisture, MotorSemaforo.Resultado result) {
-        String note;
-        if (moisture < 0.48) note = "La humedad prevista es muy baja.";
-        else if (moisture < 0.55) note = "La humedad prevista es algo baja.";
-        else if (moisture <= 0.78) note = "La humedad prevista se encuentra en el rango favorable del modelo.";
-        else if (moisture <= 0.84) note = "La humedad prevista es elevada.";
-        else note = "La humedad prevista supera el rango alto del modelo.";
-        return note + "\nResultado: " + result.estado + ".\n"
-                + "Este color resume condiciones hídricas de la próxima siembra, no el tiempo de hoy.";
+        String suelo = "En ese mes el suelo de tu zona suele estar " + Formato.humedadEnPalabras(moisture) + ".";
+        if ("Verde".equalsIgnoreCase(result.color)) {
+            return suelo + (moisture < 0.55 && activeParcel.isTieneRiego()
+                    ? " Como tienes riego, puedes sembrar con tranquilidad."
+                    : " Es un buen momento para sembrar.");
+        }
+        if ("Amarillo".equalsIgnoreCase(result.color)) {
+            return suelo + " Puedes sembrar, pero hay algo de riesgo por "
+                    + (moisture > 0.78 ? "exceso de agua." : "falta de agua.");
+        }
+        return suelo + " Sembrar ese mes es arriesgado: podrías perder la siembra.";
     }
     private String advice(double moisture, MotorSemaforo.Resultado risk) {
-        if (moisture > 0.78) return "Revisa el drenaje y posibles encharcamientos de tu terreno antes de sembrar. "
-                + "Confirma las condiciones con observación local.";
+        if (moisture > 0.78) return "Revisa que el agua corra bien y que no se encharque tu terreno antes de sembrar.";
         if (moisture < 0.55) return activeParcel.isTieneRiego()
-                ? "Verifica que el sistema de riego realmente esté disponible y que su costo sea viable."
-                : "Evalúa la disponibilidad de agua. Considera cultivos con mejor respuesta en secano y consulta asesoría técnica.";
-        return "Comprueba la humedad real, las fechas y el estado del suelo antes de invertir en semillas e insumos.";
+                ? "Revisa que tu riego funcione bien y que te alcance el agua."
+                : "Podría faltar agua. Piensa en cómo regar o elige un cultivo que aguante la sequía.";
+        return "Igual revisa tu terreno y las fechas antes de comprar semillas e insumos.";
     }
     private int colorFor(String risk) {
         if ("Rojo".equalsIgnoreCase(risk)) return 0xFFB24336;
@@ -210,89 +213,101 @@ public class SupportActivity extends ActividadBase {
     }
 
     private void showCalendar() {
-        intro("¿En qué meses conviene revisar mi siembra?",
-                "Calendario de referencia construido con la serie mensual local de AgroByte. "
-                + "Muestra riesgos para planificar, no pronósticos ni labores confirmadas.");
-        card("Tu parcela", activeParcel.getNombre() + " · " + zoneLabel() + " · Riego: "
-                + (activeParcel.isTieneRiego() ? "Sí" : "No"));
-        text(content,"Elige un mes para ver los detalles",15,DARK,true);
+        intro("¿Qué meses son buenos para sembrar?",
+                "Así suele estar el suelo de tu zona cada mes, según los últimos 20 años. "
+                + "Toca un mes para ver qué hacer.");
+        card("Tu parcela", activeParcel.getNombre() + " · " + zoneLabel() + " · "
+                + (activeParcel.isTieneRiego() ? "Con riego" : "Sin riego"));
+        text(content, "Elige un mes", 18, DARK, true);
         Spinner picker = monthPicker(content);
         LinearLayout details = new LinearLayout(this);
         details.setOrientation(LinearLayout.VERTICAL);
-        content.addView(details,new LinearLayout.LayoutParams(-1,-2));
-        picker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-            @Override public void onItemSelected(AdapterView<?> adapter,View v,int position,long id){
+        content.addView(details, new LinearLayout.LayoutParams(-1, -2));
+        picker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
                 details.removeAllViews();
-                JSONObject item=monthData(position+1);
-                MotorSemaforo.Resultado risk=evaluate(item);
-                if(item==null||risk==null){cardIn(details,"Sin datos","No hay información mensual disponible.");return;}
+                JSONObject item = monthData(position + 1);
+                MotorSemaforo.Resultado risk = evaluate(item);
+                if (item == null || risk == null) { cardIn(details, "Aún no hay datos", "Todavía no tenemos información de este mes."); return; }
                 double humidity = item.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
-                cardIn(details,MONTHS[position]+" · "+risk.color,
-                        "Lluvia de referencia: "+f(item.optDouble("lluvia_mm"),1)+" mm\n"
-                        + "Humedad estimada en raíz: "+f(humidity,3)+" m³/m³\n"
-                        + "Temperatura de referencia: "+f(item.optDouble("temp_c"),1)+" °C\n"
-                        + "Vegetación regional NDVI: "+f(item.optDouble("ndvi_modis"),3));
-                cardIn(details,"Recomendación de planificación", advice(humidity,risk));
-                button(details,"Evaluar cultivos y ahorro de urea",true,()->openScience(ScienceActivity.MODE_FUTURE));
+                LinearLayout box = cardContainer(details);
+                text(box, MONTHS[position], 18, DARK, true);
+                text(box, Formato.semaforo(risk.color), 17, colorFor(risk.color), true);
+                text(box, explanation(humidity, risk), 15, SECONDARY, false);
+                text(box, "👉 " + advice(humidity, risk), 15, DARK, false);
+                button(details, "Ver qué sembrar en " + MONTHS[position].toLowerCase(Locale.ROOT), true,
+                        () -> openScience(ScienceActivity.MODE_FUTURE));
             }
-            @Override public void onNothingSelected(AdapterView<?> parent){}
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
         });
         picker.setSelection(Calendar.getInstance().get(Calendar.MONTH));
-        text(content,"Vista de los 12 meses",18,DARK,true);
-        for(int i=1;i<=12;i++){
-            JSONObject item=monthData(i);MotorSemaforo.Resultado risk=evaluate(item);
-            if(item==null||risk==null)continue;
-            String date=MONTHS[i-1];
-            double humidity=item.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
-            LinearLayout box=cardContainer(content);
-            text(box,date+"   ·   "+risk.color,15,colorFor(risk.color),true);
-            text(box,"Lluvia ref.: "+f(item.optDouble("lluvia_mm"),1)+" mm  ·  Humedad raíz: "+f(humidity,3),13,SECONDARY,false);
-            final int index=i-1;
-            box.setOnClickListener(v->picker.setSelection(index));
+        text(content, "Todo el año de un vistazo", 19, DARK, true);
+        for (int i = 1; i <= 12; i++) {
+            JSONObject item = monthData(i); MotorSemaforo.Resultado risk = evaluate(item);
+            if (item == null || risk == null) continue;
+            double humidity = item.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
+            LinearLayout box = cardContainer(content);
+            box.setOrientation(LinearLayout.HORIZONTAL);
+            box.setGravity(Gravity.CENTER_VERTICAL);
+            TextView mes = new TextView(this);
+            mes.setText(MONTHS[i - 1]); mes.setTextSize(17); mes.setTextColor(DARK);
+            mes.setTypeface(null, Typeface.BOLD);
+            box.addView(mes, new LinearLayout.LayoutParams(0, -2, 1f));
+            TextView estado = new TextView(this);
+            estado.setText(Formato.emojiSemaforo(risk.color) + " "
+                    + ("Verde".equalsIgnoreCase(risk.color) ? "Bueno"
+                        : "Amarillo".equalsIgnoreCase(risk.color) ? "Con cuidado" : "Arriesgado")
+                    + " · suelo " + Formato.humedadEnPalabras(humidity));
+            estado.setTextSize(14); estado.setTextColor(colorFor(risk.color));
+            estado.setGravity(Gravity.END);
+            box.addView(estado, new LinearLayout.LayoutParams(0, -2, 2f));
+            final int index = i - 1;
+            box.setOnClickListener(v -> {
+                picker.setSelection(index);
+                // Sube hasta el detalle del mes elegido.
+                if (content.getParent() instanceof android.widget.ScrollView) {
+                    ((android.widget.ScrollView) content.getParent()).smoothScrollTo(0, picker.getTop());
+                }
+            });
         }
-        text(content,"Los valores proceden de la serie mensual del paquete local (periodo de análisis 2005–2025). "
-                + "No son un calendario de labores agrícolas confirmado ni un pronóstico meteorológico. "
-                + "MODIS y SMAP describen la región, no tu parcela exacta.",12,SECONDARY,false);
+        text(content, "Es lo que suele pasar cada mes, no el pronóstico del tiempo. "
+                + "Los satélites miran toda la zona, no tu terreno exacto.", 14, SECONDARY, false);
     }
 
     private void showProfile(List<Parcela> parcels) {
-        intro("Tu información en Kallpa", "Desarrollado por el equipo AgroByte. "
-                + "Los datos agrícolas del piloto están disponibles en el teléfono sin conexión.");
-        card("Mi cuenta", "Nombre: " + auth.usuarioActual().getNombre() + "\nCorreo: "
-                + auth.usuarioActual().getCorreo());
-        card("Mi parcela activa", activeParcel.getNombre() + " · " + zoneLabel() + "\n"
-                + f(activeParcel.getHectareas(),2) + " ha · " + activeParcel.getCultivoActual()
-                + "\nTienes " + parcels.size() + (parcels.size()==1?" parcela registrada.":" parcelas registradas."));
+        intro("Hola, " + auth.usuarioActual().getNombre().trim().split("\\s+")[0],
+                "Aquí está tu cuenta y tus parcelas. Kallpa funciona aunque no tengas internet.");
+        card("Mi cuenta", auth.usuarioActual().getNombre() + "\n" + auth.usuarioActual().getCorreo());
+        card("La parcela que estás viendo", activeParcel.getNombre() + " · " + zoneLabel() + "\n"
+                + Formato.hectareas(activeParcel.getHectareas()) + " · " + activeParcel.getCultivoActual()
+                + "\nTienes " + parcels.size() + (parcels.size() == 1 ? " parcela registrada." : " parcelas registradas."));
         button(content, "Cambiar o añadir parcela", true, () -> startActivity(new Intent(this, MyParcelsActivity.class)));
-        String state = isOnline() ? "El teléfono tiene conexión a internet." : "El teléfono está sin conexión a internet.";
-        card("Estado de conexión", state + "\nLos JSON del piloto se leen localmente, incluso en modo avión.");
-        int available=0;
-        StringBuilder files = new StringBuilder();
-        for(String name:REQUIRED){
-            boolean exists;
-            try(InputStream in=getAssets().open("datos/"+name)){exists=true;}
-            catch(Exception ignored){exists=false;}
-            if(exists)available++;
-            files.append(exists?"✓ ":"FALTA: ").append(name).append("\n");
+        int available = 0;
+        for (String name : REQUIRED) {
+            try (InputStream in = getAssets().open("datos/" + name)) { available++; }
+            catch (Exception ignored) { }
         }
-        card("Datos agrícolas disponibles: "+available+" de "+REQUIRED.length,files.toString().trim());
-        try{
-            JSONObject p=openLocalJson("paquete_canton.json");
-            JSONObject meta=p.optJSONObject("meta");
-            if(meta!=null)card("Información del paquete científico",
-                    "Periodo analizado: "+meta.optString("periodo_analizado","No indicado")
-                    +"\nArchivo actualizado (UTC): "+meta.optString("actualizado_utc","Sin fecha")
-                    +"\nDatos: NASA / NOAA / INIAP / MAG SIPA. Equipo AgroByte.");
-        }catch(Exception ignored){card("Paquete científico","No se pudo leer fecha o procedencia.");}
-        text(content, "Este prototipo guarda cuentas y parcelas en el dispositivo. "
-                + "No anuncia sincronización con servidores porque todavía no existe un servicio de sincronización integrado.",
-                12,SECONDARY,false);
-        button(content,"Probar datos sin conexión",false,()->new AlertDialog.Builder(this)
-                .setTitle("Prueba sin conexión")
-                .setMessage("1. Activa modo avión en tu TECNO.\n2. Abre Presente, Futuro y Pasado.\n3. "
-                        + "Regresa a Perfil para revisar si están los seis archivos.\n\nNo borres los datos de Kallpa: "
-                        + "podrías perder las parcelas locales.")
-                .setPositiveButton("Entendido",null).show());
+        boolean completos = available == REQUIRED.length;
+        card(completos ? "✅ Todo listo para usar sin internet" : "⚠️ Faltan datos en este teléfono",
+                (isOnline() ? "Ahora tienes internet. " : "Ahora no tienes internet. ")
+                + (completos ? "La información de tu zona ya está guardada en el teléfono: puedes usar Kallpa en el campo."
+                             : "Faltan " + (REQUIRED.length - available) + " archivos de datos. Vuelve a instalar Kallpa."));
+        text(content, "Tus cuentas, parcelas y bitácora se guardan solo en este teléfono. "
+                + "Si borras la app o sus datos, se pierden.", 14, SECONDARY, false);
+        button(content, "¿De dónde salen los datos?", false, () -> {
+            String periodo = "2005–2025";
+            try {
+                JSONObject meta = openLocalJson("paquete_canton.json").optJSONObject("meta");
+                if (meta != null) periodo = meta.optString("periodo_analizado", periodo);
+            } catch (Exception ignored) { }
+            explicar("¿De dónde salen los datos?",
+                    "🛰️ Satélites de la NASA: lluvia, humedad del suelo y verdor de las plantas.\n"
+                    + "🌎 NOAA: los años de El Niño y La Niña.\n"
+                    + "🌱 INIAP y FAO: información de los cultivos.\n"
+                    + "💵 MAG: precio de referencia de la urea.\n\n"
+                    + "Años analizados: " + periodo + ". El equipo AgroByte juntó y revisó estos datos. "
+                    + "Son una guía para tu zona, no una medición exacta de tu terreno.");
+        });
     }
 
     private boolean isOnline(){
@@ -304,10 +319,22 @@ public class SupportActivity extends ActividadBase {
     }
     private Spinner monthPicker(LinearLayout parent){
         Spinner spinner=new Spinner(this);
-        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,MONTHS);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,MONTHS){
+            @Override public View getView(int position, View convertView, android.view.ViewGroup group){
+                TextView v=(TextView)super.getView(position,convertView,group);
+                v.setTextSize(17);v.setTextColor(DARK);v.setTypeface(null,Typeface.BOLD);return v;
+            }
+            @Override public View getDropDownView(int position, View convertView, android.view.ViewGroup group){
+                TextView v=(TextView)super.getDropDownView(position,convertView,group);
+                v.setTextSize(17);v.setTextColor(DARK);v.setMinHeight(dp(52));v.setPadding(dp(18),0,dp(18),0);return v;
+            }
+        };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(54));
+        spinner.setBackgroundResource(R.drawable.bg_selector);
+        spinner.setPadding(dp(8),0,dp(48),0);
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(56));
+        lp.topMargin=dp(6);lp.bottomMargin=dp(4);
         parent.addView(spinner,lp);
         return spinner;
     }
@@ -317,8 +344,8 @@ public class SupportActivity extends ActividadBase {
         startActivity(intent);
     }
     private void intro(String title,String detail){
-        text(content,title,19,DARK,true);
-        text(content,detail,13,SECONDARY,false);
+        text(content,title,20,DARK,true);
+        text(content,detail,15,SECONDARY,false);
     }
     private String zoneLabel(){
         return "daule".equals(canton)?"Daule, Guayas":("babahoyo".equals(canton)?"Babahoyo, Los Ríos":"Zona sin identificar");
@@ -336,8 +363,8 @@ public class SupportActivity extends ActividadBase {
     private void card(String title,String desc){cardIn(content,title,desc);}
     private void cardIn(LinearLayout parent,String title,String desc){
         LinearLayout card=cardContainer(parent);
-        text(card,title,15,DARK,true);
-        text(card,desc,14,SECONDARY,false);
+        text(card,title,17,DARK,true);
+        text(card,desc,15,SECONDARY,false);
     }
     private TextView text(LinearLayout parent,String content,int sp,int color,boolean bold){
         TextView view=new TextView(this);
@@ -352,10 +379,11 @@ public class SupportActivity extends ActividadBase {
         Button button=new Button(this);
         button.setText(label);button.setAllCaps(false);
         button.setTextColor(primary?Color.WHITE:FOREST);
-        button.setTextSize(14);
+        button.setTextSize(16);button.setTypeface(null,Typeface.BOLD);button.setStateListAnimator(null);
         button.setBackgroundResource(primary?R.drawable.bg_button_primary:R.drawable.bg_button_outline);
         button.setOnClickListener(v->action.run());
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,dp(53));
+        button.setMinHeight(dp(54));button.setPadding(dp(16),dp(10),dp(16),dp(10));
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);
         lp.topMargin=dp(12);parent.addView(button,lp);
     }
     private String f(double value,int decimals){

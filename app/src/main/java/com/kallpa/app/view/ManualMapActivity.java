@@ -70,11 +70,11 @@ public class ManualMapActivity extends ActividadBase {
         binding.btnPreview.setOnClickListener(v -> {
             GeoPoint p = leerCoords();
             if (p != null) { marcar(p); binding.mapView.getController().animateTo(p); }
-            else mensaje("Escribe coordenadas válidas.");
+            else mensaje("Revisa los números de la ubicación: parece que falta o sobra algo.");
         });
         binding.btnMyLocation.setOnClickListener(v -> {
             if (!ControladorUbicacion.tienePermiso(this)) {
-                mensaje("Para usar GPS debes autorizar ubicación. Puedes marcar el punto manualmente.");
+                mensaje("Para usar tu ubicación, Kallpa necesita tu permiso. También puedes tocar el mapa donde está tu terreno.");
                 return;
             }
             binding.btnMyLocation.setEnabled(false);
@@ -85,7 +85,7 @@ public class ManualMapActivity extends ActividadBase {
                     GeoPoint geo = new GeoPoint(p.getLatitude(), p.getLongitude());
                     marcar(geo);
                     binding.mapView.getController().animateTo(geo);
-                } else mensaje("No encontramos la ubicación. Puedes tocar el mapa o escribir coordenadas.");
+                } else mensaje("No encontramos tu ubicación. Toca el mapa donde está tu terreno.");
             }));
         });
         binding.btnConfirm.setOnClickListener(v -> confirmarUbicacion());
@@ -93,9 +93,9 @@ public class ManualMapActivity extends ActividadBase {
 
     private void confirmarUbicacion() {
         GeoPoint punto = leerCoords();
-        if (punto == null) { mensaje("Toca el mapa o introduce coordenadas válidas."); return; }
+        if (punto == null) { mensaje("Toca el mapa donde está tu terreno."); return; }
         if (!getIntent().hasExtra(ParcelFormActivity.EXTRA_NOMBRE)) {
-            mensaje("Primero completa el formulario de parcela.");
+            mensaje("Primero cuéntanos sobre tu parcela.");
             startActivity(new Intent(this, ParcelFormActivity.class));
             finish();
             return;
@@ -135,7 +135,7 @@ public class ManualMapActivity extends ActividadBase {
         if (nombre == null || nombre.trim().isEmpty() || cultivo == null || cultivo.isEmpty()
                 || siembra == null || cosecha == null || !Double.isFinite(hectareas)
                 || hectareas < 1 || hectareas > 50) {
-            mensaje("Faltan datos de la parcela. Regresa al formulario.");
+            mensaje("Faltan datos de tu parcela. Vuelve atrás y complétalos.");
             return;
         }
         ControladorAutenticacion auth = new ControladorAutenticacion(this);
@@ -153,7 +153,7 @@ public class ManualMapActivity extends ActividadBase {
         binding.btnConfirm.setEnabled(false);
         if (!new RepositorioParcelasLocal(this).guardar(nueva)) {
             binding.btnConfirm.setEnabled(true);
-            mensaje("No se pudo guardar la parcela. Inténtalo otra vez.");
+            avisoError("No pudimos guardar tu parcela. Inténtalo otra vez.");
             return;
         }
         getSharedPreferences("kallpa_seleccion", MODE_PRIVATE).edit()

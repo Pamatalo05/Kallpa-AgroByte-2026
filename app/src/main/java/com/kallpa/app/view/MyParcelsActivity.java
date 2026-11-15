@@ -31,6 +31,7 @@ public class MyParcelsActivity extends ActividadBase {
         binding = ActivityMyParcelsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnBack.setOnClickListener(v -> finish());
+        activarBarraInferior(SECCION_PARCELA, true);
         binding.btnAddParcel.setOnClickListener(v ->
                 startActivity(new Intent(this, ParcelFormActivity.class)));
     }
@@ -47,7 +48,7 @@ public class MyParcelsActivity extends ActividadBase {
         String key = "parcela_activa_" + correo.toLowerCase(Locale.ROOT);
         String seleccionada = getSharedPreferences("kallpa_seleccion", MODE_PRIVATE).getString(key, "");
         if (parcelas.isEmpty()) {
-            TextView vacio = texto("Todavía no tienes parcelas. Añade la primera para comenzar.", 16, false);
+            TextView vacio = texto("Todavía no tienes parcelas. Toca \"Añadir otra parcela\" para registrar la primera.", 16, false);
             binding.listContainer.addView(vacio); return;
         }
         for (Parcela p : parcelas) {
@@ -57,15 +58,21 @@ public class MyParcelsActivity extends ActividadBase {
             GradientDrawable fondo = new GradientDrawable();
             fondo.setColor(0xFFFFFFFF);
             fondo.setCornerRadius(dp(18));
-            fondo.setStroke(dp(1), p.getId().equals(seleccionada) ? 0xFF67A83C : 0xFFCAD5BB);
+            boolean activa = p.getId().equals(seleccionada);
+            fondo.setStroke(dp(activa ? 2 : 1), activa ? 0xFF67A83C : 0xFFCAD5BB);
             tarjeta.setBackground(fondo);
             LinearLayout.LayoutParams itemLp = new LinearLayout.LayoutParams(-1, -2);
             itemLp.bottomMargin = dp(14);
             binding.listContainer.addView(tarjeta, itemLp);
 
-            tarjeta.addView(texto(p.getNombre() + (p.getId().equals(seleccionada) ? "  ✓ Activa" : ""), 19, true));
-            tarjeta.addView(texto(String.format(Locale.forLanguageTag("es-EC"),
-                    "%s · %.2f ha · %s", p.getCultivoActual(), p.getHectareas(), nombreCanton(p.getCanton())), 14, false));
+            if (activa) {
+                TextView etiqueta = texto("✓ La estás viendo ahora", 13, true);
+                etiqueta.setTextColor(0xFF0B5D2A);
+                tarjeta.addView(etiqueta);
+            }
+            tarjeta.addView(texto(p.getNombre(), 20, true));
+            tarjeta.addView(texto(p.getCultivoActual() + " · " + Formato.hectareas(p.getHectareas())
+                    + " · " + nombreCanton(p.getCanton()), 15, false));
 
             LinearLayout acciones = new LinearLayout(this);
             acciones.setOrientation(LinearLayout.HORIZONTAL);
@@ -75,8 +82,8 @@ public class MyParcelsActivity extends ActividadBase {
             tarjeta.addView(acciones, actionsLp);
 
             Button detalles = new Button(this);
-            detalles.setText("Ver detalles");
-            detalles.setAllCaps(false);
+            detalles.setText("Ver datos");
+            estiloBoton(detalles, false);
             LinearLayout.LayoutParams dLp = new LinearLayout.LayoutParams(0, dp(50), 1f);
             acciones.addView(detalles, dLp);
             detalles.setOnClickListener(v -> {
@@ -86,11 +93,15 @@ public class MyParcelsActivity extends ActividadBase {
             });
 
             Button elegir = new Button(this);
-            elegir.setText(p.getId().equals(seleccionada) ? "Seleccionada" : "Seleccionar");
-            elegir.setAllCaps(false);
-            elegir.setEnabled(!p.getId().equals(seleccionada));
+            elegir.setText(activa ? "Es la actual" : "Ver esta");
+            estiloBoton(elegir, !activa);
+            elegir.setEnabled(!activa);
+            if (activa) {
+                elegir.setBackgroundResource(R.drawable.bg_button_disabled);
+                elegir.setTextColor(0xFF6D7468);
+            }
             LinearLayout.LayoutParams eLp = new LinearLayout.LayoutParams(0, dp(50), 1f);
-            eLp.leftMargin = dp(6);
+            eLp.leftMargin = dp(10);
             acciones.addView(elegir, eLp);
             elegir.setOnClickListener(v -> {
                 getSharedPreferences("kallpa_seleccion", MODE_PRIVATE).edit().putString(key, p.getId()).apply();
@@ -100,6 +111,15 @@ public class MyParcelsActivity extends ActividadBase {
                 finish();
             });
         }
+    }
+
+    private void estiloBoton(Button boton, boolean principal) {
+        boton.setAllCaps(false);
+        boton.setTextSize(15);
+        boton.setTypeface(null, Typeface.BOLD);
+        boton.setTextColor(principal ? 0xFFFFFFFF : 0xFF0B5D2A);
+        boton.setBackgroundResource(principal ? R.drawable.bg_button_primary : R.drawable.bg_button_outline);
+        boton.setStateListAnimator(null);
     }
 
     private TextView texto(String mensaje, int size, boolean negrita) {

@@ -24,7 +24,7 @@ public class ParcelDetailsActivity extends ActividadBase {
         String id = getIntent().getStringExtra(EXTRA_ID);
         List<Parcela> parcelas = new RepositorioParcelasLocal(this).obtenerPorUsuario(correo);
         for (Parcela p : parcelas) if (p.getId().equals(id)) { parcela = p; break; }
-        if (parcela == null) { Toast.makeText(this, "No encontramos esa parcela.", Toast.LENGTH_SHORT).show(); finish(); return; }
+        if (parcela == null) { mensaje("No encontramos esa parcela."); finish(); return; }
         binding = ActivityParcelDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnBack.setOnClickListener(v -> finish());

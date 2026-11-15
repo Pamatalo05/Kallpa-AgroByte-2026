@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Barra de navegación inferior común. ActividadBase marca la sección activa
+     y deja el espacio de la barra del sistema debajo de ella. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/barraInferior"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="68dp"
+    android:background="@drawable/bg_nav_bar"
+    android:elevation="10dp"
+    android:orientation="horizontal"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
+
+    <LinearLayout android:id="@+id/navInicio" style="@style/KallpaNavItem"
+        android:contentDescription="Inicio">
+        <ImageView style="@style/KallpaNavIcono" android:src="@drawable/ic_nav_home" />
+        <TextView style="@style/KallpaNavTexto" android:text="Inicio" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/navParcela" style="@style/KallpaNavItem"
+        android:contentDescription="Mi parcela">
+        <ImageView style="@style/KallpaNavIcono" android:src="@drawable/ic_home_plot" />
+        <TextView style="@style/KallpaNavTexto" android:text="Mi parcela" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/navSiembra" style="@style/KallpaNavItem"
+        android:contentDescription="Siembra">
+        <ImageView style="@style/KallpaNavIcono" android:src="@drawable/ic_home_rotation" />
+        <TextView style="@style/KallpaNavTexto" android:text="Siembra" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/navClima" style="@style/KallpaNavItem"
+        android:contentDescription="Clima">
+        <ImageView style="@style/KallpaNavIcono" android:src="@drawable/ic_home_weather" />
+        <TextView style="@style/KallpaNavTexto" android:text="Clima" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/navMuyu" style="@style/KallpaNavItem"
+        android:contentDescription="Muyu">
+        <ImageView style="@style/KallpaNavIcono" android:src="@drawable/ic_kallpa" />
+        <TextView style="@style/KallpaNavTexto" android:text="Muyu" />
+    </LinearLayout>
+</LinearLayout>

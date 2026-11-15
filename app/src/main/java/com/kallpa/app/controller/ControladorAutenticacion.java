@@ -16,16 +16,16 @@ public class ControladorAutenticacion {
     /** Devuelve null si todo fue bien; de lo contrario, un mensaje comprensible. */
     public String registrar(String nombre, String correo, String clave, String confirmacion) {
         if (nombre.trim().length() < 2) return "Escribe tu nombre completo.";
-        if (!esCorreoValido(correo)) return "Ingresa un correo válido.";
+        if (!esCorreoValido(correo)) return "Revisa tu correo: parece que le falta algo (por ejemplo, la @).";
         if (clave.length() < 8) return "La contraseña necesita al menos 8 caracteres.";
         if (!clave.equals(confirmacion)) return "Las contraseñas no coinciden.";
-        if (repo.existeCuenta()) return "Ya existe una cuenta en este dispositivo. Inicia sesión.";
+        if (repo.existeCuenta()) return "Ya hay una cuenta en este teléfono. Toca \"Iniciar sesión\".";
         return repo.registrar(new Usuario(nombre.trim(), correo.trim()), clave)
-                ? null : "No se pudo crear la cuenta local.";
+                ? null : "No pudimos crear tu cuenta. Inténtalo otra vez.";
     }
 
     public String ingresar(String correo, String clave) {
-        if (!esCorreoValido(correo)) return "Ingresa un correo válido.";
+        if (!esCorreoValido(correo)) return "Revisa tu correo: parece que le falta algo (por ejemplo, la @).";
         if (clave.isEmpty()) return "Escribe tu contraseña.";
         return repo.ingresar(correo, clave) ? null : "Correo o contraseña incorrectos.";
     }
