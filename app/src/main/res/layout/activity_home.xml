@@ -1,83 +1,493 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/bg_screen">
 
-    <ImageView android:layout_width="match_parent" android:layout_height="92dp"
-        android:layout_gravity="bottom" android:src="@drawable/hills"
-        android:scaleType="fitXY" android:contentDescription="@null" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_gravity="bottom"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/hills" />
 
-    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:fillViewport="true">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="vertical" android:paddingStart="22dp" android:paddingEnd="22dp"
-            android:paddingTop="18dp" android:paddingBottom="116dp">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:gravity="center_vertical">
-                <ImageView android:layout_width="57dp" android:layout_height="57dp"
-                    android:src="@drawable/ic_kallpa" android:contentDescription="Logo de Kallpa" />
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="10dp">
-                    <TextView android:id="@+id/txtHello" android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:text="¡Hola!"
-                        android:textColor="@color/forest_dark" android:textSize="23sp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="118dp">
+
+            <!-- Identidad, estado de red, alertas, perfil y menu. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="39dp"
+                    android:layout_height="39dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_kallpa" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="Kallpa"
+                    android:textColor="@color/forest_dark"
+                    android:textSize="19sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/txtConnection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_home_status"
+                    android:gravity="center"
+                    android:paddingStart="9dp"
+                    android:paddingEnd="9dp"
+                    android:text="Sin red"
+                    android:textColor="@color/forest_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btnAlerts"
+                    android:layout_width="35dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="3dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Ver alertas"
+                    android:padding="7dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_home_bell" />
+
+                <ImageButton
+                    android:id="@+id/btnProfile"
+                    android:layout_width="35dp"
+                    android:layout_height="39dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Abrir perfil"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_home_user" />
+
+                <ImageButton
+                    android:id="@+id/btnMenu"
+                    android:layout_width="30dp"
+                    android:layout_height="39dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Abrir menú de todas las funciones"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_home_menu" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtHello"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="¡Hola!"
+                android:textColor="@color/forest_dark"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Tu tierra, tus decisiones."
+                android:textColor="@color/muted"
+                android:textSize="14sp" />
+
+            <!-- Parcela activa: se actualiza desde SharedPreferences, no se inventa. -->
+            <LinearLayout
+                android:id="@+id/btnChangeParcel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/bg_home_parcel"
+                android:clickable="true"
+                android:contentDescription="Cambiar parcela activa"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="80dp"
+                android:orientation="horizontal"
+                android:padding="13dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_home_plot" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="PARCELA ACTIVA"
+                        android:textColor="@color/muted"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:text="Cultivemos buenas decisiones" android:textSize="13sp"
-                        android:textColor="@color/muted" />
+
+                    <TextView
+                        android:id="@+id/txtParcelName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Mi parcela"
+                        android:textColor="@color/forest_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtParcelDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Cultivo · Superficie · Cantón"
+                        android:textColor="@color/muted"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/txtParcelCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="Cambiar parcela"
+                        android:textColor="@color/forest"
+                        android:textSize="11sp" />
                 </LinearLayout>
-                <Button android:id="@+id/btnMenu" android:layout_width="55dp" android:layout_height="55dp"
-                    android:text="☰" android:textSize="27sp" android:textColor="@color/forest_dark"
-                    android:background="@drawable/bg_soft" android:contentDescription="Abrir menú principal" />
-            </LinearLayout>
-            <TextView android:id="@+id/txtConnection" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="15dp"
-                android:background="@drawable/bg_soft" android:padding="10dp"
-                android:text="Sin conexión · datos locales" android:textSize="12sp"
-                android:textColor="@color/forest" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" android:text="Mi parcela activa"
-                android:textColor="@color/forest_dark" android:textSize="19sp" android:textStyle="bold" />
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" android:orientation="vertical"
-                android:background="@drawable/bg_card" android:padding="17dp">
-                <TextView android:id="@+id/txtParcelName" android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:text="Mi parcela"
-                    android:textColor="@color/forest_dark" android:textSize="21sp" android:textStyle="bold" />
-                <TextView android:id="@+id/txtParcelDetails" android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:layout_marginTop="8dp"
-                    android:textColor="@color/text_dark" android:textSize="14sp"
-                    android:lineSpacingExtra="4dp" />
-                <TextView android:id="@+id/txtParcelCount" android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:layout_marginTop="8dp"
-                    android:textColor="@color/muted" android:textSize="12sp" />
-                <Button android:id="@+id/btnMyParcels" style="@style/KallpaOutlineButton"
-                    android:layout_marginTop="12dp" android:text="Mis parcelas  ›" />
+
+                <ImageView
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_home_arrow" />
             </LinearLayout>
 
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="21dp" android:text="Explora tu terreno"
-                android:textColor="@color/forest_dark" android:textSize="19sp" android:textStyle="bold" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="3dp" android:text="Tres pasos sencillos para tu próxima siembra"
-                android:textColor="@color/muted" android:textSize="13sp" />
-            <Button android:id="@+id/btnDiagnosis" style="@style/KallpaButton"
-                android:layout_marginTop="13dp" android:text="01  Presente · Diagnóstico satelital" />
-            <Button android:id="@+id/btnFuture" style="@style/KallpaOutlineButton"
-                android:layout_marginTop="10dp" android:text="02  Futuro · Mi próxima siembra" />
-            <Button android:id="@+id/btnPast" style="@style/KallpaOutlineButton"
-                android:layout_marginTop="10dp" android:text="03  Pasado · El Niño y La Niña" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="22dp" android:text="Tu espacio en Kallpa"
-                android:textColor="@color/forest_dark" android:textSize="19sp" android:textStyle="bold" />
-            <Button android:id="@+id/btnMuyu" style="@style/KallpaOutlineButton"
-                android:layout_marginTop="12dp" android:text="✿  Pregúntale a Muyu" />
-            <Button android:id="@+id/btnAddParcel" style="@style/KallpaOutlineButton"
-                android:layout_marginTop="10dp" android:text="+  Registrar otra parcela" />
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" android:textColor="@color/muted"
-                android:textSize="12sp" android:gravity="center"
-                android:text="Datos NASA y NOAA de escala regional. Kallpa acompaña tus decisiones; no reemplaza la revisión del suelo en campo." />
+            <!-- Acceso principal al calculo auditado de proxima siembra. -->
+            <FrameLayout
+                android:id="@+id/btnRotations"
+                android:layout_width="match_parent"
+                android:layout_height="116dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/bg_home_hero"
+                android:clickable="true"
+                android:contentDescription="Abrir Mis Rotaciones y Próxima siembra"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom"
+                    android:alpha="0.19"
+                    android:contentDescription="@null"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/hills" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="17dp">
+
+                    <ImageView
+                        android:layout_width="59dp"
+                        android:layout_height="59dp"
+                        android:background="@drawable/bg_home_hero_icon"
+                        android:contentDescription="@null"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_home_rotation" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="13dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mis Rotaciones"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Prepara tu próxima siembra"
+                            android:textColor="#E5F5D8"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:contentDescription="@null"
+                        android:rotation="0"
+                        android:src="@drawable/ic_home_arrow_white" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:text="¿Qué deseas consultar?"
+                android:textColor="@color/forest_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Cuatro accesos del documento de experiencia de usuario. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/btnPlotCard"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_home_tile_plot"
+                    android:clickable="true"
+                    android:contentDescription="Abrir Mi Parcela"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_home_plot" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:text="Mi parcela"
+                        android:textColor="@color/forest_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Conoce tu terreno"
+                        android:textColor="@color/muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnClimateCard"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_home_tile_climate"
+                    android:clickable="true"
+                    android:contentDescription="Abrir Clima y Alertas"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_home_weather" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:text="Clima y alertas"
+                        android:textColor="@color/forest_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Cuida tu siembra"
+                        android:textColor="@color/muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/btnCalendarCard"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_home_tile_calendar"
+                    android:clickable="true"
+                    android:contentDescription="Abrir Calendario agrícola"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_home_calendar" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:text="Calendario"
+                        android:textColor="@color/forest_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Mes a mes"
+                        android:textColor="@color/muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btnDiaryCard"
+                    android:layout_width="0dp"
+                    android:layout_height="130dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_home_tile_diary"
+                    android:clickable="true"
+                    android:contentDescription="Abrir Bitácora agrícola"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_home_diary" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:text="Bitácora"
+                        android:textColor="@color/forest_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Tus registros"
+                        android:textColor="@color/muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Los apartados Presente y Pasado siguen visibles pero secundarios. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btnPresent"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_home_secondary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="Ver satélites"
+                    android:textColor="@color/forest"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btnPast"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_home_secondary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="El Niño y La Niña"
+                    android:textColor="@color/forest"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Kallpa · Desarrollado por AgroByte"
+                android:textColor="@color/muted"
+                android:textSize="11sp" />
         </LinearLayout>
     </ScrollView>
+
+    <!-- Muyu permanece siempre visible como un acceso pequeno y flotante. -->
+    <ImageButton
+        android:id="@+id/btnMuyu"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="19dp"
+        android:background="@drawable/bg_home_muyu"
+        android:contentDescription="Abrir asistente Muyu"
+        android:padding="7dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_kallpa" />
 </FrameLayout>
