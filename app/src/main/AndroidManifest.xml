@@ -26,6 +26,16 @@
             android:name=".view.ScienceActivity"
             android:exported="false" />
 
+
+        <activity
+            android:name=".view.CompanionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.SupportActivity"
+            android:exported="false" />
+
+
         <activity
             android:name=".view.ParcelDetailsActivity"
             android:exported="false" />

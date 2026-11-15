@@ -27,7 +27,7 @@ public class HomeActivity extends ActividadBase {
         findViewById(R.id.btnDiagnosis).setOnClickListener(v -> abrirCiencia(ScienceActivity.MODE_PRESENT));
         findViewById(R.id.btnFuture).setOnClickListener(v -> abrirCiencia(ScienceActivity.MODE_FUTURE));
         findViewById(R.id.btnPast).setOnClickListener(v -> abrirCiencia(ScienceActivity.MODE_PAST));
-        findViewById(R.id.btnMuyu).setOnClickListener(v -> abrirCiencia(ScienceActivity.MODE_MUYU));
+        findViewById(R.id.btnMuyu).setOnClickListener(v -> abrirComplementario(CompanionActivity.MODE_MUYU));
     }
 
     @Override protected void onResume() {
@@ -83,8 +83,12 @@ public class HomeActivity extends ActividadBase {
         menu.getMenu().add(0,4,3,"Futuro · Próxima siembra");
         menu.getMenu().add(0,5,4,"Pasado · Historia ENSO");
         menu.getMenu().add(0,6,5,"Hablar con Muyu");
+        menu.getMenu().add(0,12,6,"Mi bitácora agrícola");
         menu.getMenu().add(0,7,6,"Añadir otra parcela");
-        menu.getMenu().add(0,8,7,"Cerrar sesión");
+        menu.getMenu().add(0,9,7,"Clima y alertas para mi siembra");
+        menu.getMenu().add(0,10,8,"Calendario mensual de referencia");
+        menu.getMenu().add(0,11,9,"Perfil y datos sin conexión");
+        menu.getMenu().add(0,8,10,"Cerrar sesión");
         menu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 1: break;
@@ -92,8 +96,12 @@ public class HomeActivity extends ActividadBase {
                 case 3: abrirCiencia(ScienceActivity.MODE_PRESENT); break;
                 case 4: abrirCiencia(ScienceActivity.MODE_FUTURE); break;
                 case 5: abrirCiencia(ScienceActivity.MODE_PAST); break;
-                case 6: abrirCiencia(ScienceActivity.MODE_MUYU); break;
+                case 6: abrirComplementario(CompanionActivity.MODE_MUYU); break;
+                case 12: abrirComplementario(CompanionActivity.MODE_LOG); break;
                 case 7: irA(ParcelFormActivity.class); break;
+                case 9: abrirSoporte(SupportActivity.MODE_ALERTS); break;
+                case 10: abrirSoporte(SupportActivity.MODE_CALENDAR); break;
+                case 11: abrirSoporte(SupportActivity.MODE_PROFILE); break;
                 case 8: confirmarSalir(); break;
                 default: return false;
             }
@@ -104,6 +112,16 @@ public class HomeActivity extends ActividadBase {
     private void abrirCiencia(String modulo) {
         Intent intent = new Intent(this, ScienceActivity.class);
         intent.putExtra(ScienceActivity.EXTRA_MODE, modulo);
+        startActivity(intent);
+    }
+    private void abrirComplementario(String modulo) {
+        Intent intent = new Intent(this, CompanionActivity.class);
+        intent.putExtra(CompanionActivity.EXTRA_MODE, modulo);
+        startActivity(intent);
+    }
+    private void abrirSoporte(String modulo) {
+        Intent intent = new Intent(this, SupportActivity.class);
+        intent.putExtra(SupportActivity.EXTRA_MODE, modulo);
         startActivity(intent);
     }
     private void confirmarSalir() {
