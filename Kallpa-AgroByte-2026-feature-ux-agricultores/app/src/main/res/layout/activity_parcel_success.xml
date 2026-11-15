@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- Paisaje de Kallpa -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:src="@drawable/hills"
+        android:scaleType="fitXY"
+        android:contentDescription="@null" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="28dp">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_kallpa"
+            android:contentDescription="Kallpa" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="¡Parcela registrada!"
+            android:textSize="27sp"
+            android:textStyle="bold"
+            android:textColor="#0B5D2A"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/txtParcelSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Tu parcela se guardó correctamente."
+            android:textSize="16sp"
+            android:textColor="#5C715F"
+            android:gravity="center" />
+
+        <Button
+            android:id="@+id/btnAddAnotherParcel"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="35dp"
+            android:text="+ Agregar otra parcela"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#0B5D2A" />
+
+        <Button
+            android:id="@+id/btnGoHome"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="Ir al inicio"
+            android:textAllCaps="false"
+            android:textColor="#0B5D2A"
+            android:backgroundTint="#E1EED9" />
+
+    </LinearLayout>
+
+</FrameLayout>

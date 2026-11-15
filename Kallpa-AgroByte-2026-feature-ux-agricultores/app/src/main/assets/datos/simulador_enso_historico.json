@@ -1,0 +1,2078 @@
+{
+  "metadata": {
+    "titulo": "Simulador Histórico ENSO — Respuesta de Suelo y Cultivos (2005–2025)",
+    "fuentes": [
+      "NASA POWER Agroclimatology (2005–2025)",
+      "NASA SMAP Soil Moisture",
+      "NOAA CPC Oceanic Niño Index (ONI) & Niño 1+2",
+      "INIAP Ecuador — Fichas técnicas de leguminosas de rotación"
+    ],
+    "alcance_nota": "Simulación basada en registros satelitales históricos (escala cantonal ~9–50 km) ajustada a nivel de finca por disponibilidad de riego, cultivo previo y hectáreas."
+  },
+  "cantones": {
+    "daule": {
+      "nombre": "Daule",
+      "provincia": "Guayas",
+      "relieve": "Llanura aluvial baja (5–7 msnm), drenaje lento en zonas bajas",
+      "escenarios": {
+        "neutro": {
+          "clave": "neutro",
+          "etiqueta": "Año Normal (Neutro)",
+          "meses_historicos_analizados": 87,
+          "anios_referencia": [
+            2023,
+            2024,
+            2025
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 44.9,
+            "humedad_raiz_prom": 0.636,
+            "temp_max_prom_c": 38.2,
+            "anomalia_oni_prom": -0.02
+          },
+          "resumen_impacto_suelo": "En años Neutros (2023, 2024, 2025), el suelo mantiene una humedad radicular equilibrada de 0.636 con 44.9 mm/mes, ideal para rotación rentable.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 187.2,
+              "humedad_raiz": 0.665,
+              "temp_max_c": 38.7
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 171.5,
+              "humedad_raiz": 0.663,
+              "temp_max_c": 37.9
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 178.5,
+              "humedad_raiz": 0.753,
+              "temp_max_c": 35.6
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 103.6,
+              "humedad_raiz": 0.718,
+              "temp_max_c": 36.7
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 35.5,
+              "humedad_raiz": 0.686,
+              "temp_max_c": 36.7
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 22.0,
+              "humedad_raiz": 0.625,
+              "temp_max_c": 38.1
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 3.0,
+              "humedad_raiz": 0.601,
+              "temp_max_c": 38.9
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 2.0,
+              "humedad_raiz": 0.592,
+              "temp_max_c": 39.3
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 2.5,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 39.7
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 6.7,
+              "humedad_raiz": 0.592,
+              "temp_max_c": 39.6
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 4.3,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 38.1
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 7.5,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 38.8
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 85.1,
+                "estado": "Óptimo",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 84.4,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 83.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 80.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 82.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Se adapta bien en secano con la humedad residual post-cosecha."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 71.4,
+                "estado": "Precaución",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Viable en años normales sembrando inmediatamente tras la salida de lluvias."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 68.1,
+                "estado": "Precaución",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Viable en años normales sembrando inmediatamente tras la salida de lluvias."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 67.2,
+                "estado": "Precaución",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Viable en años normales sembrando inmediatamente tras la salida de lluvias."
+              }
+            ]
+          }
+        },
+        "nino": {
+          "clave": "nino",
+          "etiqueta": "Fenómeno El Niño (Exceso de lluvia)",
+          "meses_historicos_analizados": 63,
+          "anios_referencia": [
+            2020,
+            2023,
+            2024
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 83.6,
+            "humedad_raiz_prom": 0.664,
+            "temp_max_prom_c": 37.8,
+            "anomalia_oni_prom": 1.01
+          },
+          "resumen_impacto_suelo": "En eventos históricos de El Niño (2020, 2023, 2024), la lluvia mensual promedio subió a 83.6 mm y la humedad radicular alcanzó 0.664, elevando el riesgo de saturación en zonas bajas.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 95.9,
+              "humedad_raiz": 0.633,
+              "temp_max_c": 38.7
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 254.6,
+              "humedad_raiz": 0.742,
+              "temp_max_c": 35.9
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 207.0,
+              "humedad_raiz": 0.808,
+              "temp_max_c": 34.4
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 195.4,
+              "humedad_raiz": 0.795,
+              "temp_max_c": 35.1
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 76.6,
+              "humedad_raiz": 0.723,
+              "temp_max_c": 35.7
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 29.0,
+              "humedad_raiz": 0.665,
+              "temp_max_c": 37.4
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 29.0,
+              "humedad_raiz": 0.63,
+              "temp_max_c": 39.0
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 5.2,
+              "humedad_raiz": 0.595,
+              "temp_max_c": 39.7
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 1.8,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 39.9
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 7.9,
+              "humedad_raiz": 0.592,
+              "temp_max_c": 39.8
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 9.1,
+              "humedad_raiz": 0.594,
+              "temp_max_c": 38.7
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 28.7,
+              "humedad_raiz": 0.597,
+              "temp_max_c": 39.1
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 84.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 82.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ]
+          }
+        },
+        "el_nino": {
+          "clave": "nino",
+          "etiqueta": "Fenómeno El Niño (Exceso de lluvia)",
+          "meses_historicos_analizados": 63,
+          "anios_referencia": [
+            2020,
+            2023,
+            2024
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 83.6,
+            "humedad_raiz_prom": 0.664,
+            "temp_max_prom_c": 37.8,
+            "anomalia_oni_prom": 1.01
+          },
+          "resumen_impacto_suelo": "En eventos históricos de El Niño (2020, 2023, 2024), la lluvia mensual promedio subió a 83.6 mm y la humedad radicular alcanzó 0.664, elevando el riesgo de saturación en zonas bajas.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 95.9,
+              "humedad_raiz": 0.633,
+              "temp_max_c": 38.7
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 254.6,
+              "humedad_raiz": 0.742,
+              "temp_max_c": 35.9
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 207.0,
+              "humedad_raiz": 0.808,
+              "temp_max_c": 34.4
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 195.4,
+              "humedad_raiz": 0.795,
+              "temp_max_c": 35.1
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 76.6,
+              "humedad_raiz": 0.723,
+              "temp_max_c": 35.7
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 29.0,
+              "humedad_raiz": 0.665,
+              "temp_max_c": 37.4
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 29.0,
+              "humedad_raiz": 0.63,
+              "temp_max_c": 39.0
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 5.2,
+              "humedad_raiz": 0.595,
+              "temp_max_c": 39.7
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 1.8,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 39.9
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 7.9,
+              "humedad_raiz": 0.592,
+              "temp_max_c": 39.8
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 9.1,
+              "humedad_raiz": 0.594,
+              "temp_max_c": 38.7
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 28.7,
+              "humedad_raiz": 0.597,
+              "temp_max_c": 39.1
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 84.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 82.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ]
+          }
+        },
+        "nina": {
+          "clave": "nina",
+          "etiqueta": "Fenómeno La Niña (Déficit hídrico)",
+          "meses_historicos_analizados": 102,
+          "anios_referencia": [
+            2023,
+            2024,
+            2025
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 71.9,
+            "humedad_raiz_prom": 0.655,
+            "temp_max_prom_c": 36.9,
+            "anomalia_oni_prom": -0.83
+          },
+          "resumen_impacto_suelo": "En eventos históricos de La Niña (2023, 2024, 2025), la lluvia mensual bajó a 71.9 mm y la humedad radicular cayó a 0.655, haciendo crítico contar con riego o cultivos rústicos.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 144.7,
+              "humedad_raiz": 0.648,
+              "temp_max_c": 36.8
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 240.3,
+              "humedad_raiz": 0.759,
+              "temp_max_c": 34.0
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 183.8,
+              "humedad_raiz": 0.797,
+              "temp_max_c": 33.3
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 100.7,
+              "humedad_raiz": 0.754,
+              "temp_max_c": 35.1
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 17.2,
+              "humedad_raiz": 0.675,
+              "temp_max_c": 36.5
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 9.3,
+              "humedad_raiz": 0.624,
+              "temp_max_c": 37.5
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 5.0,
+              "humedad_raiz": 0.598,
+              "temp_max_c": 38.5
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 3.8,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 39.2
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 4.1,
+              "humedad_raiz": 0.593,
+              "temp_max_c": 39.1
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 8.0,
+              "humedad_raiz": 0.594,
+              "temp_max_c": 38.8
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 10.5,
+              "humedad_raiz": 0.596,
+              "temp_max_c": 37.8
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 29.7,
+              "humedad_raiz": 0.601,
+              "temp_max_c": 37.7
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 92.1,
+                "estado": "Óptimo",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Aprovecha el riego disponible en la parcela para sostener alta rentabilidad en La Niña."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 90.4,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 86.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 85.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 93.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Excelente resiliencia en secano aprovechando la humedad residual sin requerir riego."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 48.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 45.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 44.2,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              }
+            ]
+          }
+        },
+        "la_nina": {
+          "clave": "nina",
+          "etiqueta": "Fenómeno La Niña (Déficit hídrico)",
+          "meses_historicos_analizados": 102,
+          "anios_referencia": [
+            2023,
+            2024,
+            2025
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 71.9,
+            "humedad_raiz_prom": 0.655,
+            "temp_max_prom_c": 36.9,
+            "anomalia_oni_prom": -0.83
+          },
+          "resumen_impacto_suelo": "En eventos históricos de La Niña (2023, 2024, 2025), la lluvia mensual bajó a 71.9 mm y la humedad radicular cayó a 0.655, haciendo crítico contar con riego o cultivos rústicos.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 144.7,
+              "humedad_raiz": 0.648,
+              "temp_max_c": 36.8
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 240.3,
+              "humedad_raiz": 0.759,
+              "temp_max_c": 34.0
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 183.8,
+              "humedad_raiz": 0.797,
+              "temp_max_c": 33.3
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 100.7,
+              "humedad_raiz": 0.754,
+              "temp_max_c": 35.1
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 17.2,
+              "humedad_raiz": 0.675,
+              "temp_max_c": 36.5
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 9.3,
+              "humedad_raiz": 0.624,
+              "temp_max_c": 37.5
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 5.0,
+              "humedad_raiz": 0.598,
+              "temp_max_c": 38.5
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 3.8,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 39.2
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 4.1,
+              "humedad_raiz": 0.593,
+              "temp_max_c": 39.1
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 8.0,
+              "humedad_raiz": 0.594,
+              "temp_max_c": 38.8
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 10.5,
+              "humedad_raiz": 0.596,
+              "temp_max_c": 37.8
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 29.7,
+              "humedad_raiz": 0.601,
+              "temp_max_c": 37.7
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 92.1,
+                "estado": "Óptimo",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Aprovecha el riego disponible en la parcela para sostener alta rentabilidad en La Niña."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 90.4,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 86.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 85.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 93.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Excelente resiliencia en secano aprovechando la humedad residual sin requerir riego."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 48.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 45.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 44.2,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "babahoyo": {
+      "nombre": "Babahoyo",
+      "provincia": "Los Ríos",
+      "relieve": "Llanura fluvial de alta recarga (6–8 msnm), alta vulnerabilidad a crecidas en El Niño",
+      "escenarios": {
+        "neutro": {
+          "clave": "neutro",
+          "etiqueta": "Año Normal (Neutro)",
+          "meses_historicos_analizados": 87,
+          "anios_referencia": [
+            2023,
+            2024,
+            2025
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 58.6,
+            "humedad_raiz_prom": 0.642,
+            "temp_max_prom_c": 33.1,
+            "anomalia_oni_prom": -0.02
+          },
+          "resumen_impacto_suelo": "En años Neutros (2023, 2024, 2025), el suelo mantiene una humedad radicular equilibrada de 0.642 con 58.6 mm/mes, ideal para rotación rentable.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 178.8,
+              "humedad_raiz": 0.61,
+              "temp_max_c": 32.1
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 138.0,
+              "humedad_raiz": 0.608,
+              "temp_max_c": 32.6
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 177.6,
+              "humedad_raiz": 0.722,
+              "temp_max_c": 30.8
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 109.1,
+              "humedad_raiz": 0.728,
+              "temp_max_c": 31.6
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 58.0,
+              "humedad_raiz": 0.742,
+              "temp_max_c": 31.6
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 50.8,
+              "humedad_raiz": 0.677,
+              "temp_max_c": 32.8
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 19.1,
+              "humedad_raiz": 0.639,
+              "temp_max_c": 33.8
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 18.1,
+              "humedad_raiz": 0.59,
+              "temp_max_c": 34.9
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 15.9,
+              "humedad_raiz": 0.561,
+              "temp_max_c": 35.0
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 36.0,
+              "humedad_raiz": 0.557,
+              "temp_max_c": 34.3
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 26.2,
+              "humedad_raiz": 0.562,
+              "temp_max_c": 32.7
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 26.0,
+              "humedad_raiz": 0.545,
+              "temp_max_c": 33.7
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 85.1,
+                "estado": "Óptimo",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 84.4,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 83.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 80.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Condiciones históricas óptimas con respaldo de riego en la parcela."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 82.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Se adapta bien en secano con la humedad residual post-cosecha."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 71.4,
+                "estado": "Precaución",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Viable en años normales sembrando inmediatamente tras la salida de lluvias."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 68.1,
+                "estado": "Precaución",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Viable en años normales sembrando inmediatamente tras la salida de lluvias."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 67.2,
+                "estado": "Precaución",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Viable en años normales sembrando inmediatamente tras la salida de lluvias."
+              }
+            ]
+          }
+        },
+        "nino": {
+          "clave": "nino",
+          "etiqueta": "Fenómeno El Niño (Exceso de lluvia)",
+          "meses_historicos_analizados": 63,
+          "anios_referencia": [
+            2020,
+            2023,
+            2024
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 91.5,
+            "humedad_raiz_prom": 0.641,
+            "temp_max_prom_c": 32.7,
+            "anomalia_oni_prom": 1.01
+          },
+          "resumen_impacto_suelo": "En eventos históricos de El Niño (2020, 2023, 2024), la lluvia mensual promedio subió a 91.5 mm y la humedad radicular alcanzó 0.641, elevando el riesgo de saturación en zonas bajas.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 92.4,
+              "humedad_raiz": 0.576,
+              "temp_max_c": 33.4
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 215.6,
+              "humedad_raiz": 0.682,
+              "temp_max_c": 31.1
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 193.9,
+              "humedad_raiz": 0.762,
+              "temp_max_c": 30.3
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 195.5,
+              "humedad_raiz": 0.8,
+              "temp_max_c": 30.6
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 100.3,
+              "humedad_raiz": 0.752,
+              "temp_max_c": 31.0
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 46.6,
+              "humedad_raiz": 0.727,
+              "temp_max_c": 32.3
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 44.7,
+              "humedad_raiz": 0.69,
+              "temp_max_c": 33.7
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 37.4,
+              "humedad_raiz": 0.625,
+              "temp_max_c": 34.6
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 13.6,
+              "humedad_raiz": 0.572,
+              "temp_max_c": 35.3
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 26.3,
+              "humedad_raiz": 0.54,
+              "temp_max_c": 34.5
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 33.8,
+              "humedad_raiz": 0.544,
+              "temp_max_c": 33.0
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 49.6,
+              "humedad_raiz": 0.547,
+              "temp_max_c": 33.7
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 84.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 82.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ]
+          }
+        },
+        "el_nino": {
+          "clave": "nino",
+          "etiqueta": "Fenómeno El Niño (Exceso de lluvia)",
+          "meses_historicos_analizados": 63,
+          "anios_referencia": [
+            2020,
+            2023,
+            2024
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 91.5,
+            "humedad_raiz_prom": 0.641,
+            "temp_max_prom_c": 32.7,
+            "anomalia_oni_prom": 1.01
+          },
+          "resumen_impacto_suelo": "En eventos históricos de El Niño (2020, 2023, 2024), la lluvia mensual promedio subió a 91.5 mm y la humedad radicular alcanzó 0.641, elevando el riesgo de saturación en zonas bajas.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 92.4,
+              "humedad_raiz": 0.576,
+              "temp_max_c": 33.4
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 215.6,
+              "humedad_raiz": 0.682,
+              "temp_max_c": 31.1
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 193.9,
+              "humedad_raiz": 0.762,
+              "temp_max_c": 30.3
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 195.5,
+              "humedad_raiz": 0.8,
+              "temp_max_c": 30.6
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 100.3,
+              "humedad_raiz": 0.752,
+              "temp_max_c": 31.0
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 46.6,
+              "humedad_raiz": 0.727,
+              "temp_max_c": 32.3
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 44.7,
+              "humedad_raiz": 0.69,
+              "temp_max_c": 33.7
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 37.4,
+              "humedad_raiz": 0.625,
+              "temp_max_c": 34.6
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 13.6,
+              "humedad_raiz": 0.572,
+              "temp_max_c": 35.3
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 26.3,
+              "humedad_raiz": 0.54,
+              "temp_max_c": 34.5
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 33.8,
+              "humedad_raiz": 0.544,
+              "temp_max_c": 33.0
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 49.6,
+              "humedad_raiz": 0.547,
+              "temp_max_c": 33.7
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 84.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 82.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Ciclo corto viable en El Niño asegurando surcos de drenaje."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 50.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 47.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 45.9,
+                "estado": "No recomendado",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Alto riesgo de pudrición radicular por saturación histórica en El Niño."
+              }
+            ]
+          }
+        },
+        "nina": {
+          "clave": "nina",
+          "etiqueta": "Fenómeno La Niña (Déficit hídrico)",
+          "meses_historicos_analizados": 102,
+          "anios_referencia": [
+            2023,
+            2024,
+            2025
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 86.5,
+            "humedad_raiz_prom": 0.64,
+            "temp_max_prom_c": 31.8,
+            "anomalia_oni_prom": -0.83
+          },
+          "resumen_impacto_suelo": "En eventos históricos de La Niña (2023, 2024, 2025), la lluvia mensual bajó a 86.5 mm y la humedad radicular cayó a 0.64, haciendo crítico contar con riego o cultivos rústicos.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 148.1,
+              "humedad_raiz": 0.615,
+              "temp_max_c": 31.3
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 228.1,
+              "humedad_raiz": 0.728,
+              "temp_max_c": 28.8
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 175.5,
+              "humedad_raiz": 0.782,
+              "temp_max_c": 29.2
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 121.0,
+              "humedad_raiz": 0.783,
+              "temp_max_c": 30.4
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 49.2,
+              "humedad_raiz": 0.72,
+              "temp_max_c": 31.4
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 32.9,
+              "humedad_raiz": 0.674,
+              "temp_max_c": 31.9
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 23.6,
+              "humedad_raiz": 0.602,
+              "temp_max_c": 33.5
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 16.9,
+              "humedad_raiz": 0.583,
+              "temp_max_c": 34.3
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 20.5,
+              "humedad_raiz": 0.554,
+              "temp_max_c": 34.3
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 35.2,
+              "humedad_raiz": 0.553,
+              "temp_max_c": 33.8
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 41.3,
+              "humedad_raiz": 0.554,
+              "temp_max_c": 32.2
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 51.7,
+              "humedad_raiz": 0.565,
+              "temp_max_c": 32.0
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 92.1,
+                "estado": "Óptimo",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Aprovecha el riego disponible en la parcela para sostener alta rentabilidad en La Niña."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 90.4,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 86.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 85.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 93.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Excelente resiliencia en secano aprovechando la humedad residual sin requerir riego."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 48.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 45.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 44.2,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              }
+            ]
+          }
+        },
+        "la_nina": {
+          "clave": "nina",
+          "etiqueta": "Fenómeno La Niña (Déficit hídrico)",
+          "meses_historicos_analizados": 102,
+          "anios_referencia": [
+            2023,
+            2024,
+            2025
+          ],
+          "indicadores_historicos": {
+            "lluvia_mensual_prom_mm": 86.5,
+            "humedad_raiz_prom": 0.64,
+            "temp_max_prom_c": 31.8,
+            "anomalia_oni_prom": -0.83
+          },
+          "resumen_impacto_suelo": "En eventos históricos de La Niña (2023, 2024, 2025), la lluvia mensual bajó a 86.5 mm y la humedad radicular cayó a 0.64, haciendo crítico contar con riego o cultivos rústicos.",
+          "perfil_mensual": [
+            {
+              "mes": 1,
+              "mes_nombre": "Enero",
+              "lluvia_mm": 148.1,
+              "humedad_raiz": 0.615,
+              "temp_max_c": 31.3
+            },
+            {
+              "mes": 2,
+              "mes_nombre": "Febrero",
+              "lluvia_mm": 228.1,
+              "humedad_raiz": 0.728,
+              "temp_max_c": 28.8
+            },
+            {
+              "mes": 3,
+              "mes_nombre": "Marzo",
+              "lluvia_mm": 175.5,
+              "humedad_raiz": 0.782,
+              "temp_max_c": 29.2
+            },
+            {
+              "mes": 4,
+              "mes_nombre": "Abril",
+              "lluvia_mm": 121.0,
+              "humedad_raiz": 0.783,
+              "temp_max_c": 30.4
+            },
+            {
+              "mes": 5,
+              "mes_nombre": "Mayo",
+              "lluvia_mm": 49.2,
+              "humedad_raiz": 0.72,
+              "temp_max_c": 31.4
+            },
+            {
+              "mes": 6,
+              "mes_nombre": "Junio",
+              "lluvia_mm": 32.9,
+              "humedad_raiz": 0.674,
+              "temp_max_c": 31.9
+            },
+            {
+              "mes": 7,
+              "mes_nombre": "Julio",
+              "lluvia_mm": 23.6,
+              "humedad_raiz": 0.602,
+              "temp_max_c": 33.5
+            },
+            {
+              "mes": 8,
+              "mes_nombre": "Agosto",
+              "lluvia_mm": 16.9,
+              "humedad_raiz": 0.583,
+              "temp_max_c": 34.3
+            },
+            {
+              "mes": 9,
+              "mes_nombre": "Septiembre",
+              "lluvia_mm": 20.5,
+              "humedad_raiz": 0.554,
+              "temp_max_c": 34.3
+            },
+            {
+              "mes": 10,
+              "mes_nombre": "Octubre",
+              "lluvia_mm": 35.2,
+              "humedad_raiz": 0.553,
+              "temp_max_c": 33.8
+            },
+            {
+              "mes": 11,
+              "mes_nombre": "Noviembre",
+              "lluvia_mm": 41.3,
+              "humedad_raiz": 0.554,
+              "temp_max_c": 32.2
+            },
+            {
+              "mes": 12,
+              "mes_nombre": "Diciembre",
+              "lluvia_mm": 51.7,
+              "humedad_raiz": 0.565,
+              "temp_max_c": 32.0
+            }
+          ],
+          "recomendacion_por_parcela": {
+            "con_riego": [
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 92.1,
+                "estado": "Óptimo",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Aprovecha el riego disponible en la parcela para sostener alta rentabilidad en La Niña."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 90.4,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 86.2,
+                "estado": "Óptimo",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              },
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 85.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Viable con riego suplementario durante periodos secos de La Niña."
+              }
+            ],
+            "sin_riego": [
+              {
+                "cultivo": "Maní de rotación (INIAP-381)",
+                "score_compatibilidad": 93.9,
+                "estado": "Óptimo",
+                "ciclo_dias": 115,
+                "fijacion_n_kg_ha": 65.0,
+                "ahorro_urea_kg_ha": 105.0,
+                "ahorro_urea_usd_ha": 79.8,
+                "costo_insumos_ha": 610.0,
+                "ingreso_bruto_ha": 1420.0,
+                "nota_agronomica": "Excelente resiliencia en secano aprovechando la humedad residual sin requerir riego."
+              },
+              {
+                "cultivo": "Mucuna (Mucuna pruriens — Abono verde)",
+                "score_compatibilidad": 48.4,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 140.0,
+                "ahorro_urea_kg_ha": 220.0,
+                "ahorro_urea_usd_ha": 167.2,
+                "costo_insumos_ha": 195.0,
+                "ingreso_bruto_ha": 410.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Soya de rotación (INIAP-308)",
+                "score_compatibilidad": 45.1,
+                "estado": "No recomendado",
+                "ciclo_dias": 105,
+                "fijacion_n_kg_ha": 85.0,
+                "ahorro_urea_kg_ha": 140.0,
+                "ahorro_urea_usd_ha": 106.4,
+                "costo_insumos_ha": 520.0,
+                "ingreso_bruto_ha": 1180.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              },
+              {
+                "cultivo": "Fréjol Caupí (INIAP-463)",
+                "score_compatibilidad": 44.2,
+                "estado": "No recomendado",
+                "ciclo_dias": 75,
+                "fijacion_n_kg_ha": 70.0,
+                "ahorro_urea_kg_ha": 115.0,
+                "ahorro_urea_usd_ha": 87.4,
+                "costo_insumos_ha": 430.0,
+                "ingreso_bruto_ha": 980.0,
+                "nota_agronomica": "Sin riego sufre déficit hídrico severo en años secos como La Niña."
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

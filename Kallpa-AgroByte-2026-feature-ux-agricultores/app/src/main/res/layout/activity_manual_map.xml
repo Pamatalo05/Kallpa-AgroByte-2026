@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@drawable/bg_screen"
+    android:paddingStart="18dp" android:paddingEnd="18dp" android:paddingTop="12dp" android:paddingBottom="12dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+        <Button android:id="@+id/btnBack" android:layout_width="48dp" android:layout_height="48dp" android:text="←" android:textSize="25sp" android:textColor="@color/forest" android:background="@android:color/transparent" android:contentDescription="Volver" />
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/map_title" android:textSize="23sp" android:textColor="@color/forest_dark" android:textStyle="bold" />
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/map_subtitle" android:textColor="@color/muted" android:textSize="14sp" android:gravity="center" />
+    <!-- Accesos rapidos del piloto; no seleccionan la parcela por si solos. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/btnDaule"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:text="Ir a Daule"
+            android:textAllCaps="false"
+            android:textColor="@color/forest"
+            android:background="@drawable/bg_button_outline" />
+        <Space android:layout_width="8dp" android:layout_height="1dp" />
+        <Button
+            android:id="@+id/btnBabahoyo"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:text="Ir a Babahoyo"
+            android:textAllCaps="false"
+            android:textColor="@color/forest"
+            android:background="@drawable/bg_button_outline" />
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="12dp" android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_card" android:clipToOutline="true">
+        <org.osmdroid.views.MapView android:id="@+id/mapView" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom|start" android:text="© OpenStreetMap contributors" android:textColor="@color/forest_dark" android:textSize="11sp" android:padding="6dp" android:background="@drawable/bg_soft" />
+    </FrameLayout>
+    <TextView android:id="@+id/txtSelection" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ubicación aún no seleccionada" android:textStyle="bold" android:textColor="@color/forest_dark" android:textSize="14sp" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+        <EditText android:id="@+id/inputLat" style="@style/KallpaInput" android:layout_width="0dp" android:layout_weight="1"
+            android:inputType="numberDecimal|numberSigned" android:hint="Latitud" android:contentDescription="Latitud" />
+        <Space android:layout_width="8dp" android:layout_height="1dp" />
+        <EditText android:id="@+id/inputLon" style="@style/KallpaInput" android:layout_width="0dp" android:layout_weight="1"
+            android:inputType="numberDecimal|numberSigned" android:hint="Longitud" android:contentDescription="Longitud" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+        <Button android:id="@+id/btnPreview" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp"
+            android:text="Ver punto" android:background="@drawable/bg_button_outline" android:textColor="@color/forest" android:textAllCaps="false" />
+        <Space android:layout_width="8dp" android:layout_height="1dp" />
+        <Button android:id="@+id/btnMyLocation" android:layout_width="0dp" android:layout_weight="1" android:layout_height="44dp"
+            android:text="Usar GPS" android:background="@drawable/bg_button_outline" android:textColor="@color/forest" android:textAllCaps="false" />
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/osm_attribution" android:textColor="@color/muted" android:textSize="11sp" />
+    <Button android:id="@+id/btnConfirm" style="@style/KallpaButton" android:layout_marginTop="10dp" android:text="@string/btn_confirm" />
+</LinearLayout>

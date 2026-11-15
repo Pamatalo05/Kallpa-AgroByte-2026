@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Kallpa</string>
+    <string name="tagline">Datos que dan vida</string>
+    <string name="login_title">Bienvenido de nuevo</string>
+    <string name="login_subtitle">Inicia sesión para continuar</string>
+    <string name="register_title">Crear una cuenta</string>
+    <string name="register_subtitle">Completa tus datos para empezar</string>
+    <string name="hint_email">Correo electrónico</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_name">Nombre completo</string>
+    <string name="hint_confirm_password">Confirmar contraseña</string>
+    <string name="btn_signin">Iniciar sesión</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="btn_continue">Continuar</string>
+    <string name="btn_location">Usar mi ubicación actual</string>
+    <string name="btn_manual">Elegir ubicación en el mapa</string>
+    <string name="btn_confirm">Confirmar ubicación</string>
+    <string name="btn_center">Mostrar coordenadas en el mapa</string>
+    <string name="location_title">¿Compartir tu ubicación?</string>
+    <string name="location_subtitle">La usamos una sola vez para ubicar tu terreno y ayudarte a planificar sus cultivos. También puedes elegirla manualmente.</string>
+    <string name="map_title">Selecciona tu ubicación</string>
+    <string name="map_subtitle">Toca el mapa para señalar tu terreno o escribe sus coordenadas.</string>
+    <string name="osm_attribution">© OpenStreetMap contributors · Se requiere internet para descargar mapas nuevos.</string>
+</resources>
