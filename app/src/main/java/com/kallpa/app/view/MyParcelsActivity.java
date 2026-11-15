@@ -31,7 +31,7 @@ public class MyParcelsActivity extends ActividadBase {
         binding = ActivityMyParcelsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnBack.setOnClickListener(v -> finish());
-        activarBarraInferior(SECCION_PARCELA, true);
+        activarBarraInferior(SECCION_PARCELA, false);
         binding.btnAddParcel.setOnClickListener(v ->
                 startActivity(new Intent(this, ParcelFormActivity.class)));
     }
@@ -118,7 +118,7 @@ public class MyParcelsActivity extends ActividadBase {
         boton.setTextSize(15);
         boton.setTypeface(null, Typeface.BOLD);
         boton.setTextColor(principal ? 0xFFFFFFFF : 0xFF0B5D2A);
-        boton.setBackgroundResource(principal ? R.drawable.bg_button_primary : R.drawable.bg_button_outline);
+        boton.setBackgroundResource(principal ? R.drawable.bg_button_primary : R.drawable.bg_button_soft);
         boton.setStateListAnimator(null);
     }
 

@@ -38,7 +38,8 @@ public abstract class ActividadBase extends AppCompatActivity {
     protected static final int SECCION_MUYU = 4;
 
     private static final int[] IDS_BARRA = {
-            R.id.navInicio, R.id.navParcela, R.id.navSiembra, R.id.navClima, R.id.navMuyu };
+            R.id.navInicio, R.id.navParcela, R.id.navSiembra, R.id.navClima };
+    private static final String PREFS_UI = "kallpa_ui";
     private static final long DURACION_AVISO_MS = 4000;
 
     private static final int AVISO_INFO = 0, AVISO_EXITO = 1, AVISO_ERROR = 2;
@@ -228,10 +229,7 @@ public abstract class ActividadBase extends AppCompatActivity {
             TextView texto = (TextView) item.getChildAt(1);
             boolean activa = i == seccion;
             icono.setBackgroundResource(activa ? R.drawable.bg_nav_pill : 0);
-            // Muyu conserva sus colores; los demás íconos se pintan según el estado.
-            if (IDS_BARRA[i] != R.id.navMuyu) {
-                icono.setColorFilter(getColor(activa ? R.color.forest : R.color.nav_inactive));
-            }
+            icono.setColorFilter(getColor(activa ? R.color.forest : R.color.nav_inactive));
             texto.setTextColor(getColor(activa ? R.color.forest_dark : R.color.nav_inactive));
             texto.setTypeface(null, activa ? Typeface.BOLD : Typeface.NORMAL);
             item.setSelected(activa);
@@ -240,6 +238,97 @@ public abstract class ActividadBase extends AppCompatActivity {
                 if (destino == seccion && exacta) return;
                 irASeccion(destino);
             });
+        }
+        // Muyu flota sobre todas las pantallas con barra, salvo en su propia pantalla.
+        if (seccion != SECCION_MUYU) mostrarMuyuFlotante();
+    }
+
+    // ---------------------------------------------------------------- Muyu flotante
+
+    /**
+     * Botón redondo de Muyu que flota sobre la pantalla.
+     * Un toque abre a Muyu; si lo arrastras, se mueve y se pega al borde más cercano.
+     * La posición se recuerda entre pantallas.
+     */
+    private void mostrarMuyuFlotante() {
+        ViewGroup contenido = findViewById(android.R.id.content);
+        if (contenido == null || contenido.findViewById(R.id.muyuFlotante) != null) return;
+        View muyu = LayoutInflater.from(this).inflate(R.layout.view_muyu_flotante, contenido, false);
+        muyu.setAlpha(0f);
+        contenido.addView(muyu);
+        // Abre a Muyu encima de esta pantalla: al volver, sigues donde estabas.
+        muyu.setOnClickListener(v -> abrirMuyu());
+        muyu.setOnTouchListener(new ArrastreMuyu());
+        // Se ubica cuando la pantalla ya conoce su tamaño.
+        contenido.post(() -> ubicarMuyu(muyu, contenido, false));
+    }
+
+    private void ubicarMuyu(View muyu, ViewGroup contenido, boolean guardar) {
+        int ancho = contenido.getWidth(), alto = contenido.getHeight();
+        if (ancho == 0 || alto == 0 || muyu.getWidth() == 0) {
+            muyu.post(() -> ubicarMuyu(muyu, contenido, guardar));
+            return;
+        }
+        int[] limites = limitesVerticales(contenido, muyu);
+        android.content.SharedPreferences prefs = getSharedPreferences(PREFS_UI, MODE_PRIVATE);
+        if (guardar) {
+            boolean derecha = muyu.getX() + muyu.getWidth() / 2f > ancho / 2f;
+            float fraccion = (muyu.getY() - limites[0]) / Math.max(1f, limites[1] - limites[0]);
+            prefs.edit().putBoolean("muyu_derecha", derecha).putFloat("muyu_altura", fraccion).apply();
+        }
+        boolean derecha = prefs.getBoolean("muyu_derecha", true);
+        float fraccion = Math.max(0f, Math.min(1f, prefs.getFloat("muyu_altura", 1f)));
+        float x = derecha ? ancho - muyu.getWidth() - px(14) : px(14);
+        float y = limites[0] + fraccion * (limites[1] - limites[0]);
+        muyu.animate().x(x).y(y).alpha(1f).setDuration(guardar ? 180 : 150).start();
+    }
+
+    /** Muyu no tapa la barra de estado ni la barra inferior. */
+    private int[] limitesVerticales(ViewGroup contenido, View muyu) {
+        WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(contenido);
+        int arriba = (insets == null ? 0 : insets.getInsets(WindowInsetsCompat.Type.systemBars()).top) + px(12);
+        View barra = findViewById(R.id.barraInferior);
+        int abajoLibre = barra != null && barra.getVisibility() == View.VISIBLE ? barra.getHeight()
+                : (insets == null ? 0 : insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom);
+        int abajo = contenido.getHeight() - abajoLibre - muyu.getHeight() - px(14);
+        return new int[]{arriba, Math.max(arriba, abajo)};
+    }
+
+    /** Distingue un toque (abre Muyu) de un arrastre (lo mueve). */
+    private class ArrastreMuyu implements View.OnTouchListener {
+        private float inicioX, inicioY, origenX, origenY;
+        private boolean arrastrando;
+
+        @Override public boolean onTouch(View v, android.view.MotionEvent e) {
+            ViewGroup padre = (ViewGroup) v.getParent();
+            switch (e.getActionMasked()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    inicioX = e.getRawX(); inicioY = e.getRawY();
+                    origenX = v.getX(); origenY = v.getY();
+                    arrastrando = false;
+                    v.animate().scaleX(1.08f).scaleY(1.08f).setDuration(120).start();
+                    return true;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    float dx = e.getRawX() - inicioX, dy = e.getRawY() - inicioY;
+                    if (!arrastrando && Math.hypot(dx, dy) > px(8)) arrastrando = true;
+                    if (arrastrando) {
+                        int[] limites = limitesVerticales(padre, v);
+                        v.setX(Math.max(0, Math.min(padre.getWidth() - v.getWidth(), origenX + dx)));
+                        v.setY(Math.max(limites[0], Math.min(limites[1], origenY + dy)));
+                    }
+                    return true;
+                case android.view.MotionEvent.ACTION_UP:
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(120).start();
+                    if (arrastrando) ubicarMuyu(v, padre, true);
+                    else v.performClick();
+                    return true;
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(120).start();
+                    if (arrastrando) ubicarMuyu(v, padre, true);
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 
@@ -251,7 +340,8 @@ public abstract class ActividadBase extends AppCompatActivity {
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 break;
             case SECCION_PARCELA:
-                intent = new Intent(this, MyParcelsActivity.class);
+                intent = new Intent(this, ScienceActivity.class)
+                        .putExtra(ScienceActivity.EXTRA_MODE, ScienceActivity.MODE_PRESENT);
                 break;
             case SECCION_SIEMBRA:
                 intent = new Intent(this, ScienceActivity.class)
@@ -272,6 +362,19 @@ public abstract class ActividadBase extends AppCompatActivity {
         if (!(this instanceof HomeActivity)) {
             finish();
             overridePendingTransition(0, 0);
+        }
+    }
+
+    /**
+     * Abre a Muyu: el chat completo (web de Muyu dentro de la app) si viene incluido;
+     * si no, las preguntas frecuentes sin conexión.
+     */
+    protected void abrirMuyu() {
+        if (MuyuWebActivity.disponible(this)) {
+            startActivity(new Intent(this, MuyuWebActivity.class));
+        } else {
+            startActivity(new Intent(this, CompanionActivity.class)
+                    .putExtra(CompanionActivity.EXTRA_MODE, CompanionActivity.MODE_MUYU));
         }
     }
 

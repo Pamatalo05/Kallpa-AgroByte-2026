@@ -168,7 +168,7 @@ public class SupportActivity extends ActividadBase {
                 cardIn(result, "¿Qué puedes hacer?", advice(moisture, risk));
                 button(result, "Ver qué sembrar y cuánto ahorrar", true,
                         () -> openScience(ScienceActivity.MODE_FUTURE));
-                button(result, "Ver las cifras de " + MONTHS[position].toLowerCase(Locale.ROOT), false,
+                link(result, "Ver las cifras de " + MONTHS[position].toLowerCase(Locale.ROOT),
                         () -> explicar("Cifras de " + MONTHS[position].toLowerCase(Locale.ROOT),
                                 "🌧️ Lluvia normal del mes: unos " + Formato.numero(datum.optDouble("lluvia_mm")) + " mm\n"
                                 + "💧 Humedad del suelo en las raíces: cerca de " + Formato.porcentaje(moisture) + "\n"
@@ -182,7 +182,7 @@ public class SupportActivity extends ActividadBase {
         text(content, "Los datos son de toda la zona de " + zoneLabel().split(",")[0]
                 + ", no de tu lote. Antes de invertir, mira tu terreno y, si puedes, pide consejo a un técnico.",
                 14, SECONDARY, false);
-        button(content, "Ver cómo fue en años de El Niño y La Niña", false,
+        link(content, "Ver cómo fue en años de El Niño y La Niña",
                 () -> openScience(ScienceActivity.MODE_PAST));
     }
 
@@ -294,7 +294,7 @@ public class SupportActivity extends ActividadBase {
                              : "Faltan " + (REQUIRED.length - available) + " archivos de datos. Vuelve a instalar Kallpa."));
         text(content, "Tus cuentas, parcelas y bitácora se guardan solo en este teléfono. "
                 + "Si borras la app o sus datos, se pierden.", 14, SECONDARY, false);
-        button(content, "¿De dónde salen los datos?", false, () -> {
+        link(content, "¿De dónde salen los datos?", () -> {
             String periodo = "2005–2025";
             try {
                 JSONObject meta = openLocalJson("paquete_canton.json").optJSONObject("meta");
@@ -380,11 +380,21 @@ public class SupportActivity extends ActividadBase {
         button.setText(label);button.setAllCaps(false);
         button.setTextColor(primary?Color.WHITE:FOREST);
         button.setTextSize(16);button.setTypeface(null,Typeface.BOLD);button.setStateListAnimator(null);
-        button.setBackgroundResource(primary?R.drawable.bg_button_primary:R.drawable.bg_button_outline);
+        button.setBackgroundResource(primary?R.drawable.bg_button_primary:R.drawable.bg_button_soft);
         button.setOnClickListener(v->action.run());
         button.setMinHeight(dp(54));button.setPadding(dp(16),dp(10),dp(16),dp(10));
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);
         lp.topMargin=dp(12);parent.addView(button,lp);
+    }
+    /** Acción secundaria como enlace de texto: evita apilar botones grandes. */
+    private void link(LinearLayout parent,String label,Runnable action){
+        TextView t=new TextView(this);
+        t.setText(label+"  ›");t.setTextSize(16);t.setTextColor(FOREST);t.setTypeface(null,Typeface.BOLD);
+        t.setGravity(Gravity.CENTER_VERTICAL);t.setMinHeight(dp(48));
+        t.setBackgroundResource(android.R.drawable.list_selector_background);
+        t.setOnClickListener(v->action.run());
+        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-2,-2);lp.topMargin=dp(4);
+        parent.addView(t,lp);
     }
     private String f(double value,int decimals){
         return String.format(Locale.US,"%."+decimals+"f",value);

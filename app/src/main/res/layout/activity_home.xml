@@ -36,7 +36,7 @@
                 android:paddingEnd="18dp"
                 android:paddingBottom="28dp">
 
-                <!-- Marca, conexión, avisos, perfil y más opciones. -->
+                <!-- Encabezado limpio: marca a la izquierda y un solo botón de cuenta. -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,65 +44,45 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_kallpa" />
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
+                        android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        android:fontFamily="sans-serif-black"
-                        android:text="Kallpa"
-                        android:textColor="@color/forest_dark"
-                        android:textSize="20sp" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/txtConnection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="2dp"
-                        android:background="@drawable/bg_chip"
-                        android:gravity="center"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:text="Sin internet"
-                        android:textColor="@color/forest_dark"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-black"
+                            android:includeFontPadding="false"
+                            android:letterSpacing="0.02"
+                            android:text="@string/app_name"
+                            android:textColor="@color/forest"
+                            android:textSize="24sp" />
 
-                <ImageButton
-                    android:id="@+id/btnAlerts"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Ver alertas de clima"
-                    android:padding="11dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_home_bell" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tagline"
+                            android:textColor="@color/earth"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btnProfile"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Mi perfil"
-                    android:padding="11dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_home_user" />
-
-                <ImageButton
-                    android:id="@+id/btnMenu"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Más opciones"
-                    android:padding="12dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_home_menu" />
-
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_icon_soft"
+                        android:contentDescription="Mi cuenta y más opciones"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_home_user" />
                 </LinearLayout>
 
                 <TextView
@@ -122,6 +102,22 @@
                     android:text="¿Qué revisamos hoy en tu parcela?"
                     android:textColor="@color/nav_inactive"
                     android:textSize="16sp" />
+
+                <!-- Solo aparece si no hay internet; Kallpa funciona igual. -->
+                <TextView
+                    android:id="@+id/txtConnection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_chip"
+                    android:paddingStart="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="6dp"
+                    android:text="Sin internet: igual puedes usar Kallpa"
+                    android:textColor="@color/forest_dark"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
                 <!-- Parcela activa (se lee del teléfono). -->
                 <LinearLayout
@@ -292,7 +288,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_home_tile_plot"
                     android:clickable="true"
-                    android:contentDescription="Ver lo que muestran los satélites de tu zona"
+                    android:contentDescription="Ver, cambiar o añadir tus parcelas"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
@@ -308,7 +304,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Mi terreno"
+                        android:text="Mis parcelas"
                         android:textColor="@color/forest_dark"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -317,7 +313,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Lo que ven los satélites"
+                        android:text="Cambia o añade otra"
                         android:textColor="@color/nav_inactive"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -447,61 +443,6 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                </LinearLayout>
-
-                <!-- Muyu: ayuda siempre a mano, con palabras sencillas. -->
-                <LinearLayout
-                    android:id="@+id/btnMuyu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_home_muyu"
-                    android:clickable="true"
-                    android:contentDescription="Preguntarle a Muyu"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:minHeight="76dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="14dp"
-                    android:paddingTop="10dp"
-                    android:paddingEnd="18dp"
-                    android:paddingBottom="10dp">
-
-                    <ImageView
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_kallpa" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="¿Tienes una duda?"
-                            android:textColor="@color/forest_dark"
-                            android:textSize="17sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Pregúntale a Muyu: te explica con calma."
-                            android:textColor="@color/nav_inactive"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_home_arrow" />
                 </LinearLayout>
 
                 <TextView

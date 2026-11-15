@@ -30,18 +30,15 @@ public class HomeActivity extends ActividadBase {
         setContentView(R.layout.activity_home);
 
         accion(R.id.btnMenu, this::mostrarMenu);
-        accion(R.id.btnProfile, () -> abrirSoporte(SupportActivity.MODE_PROFILE));
-        accion(R.id.btnAlerts, () -> abrirSoporte(SupportActivity.MODE_ALERTS));
         accion(R.id.btnChangeParcel, () -> irA(MyParcelsActivity.class));
 
-        // Una acción principal y cuatro accesos. Parcela, siembra, clima y Muyu
-        // también están en la barra inferior.
+        // Una acción principal y cuatro accesos. Mi parcela, Siembra y Clima están
+        // en la barra inferior; Muyu flota sobre la pantalla.
         accion(R.id.btnRotations, () -> abrirCiencia(ScienceActivity.MODE_FUTURE));
-        accion(R.id.btnPlotCard, () -> abrirCiencia(ScienceActivity.MODE_PRESENT));
+        accion(R.id.btnPlotCard, () -> irA(MyParcelsActivity.class));
         accion(R.id.btnClimateCard, () -> abrirCiencia(ScienceActivity.MODE_PAST));
         accion(R.id.btnCalendarCard, () -> abrirSoporte(SupportActivity.MODE_CALENDAR));
         accion(R.id.btnDiaryCard, () -> abrirComplementario(CompanionActivity.MODE_LOG));
-        accion(R.id.btnMuyu, () -> abrirComplementario(CompanionActivity.MODE_MUYU));
         activarBarraInferior(SECCION_INICIO, true);
     }
 
@@ -97,9 +94,8 @@ public class HomeActivity extends ActividadBase {
         ((TextView) findViewById(R.id.txtParcelCount)).setText(
                 parcelas.size() == 1 ? "Cambiar" : "Cambiar (" + parcelas.size() + ")");
 
-        // Kallpa funciona sin internet: el aviso solo informa, no asusta.
-        ((TextView) findViewById(R.id.txtConnection)).setText(
-                hayInternet() ? "● Con internet" : "● Sin internet");
+        // Kallpa funciona sin internet: el aviso solo aparece si hace falta y no asusta.
+        findViewById(R.id.txtConnection).setVisibility(hayInternet() ? View.GONE : View.VISIBLE);
     }
 
     private boolean hayInternet() {
@@ -113,13 +109,10 @@ public class HomeActivity extends ActividadBase {
     private void mostrarMenu() {
         PopupMenu menu = new PopupMenu(this, findViewById(R.id.btnMenu));
         // Lo más usado está en la barra inferior; aquí queda el resto.
-        menu.getMenu().add(0, 7, 0, "Añadir otra parcela");
-        menu.getMenu().add(0, 3, 1, "Mi terreno visto por satélite");
-        menu.getMenu().add(0, 5, 2, "El Niño y La Niña");
-        menu.getMenu().add(0, 10, 3, "Calendario de mi zona");
-        menu.getMenu().add(0, 12, 4, "Mi bitácora");
-        menu.getMenu().add(0, 11, 5, "Mi perfil");
-        menu.getMenu().add(0, 8, 6, "Cerrar sesión");
+        menu.getMenu().add(0, 11, 0, "Mi perfil");
+        menu.getMenu().add(0, 7, 1, "Añadir otra parcela");
+        menu.getMenu().add(0, 6, 2, "Preguntarle a Muyu");
+        menu.getMenu().add(0, 8, 3, "Cerrar sesión");
         menu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 1: return true;
@@ -130,7 +123,7 @@ public class HomeActivity extends ActividadBase {
                 case 9: abrirSoporte(SupportActivity.MODE_ALERTS); return true;
                 case 10: abrirSoporte(SupportActivity.MODE_CALENDAR); return true;
                 case 12: abrirComplementario(CompanionActivity.MODE_LOG); return true;
-                case 6: abrirComplementario(CompanionActivity.MODE_MUYU); return true;
+                case 6: abrirMuyu(); return true;
                 case 7: irA(ParcelFormActivity.class); return true;
                 case 11: abrirSoporte(SupportActivity.MODE_PROFILE); return true;
                 case 8: confirmarSalir(); return true;

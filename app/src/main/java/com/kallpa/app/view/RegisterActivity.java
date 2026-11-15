@@ -87,6 +87,12 @@ public class RegisterActivity extends ActividadBase {
             return false;
         }
 
+        if (!ControladorAutenticacion.empiezaConMayuscula(nombre)) {
+            binding.inputName.setError("Empieza tu nombre con mayúscula. Ejemplo: María");
+            binding.inputName.requestFocus();
+            return false;
+        }
+
         // Validar correo
         if (correo.isEmpty()) {
             binding.inputEmail.setError("El correo es obligatorio");

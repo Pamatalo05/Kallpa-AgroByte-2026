@@ -22,4 +22,7 @@ dependencies {
     // Librerías originales de Cristina
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
+
+    // Muyu web dentro de la app (WebViewAssetLoader): carga segura de assets/muyu/
+    implementation 'androidx.webkit:webkit:1.12.1'
 }

@@ -31,6 +31,12 @@
             android:name=".view.CompanionActivity"
             android:exported="false" />
 
+        <!-- Muyu completo (web compilada en assets/muyu). -->
+        <activity
+            android:name=".view.MuyuWebActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".view.SupportActivity"
             android:exported="false" />

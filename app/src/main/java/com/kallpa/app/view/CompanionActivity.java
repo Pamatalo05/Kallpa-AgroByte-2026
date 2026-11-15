@@ -138,7 +138,10 @@ public class CompanionActivity extends ActividadBase {
                     + "\nMira toda la zona, no solo tu parcela.");
 
             // Fechas, fuentes, unidades y resolución siguen disponibles bajo demanda.
-            button(body, "Ver las cifras del satélite", false, () -> explicar("Lo que ve el satélite",
+            LinearLayout fila = new LinearLayout(this);
+            fila.setOrientation(LinearLayout.HORIZONTAL);
+            body.addView(fila, new LinearLayout.LayoutParams(-1, -2));
+            button(fila, "Ver cifras", false, () -> explicar("Lo que ve el satélite",
                     "🌿 Verdor de las plantas: " + Formato.verdor(s.optDouble("ndvi_ultimo", 0))
                     + "\nÚltima foto: " + s.optString("fecha_ndvi", "sin fecha")
                     + "\n\n💧 Humedad en la superficie: " + Formato.porcentaje(s.optDouble("smap_humedad_ultima", 0))
@@ -146,7 +149,7 @@ public class CompanionActivity extends ActividadBase {
                     + "\n\nDatos de satélites de la NASA. Miran toda la zona, no solo tu parcela."));
 
             // Una sola acción abre las tres respuestas; no sobrecargamos la Bitácora.
-            button(body, "¿Coincide con lo que ves?", true, () ->
+            button(fila, "¿Se ve así?", true, () ->
                     new AlertDialog.Builder(this)
                             .setTitle("¿Tu terreno se ve así?")
                             .setItems(new String[]{"Sí, se ve así", "No, se ve distinto", "No estoy seguro"},
@@ -256,12 +259,11 @@ public class CompanionActivity extends ActividadBase {
         section("Tu parcela",active.getNombre()+" · "+Formato.hectareas(active.getHectareas())+" · "
                 +(active.isTieneRiego()?"Con riego":"Sin riego"));
         text(body,"Preguntas frecuentes",18,DARK,true);
-        button(body,"🌱 ¿Qué siembro después?",false,()->answer(rotationAnswer()));
-        button(body,"📅 ¿Es buen mes para sembrar?",false,()->askMonth());
-        button(body,"💵 ¿Cuánto ahorro en urea?",false,()->answer(savingAnswer()));
-        button(body,"🌧️ ¿Qué es El Niño y La Niña?",false,()->answer(ensoAnswer()));
-        button(body,"🛰️ ¿Qué ven los satélites?",false,()->answer(satelliteAnswer()));
-        button(body,"📚 ¿De dónde sacas los datos?",false,()->answer(sourcesAnswer()));
+        questionGrid(new String[]{"🌱","📅","💵","🌧️","🛰️","📚"},
+                new String[]{"¿Qué siembro después?","¿Es buen mes para sembrar?","¿Cuánto ahorro en urea?",
+                        "¿Qué es El Niño y La Niña?","¿Qué ven los satélites?","¿De dónde sacas los datos?"},
+                new Runnable[]{()->answer(rotationAnswer()),this::askMonth,()->answer(savingAnswer()),
+                        ()->answer(ensoAnswer()),()->answer(satelliteAnswer()),()->answer(sourcesAnswer())});
         text(body,"O escribe tu pregunta",18,DARK,true);
         EditText question = input("Ej.: ¿qué siembro después del arroz?",false);
         question.setBackgroundResource(R.drawable.bg_input);
@@ -429,10 +431,38 @@ public class CompanionActivity extends ActividadBase {
         Button b=new Button(this);b.setText(label);b.setAllCaps(false);b.setTextSize(16);
         b.setTypeface(null,Typeface.BOLD);b.setStateListAnimator(null);
         b.setTextColor(primary?Color.WHITE:FOREST);
-        b.setBackgroundResource(primary?R.drawable.bg_button_primary:R.drawable.bg_button_outline);
+        b.setBackgroundResource(primary?R.drawable.bg_button_primary:R.drawable.bg_button_soft);
         b.setMinHeight(dp(54));b.setPadding(dp(16),dp(10),dp(16),dp(10));
-        LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.topMargin=dp(10);
+        // En una fila horizontal los botones se reparten el ancho; si no, ocupan todo.
+        boolean enFila=parent.getOrientation()==LinearLayout.HORIZONTAL;
+        LinearLayout.LayoutParams lp=enFila?new LinearLayout.LayoutParams(0,-2,1f):new LinearLayout.LayoutParams(-1,-2);
+        lp.topMargin=dp(10);
+        if(enFila&&parent.getChildCount()>0)lp.leftMargin=dp(10);
         parent.addView(b,lp);b.setOnClickListener(v->callback.run());
+    }
+    /** Preguntas frecuentes en dos columnas de tarjetas, en vez de seis botones apilados. */
+    private void questionGrid(String[] icons,String[] labels,Runnable[] actions){
+        LinearLayout row=null;
+        for(int i=0;i<labels.length;i++){
+            if(i%2==0){
+                row=new LinearLayout(this);row.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams rl=new LinearLayout.LayoutParams(-1,-2);rl.topMargin=dp(10);
+                body.addView(row,rl);
+            }
+            LinearLayout card=new LinearLayout(this);card.setOrientation(LinearLayout.VERTICAL);
+            card.setBackgroundResource(R.drawable.bg_card_pregunta);
+            card.setPadding(dp(14),dp(12),dp(14),dp(12));card.setMinimumHeight(dp(96));
+            card.setClickable(true);card.setFocusable(true);card.setContentDescription(labels[i]);
+            final Runnable action=actions[i];card.setOnClickListener(v->action.run());
+            TextView icon=new TextView(this);icon.setText(icons[i]);icon.setTextSize(24);
+            card.addView(icon);
+            TextView label=new TextView(this);label.setText(labels[i]);label.setTextSize(15);
+            label.setTextColor(DARK);label.setTypeface(null,Typeface.BOLD);label.setPadding(0,dp(6),0,0);
+            card.addView(label);
+            LinearLayout.LayoutParams cl=new LinearLayout.LayoutParams(0,-1,1f);
+            if(i%2==1)cl.leftMargin=dp(10);
+            row.addView(card,cl);
+        }
     }
     private String today(){return new SimpleDateFormat("yyyy-MM-dd",Locale.US).format(new java.util.Date());}
     private String fmt(double x,int digits){return String.format(Locale.US,"%."+digits+"f",x);}

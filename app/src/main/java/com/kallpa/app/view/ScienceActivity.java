@@ -111,14 +111,13 @@ public class ScienceActivity extends ActividadBase {
         subtitulo.setText(parcela.getNombre() + " · " + nombreCanton());
         if (MODE_MUYU.equals(destino)) {
             // Hay un solo Muyu en la app: el de la barra inferior.
-            startActivity(new Intent(this, CompanionActivity.class)
-                    .putExtra(CompanionActivity.EXTRA_MODE, CompanionActivity.MODE_MUYU));
+            abrirMuyu();
             finish();
             return;
         }
         if (MODE_FUTURE.equals(destino)) activarBarraInferior(SECCION_SIEMBRA, true);
         else if (MODE_PAST.equals(destino)) activarBarraInferior(SECCION_CLIMA, false);
-        else activarBarraInferior(SECCION_PARCELA, false);
+        else activarBarraInferior(SECCION_PARCELA, true);
         if (!"daule".equals(canton) && !"babahoyo".equals(canton)) {
             titulo.setText("Aún no tenemos tu zona");
             bloque("Por ahora solo Daule y Babahoyo", "Kallpa todavía no tiene datos de tu cantón. "
@@ -127,7 +126,7 @@ public class ScienceActivity extends ActividadBase {
         }
         if (MODE_FUTURE.equals(destino)) { titulo.setText("¿Qué siembro después?"); futuro(); }
         else if (MODE_PAST.equals(destino)) { titulo.setText("El Niño y La Niña"); pasado(); }
-        else { modo = MODE_PRESENT; titulo.setText("Mi terreno"); presente(); }
+        else { modo = MODE_PRESENT; titulo.setText("Mi parcela"); presente(); }
     }
     private String nombreCanton() { return "babahoyo".equals(canton) ? "Babahoyo, Los Ríos" : "Daule, Guayas"; }
     private String f(double v, int decimales) { return String.format(Locale.US, "%1$." + decimales + "f", v); }
@@ -137,28 +136,89 @@ public class ScienceActivity extends ActividadBase {
         JSONObject info = dato == null ? null : dato.optJSONObject("resumen_actual");
         JSONObject clima = objetoCanton(paquete, "cantones");
         if (info == null) { bloque("Sin datos del satélite", "Todavía no tenemos fotos del satélite para tu cantón."); return; }
-        texto(contenido, "¿Qué ven los satélites en mi zona?", 19, OSCURO, true);
-        texto(contenido, "Los satélites miran toda la zona, no cada metro de tu finca. "
-                + "Úsalo como una pista y compáralo con lo que ves en tu terreno.", 15, GRIS, false);
+        LinearLayout resumen = tarjeta(contenido);
+        texto(resumen, parcela.getNombre(), 19, OSCURO, true);
+        texto(resumen, parcela.getCultivoActual() + " · " + Formato.hectareas(parcela.getHectareas())
+                + " · " + (parcela.isTieneRiego() ? "Con riego" : "Sin riego") + "\n" + nombreCanton(), 15, GRIS, false);
+        enlace(resumen, "Cambiar o añadir parcela", () -> startActivity(new Intent(this, MyParcelsActivity.class)));
+
+        texto(contenido, "¿Qué ven los satélites?", 19, OSCURO, true);
+        texto(contenido, "Los satélites miran toda la zona, no cada metro de tu parcela. "
+                + "Compáralo con lo que ves en tu terreno.", 15, GRIS, false);
         double ndvi = info.optDouble("ndvi_ultimo");
         bloque("🌿 Verdor de las plantas: " + Formato.verdor(ndvi),
-                "Mientras más alto, más vegetación verde hay en la zona.\n"
-                + info.optString("estado_cobertura") + "\nÚltima foto: " + info.optString("fecha_ndvi"));
+                info.optString("estado_cobertura") + "\nÚltima foto: " + fechaCorta(info.optString("fecha_ndvi")));
         double smap = info.optDouble("smap_humedad_ultima");
         bloque("💧 Humedad en la superficie: " + Formato.porcentaje(smap),
-                "Es el agua en la capa de arriba del suelo, medida para toda la zona.\n"
-                + "Última medición: " + info.optString("fecha_smap"));
+                "Es el agua en la capa de arriba del suelo.\nÚltima medición: " + fechaCorta(info.optString("fecha_smap")));
         if (clima != null) bloque("🟫 Tipo de suelo de la zona", clima.optString("suelo_referencia")
                 + "\nEs el suelo más común en tu cantón; el tuyo puede ser distinto.");
         // Mapa desactivado TEMPORALMENTE para separar el diagnóstico JSON de
         // los posibles bloqueos del visor OpenStreetMap en dispositivos físicos.
         // crearMapa();
-        texto(contenido, "¿Cómo ha cambiado mi zona?", 18, OSCURO, true);
-        boton(contenido, "Ver cómo cambió el verdor", false, () -> mostrarSerie(dato,"serie_ndvi_modis","ndvi","Verdor de las plantas en tu zona",0xFF67A83C));
-        boton(contenido, "Ver cómo cambió la humedad", false, () -> mostrarSerie(dato,"serie_humedad_smap","humedad_m3_m3","Humedad en la superficie de tu zona",0xFF228B87));
+        graficoSatelital(dato, "serie_ndvi_modis", "ndvi", "🌿 Verdor durante el último año",
+                "Mientras más alta la línea, más plantas verdes había.", 0xFF4E9A2E,
+                v -> Math.round(v * 100) + "", "verde");
+        graficoSatelital(dato, "serie_humedad_smap", "humedad_m3_m3", "💧 Humedad en los últimos meses",
+                "Mientras más alta la línea, más mojada estaba la superficie.", 0xFF2A7FA8,
+                v -> Math.round(v * 100) + " %", "húmeda");
         texto(contenido, "Datos de satélites de la NASA (MODIS y SMAP).", 13, GRIS, false);
         boton(contenido, "¿Qué siembro después?  ›", true, () -> mostrar(MODE_FUTURE));
     }
+
+    /** Gráfico de una serie del satélite con fechas legibles y una frase que lo resume. */
+    private void graficoSatelital(JSONObject dato, String clave, String campo, String titulo,
+                                  String ayuda, int color, GraficoSencillo.Etiqueta etiqueta, String palabra) {
+        JSONArray serie = dato == null ? null : dato.optJSONArray(clave);
+        if (serie == null || serie.length() < 2) return;
+        int n = serie.length();
+        float[] valores = new float[n];
+        String[] fechas = new String[n];
+        int max = 0, min = 0;
+        for (int i = 0; i < n; i++) {
+            JSONObject x = serie.optJSONObject(i);
+            valores[i] = x == null ? 0f : (float) x.optDouble(campo, 0);
+            if (valores[i] > valores[max]) max = i;
+            if (valores[i] < valores[min]) min = i;
+        }
+        // Solo tres fechas abajo (inicio, mitad y final) para que se lean bien.
+        for (int i : new int[]{0, n / 2, n - 1}) fechas[i] = fechaCorta(serie.optJSONObject(i).optString("fecha"));
+        texto(contenido, titulo, 18, OSCURO, true);
+        texto(contenido, ayuda, 14, GRIS, false);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = dp(6);
+        contenido.addView(GraficoSencillo.linea(this, valores, fechas, color, etiqueta), lp);
+        texto(contenido, "Más " + palabra + ": " + fechaCorta(serie.optJSONObject(max).optString("fecha"))
+                + " (" + etiqueta.texto(valores[max]) + ")  ·  Menos " + palabra + ": "
+                + fechaCorta(serie.optJSONObject(min).optString("fecha"))
+                + " (" + etiqueta.texto(valores[min]) + ")", 14, OSCURO, false);
+    }
+
+    /** "2025-10-16" -> "oct 2025". */
+    private String fechaCorta(String fecha) {
+        final String[] meses = {"ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"};
+        try {
+            int mes = Integer.parseInt(fecha.substring(5, 7));
+            return meses[mes - 1] + " " + fecha.substring(0, 4);
+        } catch (Exception e) {
+            return fecha == null ? "" : fecha;
+        }
+    }
+
+    /** Enlace de texto verde: una acción secundaria sin otro botón grande. */
+    private void enlace(LinearLayout padre, String texto, Runnable click) {
+        TextView t = new TextView(this);
+        t.setText(texto + "  ›");
+        t.setTextSize(16);
+        t.setTextColor(VERDE);
+        t.setTypeface(null, Typeface.BOLD);
+        t.setGravity(Gravity.CENTER_VERTICAL);
+        t.setMinHeight(dp(48));
+        t.setBackgroundResource(android.R.drawable.list_selector_background);
+        t.setOnClickListener(v -> click.run());
+        padre.addView(t, new LinearLayout.LayoutParams(-2, -2));
+    }
+
     private void crearMapa() {
         try {
             File raiz = new File(getFilesDir(), "osmdroid"); raiz.mkdirs();
@@ -181,13 +241,6 @@ public class ScienceActivity extends ActividadBase {
             contenido.addView(mapa, lp);
             mapa.onResume();
         } catch (Exception e) { texto(contenido, "Mapa base no disponible. Las observaciones pueden consultarse sin conexión.", 13, GRIS, false); }
-    }
-    private void mostrarSerie(JSONObject dato, String key, String valueKey, String label, int color) {
-        JSONArray valores = dato == null ? null : dato.optJSONArray(key);
-        if (valores == null || valores.length() == 0) { mensaje("Todavía no hay mediciones para mostrar."); return; }
-        new androidx.appcompat.app.AlertDialog.Builder(this).setTitle(label)
-                .setView(crearGrafico(valores, valueKey, color, false))
-                .setPositiveButton("Cerrar", null).show();
     }
     /** Próxima siembra: traslada la lógica auditada de semaforo.py de AgroByte. */
     private void futuro() {
@@ -235,7 +288,7 @@ public class ScienceActivity extends ActividadBase {
                 "Puedes hacerlo, pero no ahorrarías urea: el mismo cultivo seguido "
                 + "no le devuelve nitrógeno a la tierra.");
 
-        boton(contenido, "¿De dónde salen estas cifras?", false, () -> explicar(
+        enlace(contenido, "¿De dónde salen estas cifras?", () -> explicar(
                 "¿De dónde salen estas cifras?",
                 "🌧️ El mes: miramos cómo estuvo el suelo de tu zona en ese mes durante "
                 + "los últimos 20 años (datos de la NASA) y si tienes riego.\n\n"
@@ -324,7 +377,12 @@ public class ScienceActivity extends ActividadBase {
             double costoHa = opcion.optDouble("costo_insumos_ha", Double.NaN);
             double ingresoHa = opcion.optDouble("ingreso_bruto_ha", Double.NaN);
             LinearLayout card = tarjeta(destino);
-            if (i == 0) texto(card, "⭐ La que más te conviene", 13, VERDE, true);
+            if (i == 0) {
+                TextView insignia = texto(card, "⭐ La que más te conviene", 13, 0xFF6B4E00, true);
+                insignia.setBackgroundResource(R.drawable.bg_chip_oro);
+                insignia.setPadding(dp(12), dp(4), dp(12), dp(4));
+                insignia.setLayoutParams(new LinearLayout.LayoutParams(-2, -2));
+            }
             texto(card, (i + 1) + ". " + cultivo, 18, OSCURO, true);
             int estadoColor = "Óptimo".equalsIgnoreCase(estado) ? VERDE
                     : ("No recomendado".equalsIgnoreCase(estado)
@@ -356,7 +414,7 @@ public class ScienceActivity extends ActividadBase {
                             + " de lo que inviertas.",
                         14, economia.capitalEnRiesgoUsd <= 0 ? VERDE : 0xFF865C21, false);
                 texto(card, Formato.NOTA_APROXIMADO, 13, GRIS, false);
-                boton(card, "¿Cómo se calculó?", false, () -> explicar(cultivo,
+                enlace(card, "¿Cómo se calculó?", () -> explicar(cultivo,
                         "💵 Ahorro en urea: este cultivo deja unos " + Formato.kilos(kgHa)
                         + " de nitrógeno por hectárea que ya no tendrías que comprar como urea. "
                         + "En tus " + Formato.hectareas(ha) + " son " + Formato.kilos(kgHa * ha)
@@ -442,12 +500,7 @@ public class ScienceActivity extends ActividadBase {
                         +"🌡️ Calor máximo: unos "+Formato.numero(indicadores.optDouble("temp_max_prom_c"))+" °C");
                 JSONArray perfil=e.optJSONArray("perfil_mensual");
                 if(perfil!=null){
-                    texto(resultado,"Lluvia mes a mes",17,OSCURO,true);
-                    texto(resultado,"Mientras más alta la línea, más llovió ese mes.",14,GRIS,false);
-                    resultado.addView(crearGrafico(perfil,"lluvia_mm",0xFF438CB6,true),new LinearLayout.LayoutParams(-1,dp(195)));
-                    texto(resultado,"Humedad del suelo mes a mes",17,OSCURO,true);
-                    texto(resultado,"Mientras más alta la línea, más agua tenía la tierra.",14,GRIS,false);
-                    resultado.addView(crearGrafico(perfil,"humedad_raiz",0xFF67A83C,true),new LinearLayout.LayoutParams(-1,dp(195)));
+                    graficosMensuales(resultado, perfil);
                 }
                 texto(resultado,"Cultivos que funcionaron en años así",18,OSCURO,true);
                 JSONObject r=e.optJSONObject("recomendacion_por_parcela");
@@ -462,7 +515,6 @@ public class ScienceActivity extends ActividadBase {
             }
             @Override public void onNothingSelected(AdapterView<?> p){}
         });
-        boton(contenido,"Preguntarle a Muyu  ›",true,()->mostrar(MODE_MUYU));
     }
     private void mostrarRotacionesEn(LinearLayout padre,JSONArray opciones){
         if(opciones==null){texto(padre,"Todavía no hay cultivos para mostrar.",15,GRIS,false);return;}
@@ -545,46 +597,62 @@ public class ScienceActivity extends ActividadBase {
     private Button boton(LinearLayout padre,String texto,boolean principal,Runnable click){
         Button b=new Button(this);b.setText(texto);b.setAllCaps(false);
         b.setTextColor(principal?Color.WHITE:VERDE);
-        b.setBackgroundResource(principal?R.drawable.bg_button_primary:R.drawable.bg_button_outline);
+        b.setBackgroundResource(principal?R.drawable.bg_button_primary:R.drawable.bg_button_soft);
         b.setTextSize(16);b.setTypeface(null,Typeface.BOLD);b.setStateListAnimator(null);
         b.setOnClickListener(v->click.run());
         LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(-1,-2);lp.topMargin=dp(12);
         b.setMinHeight(dp(54));b.setPadding(dp(16),dp(10),dp(16),dp(10));
         padre.addView(b,lp);return b;
     }
-    private View crearGrafico(JSONArray arr,String campo,int color,boolean meses){
-        ArrayList<Float> serie=new ArrayList<>();
-        if(arr!=null)for(int i=0;i<arr.length();i++){
-            JSONObject x=arr.optJSONObject(i);if(x!=null)serie.add((float)x.optDouble(campo,0));
+    /** Lluvia (barras) y humedad (línea con franja buena) mes a mes, con el mes actual resaltado. */
+    private void graficosMensuales(LinearLayout padre, JSONArray perfil) {
+        final String[] meses = {"enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+                "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
+        float[] lluvia = new float[12], humedad = new float[12];
+        for (int i = 0; i < perfil.length() && i < 12; i++) {
+            JSONObject x = perfil.optJSONObject(i);
+            if (x == null) continue;
+            int mes = Math.max(1, Math.min(12, x.optInt("mes", i + 1))) - 1;
+            lluvia[mes] = (float) x.optDouble("lluvia_mm", 0);
+            humedad[mes] = (float) x.optDouble("humedad_raiz", 0);
         }
-        SeriesView v=new SeriesView(serie,color,meses);
-        if(!meses) v.setPadding(dp(12),dp(12),dp(12),dp(12));
-        return v;
+        int hoy = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH);
+        int masLluvia = 0, menosLluvia = 0;
+        for (int i = 1; i < 12; i++) {
+            if (lluvia[i] > lluvia[masLluvia]) masLluvia = i;
+            if (lluvia[i] < lluvia[menosLluvia]) menosLluvia = i;
+        }
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = dp(6);
+
+        texto(padre, "🌧️ Lluvia de cada mes", 18, OSCURO, true);
+        texto(padre, "Cada barra es un mes (E = enero … D = diciembre). El número es la lluvia en milímetros.",
+                14, GRIS, false);
+        padre.addView(GraficoSencillo.barras(this, lluvia, GraficoSencillo.MESES_CORTOS, 0xFF2A7FA8,
+                v -> Math.round(v) + " mm").destacar(hoy), lp);
+        texto(padre, "Llueve más en " + meses[masLluvia] + " (unos " + Math.round(lluvia[masLluvia])
+                + " mm) y menos en " + meses[menosLluvia] + " (unos " + Math.round(lluvia[menosLluvia])
+                + " mm). Resaltado: " + meses[hoy] + ", el mes actual.", 14, OSCURO, false);
+
+        texto(padre, "💧 Humedad del suelo cada mes", 18, OSCURO, true);
+        texto(padre, "La franja verde es la humedad buena para sembrar (entre 55 % y 78 %).",
+                14, GRIS, false);
+        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(-1, -2);
+        lp2.topMargin = dp(6);
+        padre.addView(GraficoSencillo.linea(this, humedad, GraficoSencillo.MESES_CORTOS, 0xFF4E9A2E,
+                v -> Math.round(v * 100) + " %").escala(0.40f, 0.90f)
+                .franja(0.55f, 0.78f, "Bueno para sembrar").destacar(hoy), lp2);
+        StringBuilder buenos = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            if (humedad[i] >= 0.55f && humedad[i] <= 0.78f) {
+                if (buenos.length() > 0) buenos.append(", ");
+                buenos.append(meses[i]);
+            }
+        }
+        texto(padre, buenos.length() == 0 ? "En años así, ningún mes quedó dentro de la franja buena."
+                : "Meses con humedad buena: " + buenos + ".", 14, OSCURO, false);
     }
     private int dp(float n){return (int)(n*getResources().getDisplayMetrics().density+.5f);}
-    private class SeriesView extends View{
-        private final ArrayList<Float> datos;private final Paint p=new Paint(3);private final int color;private final boolean meses;
-        SeriesView(ArrayList<Float> valores,int color,boolean meses){super(ScienceActivity.this);this.datos=valores;this.color=color;this.meses=meses;
-            setBackgroundResource(R.drawable.bg_card);setMinimumHeight(dp(190));}
-        @Override protected void onMeasure(int w,int h){super.onMeasure(w,View.MeasureSpec.makeMeasureSpec(dp(190),View.MeasureSpec.EXACTLY));}
-        @Override protected void onDraw(Canvas c){super.onDraw(c);if(datos.size()<2)return;
-            float l=dp(25),r=getWidth()-dp(16),t=dp(19),b=getHeight()-dp(31);
-            float min=Float.MAX_VALUE,max=-Float.MAX_VALUE;
-            for(float v:datos){min=Math.min(min,v);max=Math.max(max,v);}
-            if(max-min<.01f){max+=.01f;min-=.01f;}
-            p.setColor(0xFFCBD8C1);p.setStrokeWidth(dp(1));p.setStyle(Paint.Style.STROKE);
-            c.drawLine(l,b,r,b,p);c.drawLine(l,t,l,b,p);
-            Path path=new Path();for(int i=0;i<datos.size();i++){
-                float x=l+(r-l)*i/(datos.size()-1f);
-                float y=b-(datos.get(i)-min)/(max-min)*(b-t);
-                if(i==0)path.moveTo(x,y);else path.lineTo(x,y);
-            }
-            p.setColor(color);p.setStrokeWidth(dp(3));c.drawPath(path,p);
-            p.setStyle(Paint.Style.FILL);p.setTextSize(dp(12));p.setColor(GRIS);
-            c.drawText(f(max,2),dp(3),t+dp(6),p);c.drawText(f(min,2),dp(3),b,p);
-            c.drawText(meses?"Ene":"Antes",l,b+dp(18),p);p.setTextAlign(Paint.Align.RIGHT);c.drawText(meses?"Dic":"Ahora",r,b+dp(18),p);p.setTextAlign(Paint.Align.LEFT);
-        }
-    }
     @Override protected void onResume(){super.onResume();if(mapa!=null)mapa.onResume();}
     @Override protected void onPause(){if(mapa!=null)mapa.onPause();super.onPause();}
     @Override protected void onDestroy(){if(mapa!=null)mapa.onDetach();super.onDestroy();}

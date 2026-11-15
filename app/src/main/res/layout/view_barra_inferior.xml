@@ -36,9 +36,4 @@
         <TextView style="@style/KallpaNavTexto" android:text="Clima" />
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/navMuyu" style="@style/KallpaNavItem"
-        android:contentDescription="Muyu">
-        <ImageView style="@style/KallpaNavIcono" android:src="@drawable/ic_kallpa" />
-        <TextView style="@style/KallpaNavTexto" android:text="Muyu" />
-    </LinearLayout>
 </LinearLayout>
