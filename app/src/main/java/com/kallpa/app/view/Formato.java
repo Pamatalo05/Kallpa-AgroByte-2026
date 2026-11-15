@@ -65,23 +65,17 @@ public final class Formato {
 
     /** Verde / Amarillo / Rojo del semáforo en palabras de campo. */
     public static String semaforo(String color) {
-        if ("Verde".equalsIgnoreCase(color)) return "🟢 Buen momento para sembrar";
-        if ("Amarillo".equalsIgnoreCase(color)) return "🟡 Puedes sembrar, pero con cuidado";
-        return "🔴 Mejor espera o prepara bien el terreno";
-    }
-
-    public static String emojiSemaforo(String color) {
-        if ("Verde".equalsIgnoreCase(color)) return "🟢";
-        if ("Amarillo".equalsIgnoreCase(color)) return "🟡";
-        return "🔴";
+        if ("Verde".equalsIgnoreCase(color)) return "Buen momento para sembrar";
+        if ("Amarillo".equalsIgnoreCase(color)) return "Puedes sembrar, pero con cuidado";
+        return "Mejor espera o prepara bien el terreno";
     }
 
     /** Evaluación del simulador ("Óptimo", "No recomendado"...) dicha de forma sencilla. */
     public static String evaluacionCultivo(String estado) {
         if (estado == null) return "Sin evaluación";
-        if (estado.toLowerCase(Locale.ROOT).startsWith("óptimo")) return "✅ Le fue muy bien en años parecidos";
-        if (estado.toLowerCase(Locale.ROOT).startsWith("no recomendado")) return "⛔ No te la recomendamos para tu caso";
-        return "⚠️ Puede funcionar, con cuidado";
+        if (estado.toLowerCase(Locale.ROOT).startsWith("óptimo")) return "Le fue muy bien en años parecidos";
+        if (estado.toLowerCase(Locale.ROOT).startsWith("no recomendado")) return "No te la recomendamos para tu caso";
+        return "Puede funcionar, con cuidado";
     }
 
     /** NDVI (0–1) como "verdor de 0 a 100". */

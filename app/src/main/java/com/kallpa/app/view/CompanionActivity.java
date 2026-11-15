@@ -142,9 +142,9 @@ public class CompanionActivity extends ActividadBase {
             fila.setOrientation(LinearLayout.HORIZONTAL);
             body.addView(fila, new LinearLayout.LayoutParams(-1, -2));
             button(fila, "Ver cifras", false, () -> explicar("Lo que ve el satélite",
-                    "🌿 Verdor de las plantas: " + Formato.verdor(s.optDouble("ndvi_ultimo", 0))
+                    "Verdor de las plantas: " + Formato.verdor(s.optDouble("ndvi_ultimo", 0))
                     + "\nÚltima foto: " + s.optString("fecha_ndvi", "sin fecha")
-                    + "\n\n💧 Humedad en la superficie: " + Formato.porcentaje(s.optDouble("smap_humedad_ultima", 0))
+                    + "\n\nHumedad en la superficie: " + Formato.porcentaje(s.optDouble("smap_humedad_ultima", 0))
                     + "\nÚltima medición: " + s.optString("fecha_smap", "sin fecha")
                     + "\n\nDatos de satélites de la NASA. Miran toda la zona, no solo tu parcela."));
 
@@ -249,7 +249,7 @@ public class CompanionActivity extends ActividadBase {
         mascot.setImageResource(R.drawable.ic_kallpa); // La mascota de la guía de marca, no un símbolo de flor.
         title.addView(mascot,new LinearLayout.LayoutParams(dp(85),dp(85)));
         TextView welcome = new TextView(this);
-        welcome.setText("¡Hola! Soy Muyu 🌱\nTe explico tu parcela con palabras sencillas.");
+        welcome.setText("¡Hola! Soy Muyu.\nTe explico tu parcela con palabras sencillas.");
         welcome.setTextSize(17); welcome.setTextColor(DARK);welcome.setTypeface(null,Typeface.BOLD);
         LinearLayout.LayoutParams wl = new LinearLayout.LayoutParams(0,-2,1);
         wl.leftMargin=dp(8);title.addView(welcome,wl);
@@ -259,7 +259,8 @@ public class CompanionActivity extends ActividadBase {
         section("Tu parcela",active.getNombre()+" · "+Formato.hectareas(active.getHectareas())+" · "
                 +(active.isTieneRiego()?"Con riego":"Sin riego"));
         text(body,"Preguntas frecuentes",18,DARK,true);
-        questionGrid(new String[]{"🌱","📅","💵","🌧️","🛰️","📚"},
+        questionGrid(new int[]{R.drawable.ic_home_rotation,R.drawable.ic_home_calendar,R.drawable.ic_brote,
+                        R.drawable.ic_home_weather,R.drawable.ic_home_plot,R.drawable.ic_home_diary},
                 new String[]{"¿Qué siembro después?","¿Es buen mes para sembrar?","¿Cuánto ahorro en urea?",
                         "¿Qué es El Niño y La Niña?","¿Qué ven los satélites?","¿De dónde sacas los datos?"},
                 new Runnable[]{()->answer(rotationAnswer()),this::askMonth,()->answer(savingAnswer()),
@@ -279,7 +280,7 @@ public class CompanionActivity extends ActividadBase {
             else if(q.contains("legum")||q.contains("cultivo")||q.contains("rotaci")||q.contains("maní")||q.contains("soya"))answer(rotationAnswer());
             else if(q.contains("niño")||q.contains("nina")||q.contains("niña")||q.contains("enso"))answer(ensoAnswer());
             else if(q.contains("fuente")||q.contains("nasa")||q.contains("iniap"))answer(sourcesAnswer());
-            else answer("¡Uy! Esa pregunta todavía no la sé responder. 🌱\n\n"
+            else answer("¡Uy! Esa pregunta todavía no la sé responder. \n\n"
                     + "Puedo ayudarte con qué sembrar, el mejor mes, el ahorro en urea, "
                     + "El Niño y La Niña, y lo que ven los satélites. Prueba con una de las preguntas de arriba.\n\n"
                     + "Para algo muy puntual de tu terreno, lo mejor es conversar con un técnico agrícola.");
@@ -326,9 +327,9 @@ public class CompanionActivity extends ActividadBase {
             JSONObject d=readData("evidencia_satelital_parcelas.json")
                     .getJSONObject("parcelas_satelitales").getJSONObject(canton)
                     .getJSONObject("resumen_actual");
-            return "🌿 Verdor de las plantas en tu zona: "+Formato.verdor(d.getDouble("ndvi_ultimo"))
+            return "Verdor de las plantas en tu zona: "+Formato.verdor(d.getDouble("ndvi_ultimo"))
                     +" (foto del "+d.optString("fecha_ndvi")+"). Mientras más alto, más plantas verdes hay.\n\n"
-                    +"💧 Humedad en la superficie del suelo: "+Formato.porcentaje(d.getDouble("smap_humedad_ultima"))
+                    +"Humedad en la superficie del suelo: "+Formato.porcentaje(d.getDouble("smap_humedad_ultima"))
                     +" (medida el "+d.optString("fecha_smap")+").\n\n"
                     +"Son satélites de la NASA que miran toda la zona, no solo tu parcela. "
                     +"Compáralo con lo que ves en tu terreno.";
@@ -345,7 +346,7 @@ public class CompanionActivity extends ActividadBase {
     private String rotationAnswer() {
         try {
             JSONObject c=bestCrop();
-            return "¡Buena pregunta! 🌱 Para una parcela "+(active.isTieneRiego()?"con riego":"sin riego")
+            return "¡Buena pregunta! Para una parcela "+(active.isTieneRiego()?"con riego":"sin riego")
                     +" como la tuya, lo que mejor resultó en años normales fue: "+c.getString("cultivo")+".\n\n"
                     +Formato.evaluacionCultivo(c.optString("estado"))+".\n"+c.optString("nota_agronomica")
                     +"\n\nTambién puedes mirar soya, fréjol caupí, maní y mucuna en \"Siembra\". "
@@ -361,24 +362,24 @@ public class CompanionActivity extends ActividadBase {
             return "Si siembras "+c.getString("cultivo")+", ese cultivo deja nitrógeno en la tierra. "
                     +"Así, en tus "+Formato.hectareas(active.getHectareas())+" podrías dejar de poner unos "
                     +Formato.kilos(kg)+" de urea.\n\n"
-                    +"💵 Eso es "+Formato.unos(usd)+" (con el saco de 50 kg a unos $38).\n\n"
+                    +"Eso es "+Formato.unos(usd)+" (con el saco de 50 kg a unos $38).\n\n"
                     +"Es una cuenta aproximada: depende de tu suelo y de cuánta urea usas hoy. "
                     +"Si siembras otra vez lo mismo, no ahorrarías urea.";
         }catch(Exception e){return "Todavía no puedo calcular tu ahorro: no tengo los datos de tu cantón.";}
     }
     private String ensoAnswer() {
         return "El Niño y La Niña son cambios en el mar que cambian las lluvias en la Costa.\n\n"
-                +"🌧️ El Niño: suele traer más lluvia y riesgo de inundaciones.\n"
-                +"☀️ La Niña: suele traer menos lluvia.\n\n"
+                +"El Niño: suele traer más lluvia y riesgo de inundaciones.\n"
+                +"La Niña: suele traer menos lluvia.\n\n"
                 +"En \"El Niño y La Niña\" puedes ver cómo le fue a tu zona en esos años (de 2005 a 2025). "
                 +"Sirve para prepararte, pero nadie sabe con certeza cuándo vendrá el próximo.";
     }
     private String sourcesAnswer() {
         return "Uso datos de fuentes confiables:\n\n"
-                +"🛰️ NASA: satélites que miden lluvia, humedad del suelo y verdor de las plantas.\n"
-                +"🌎 NOAA: los años de El Niño y La Niña.\n"
-                +"🌱 INIAP y FAO: información de los cultivos.\n"
-                +"💵 MAG: precio de la urea (unos $38 el saco de 50 kg).\n\n"
+                +"NASA: satélites que miden lluvia, humedad del suelo y verdor de las plantas.\n"
+                +"NOAA: los años de El Niño y La Niña.\n"
+                +"INIAP y FAO: información de los cultivos.\n"
+                +"MAG: precio de la urea (unos $38 el saco de 50 kg).\n\n"
                 +"El equipo AgroByte juntó todo esto. Son datos de tu zona, no de tu terreno exacto, "
                 +"y las cifras son aproximadas.";
     }
@@ -396,7 +397,7 @@ public class CompanionActivity extends ActividadBase {
         }
     }
     private void answer(String result) {
-        explicar("Muyu te explica 🌱", result);
+        explicar("Muyu te explica", result);
     }
 
     // ---------------- Helpers de interfaz ----------------
@@ -441,7 +442,7 @@ public class CompanionActivity extends ActividadBase {
         parent.addView(b,lp);b.setOnClickListener(v->callback.run());
     }
     /** Preguntas frecuentes en dos columnas de tarjetas, en vez de seis botones apilados. */
-    private void questionGrid(String[] icons,String[] labels,Runnable[] actions){
+    private void questionGrid(int[] icons,String[] labels,Runnable[] actions){
         LinearLayout row=null;
         for(int i=0;i<labels.length;i++){
             if(i%2==0){
@@ -454,8 +455,9 @@ public class CompanionActivity extends ActividadBase {
             card.setPadding(dp(14),dp(12),dp(14),dp(12));card.setMinimumHeight(dp(96));
             card.setClickable(true);card.setFocusable(true);card.setContentDescription(labels[i]);
             final Runnable action=actions[i];card.setOnClickListener(v->action.run());
-            TextView icon=new TextView(this);icon.setText(icons[i]);icon.setTextSize(24);
-            card.addView(icon);
+            ImageView icon=new ImageView(this);icon.setImageResource(icons[i]);
+            if(icons[i]!=R.drawable.ic_brote)icon.setColorFilter(FOREST);
+            card.addView(icon,new LinearLayout.LayoutParams(dp(30),dp(30)));
             TextView label=new TextView(this);label.setText(labels[i]);label.setTextSize(15);
             label.setTextColor(DARK);label.setTypeface(null,Typeface.BOLD);label.setPadding(0,dp(6),0,0);
             card.addView(label);

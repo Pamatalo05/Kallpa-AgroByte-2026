@@ -44,9 +44,11 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:adjustViewBounds="true"
                         android:importantForAccessibility="no"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/ic_kallpa" />
 
                     <LinearLayout
@@ -60,7 +62,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-black"
-                            android:includeFontPadding="false"
                             android:letterSpacing="0.02"
                             android:text="@string/app_name"
                             android:textColor="@color/forest"
@@ -78,11 +79,11 @@
                         android:id="@+id/btnMenu"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:background="@drawable/bg_icon_soft"
-                        android:contentDescription="Mi cuenta y más opciones"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Más opciones"
                         android:padding="12dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_home_user" />
+                        android:src="@drawable/ic_more_vert" />
                 </LinearLayout>
 
                 <TextView
@@ -194,6 +195,48 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <!-- Resumen del mes actual: lo más importante sin tener que entrar a otra pantalla. -->
+                <LinearLayout
+                    android:id="@+id/btnResumenMes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_card"
+                    android:clickable="true"
+                    android:contentDescription="Ver el clima para sembrar este mes"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/txtResumenTitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Este mes en tu zona"
+                        android:textColor="@color/nav_inactive"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/txtResumenEstado"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/forest"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtResumenDetalle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:lineSpacingExtra="2dp"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
                 <!-- Acción principal: qué sembrar después. -->
                 <FrameLayout
                     android:id="@+id/btnRotations"
@@ -250,7 +293,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="Mira qué cultivo te conviene y cuánto podrías ahorrar en urea."
+                                android:text="Cultivos recomendados para tu parcela, ahorro en urea y ganancia aproximada."
                                 android:textColor="#E5F5D8"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -313,7 +356,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Cambia o añade otra"
+                        android:text="Ver, cambiar o añadir"
                         android:textColor="@color/nav_inactive"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -352,7 +395,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Cómo fue en otros años"
+                        android:text="Lluvia y cultivos en esos años"
                         android:textColor="@color/nav_inactive"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -399,7 +442,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Qué meses convienen"
+                        android:text="Meses buenos para sembrar"
                         android:textColor="@color/nav_inactive"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -438,7 +481,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="Anota lo que haces"
+                        android:text="Tus anotaciones de campo"
                         android:textColor="@color/nav_inactive"
                         android:textSize="14sp" />
                 </LinearLayout>

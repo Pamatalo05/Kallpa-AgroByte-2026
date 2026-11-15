@@ -170,9 +170,9 @@ public class SupportActivity extends ActividadBase {
                         () -> openScience(ScienceActivity.MODE_FUTURE));
                 link(result, "Ver las cifras de " + MONTHS[position].toLowerCase(Locale.ROOT),
                         () -> explicar("Cifras de " + MONTHS[position].toLowerCase(Locale.ROOT),
-                                "🌧️ Lluvia normal del mes: unos " + Formato.numero(datum.optDouble("lluvia_mm")) + " mm\n"
-                                + "💧 Humedad del suelo en las raíces: cerca de " + Formato.porcentaje(moisture) + "\n"
-                                + "🌡️ Calor máximo: unos " + Formato.numero(datum.optDouble("temp_c")) + " °C\n\n"
+                                "Lluvia normal del mes: unos " + Formato.numero(datum.optDouble("lluvia_mm")) + " mm\n"
+                                + "Humedad del suelo en las raíces: cerca de " + Formato.porcentaje(moisture) + "\n"
+                                + "Calor máximo: unos " + Formato.numero(datum.optDouble("temp_c")) + " °C\n\n"
                                 + "Son promedios de tu zona en los últimos 20 años (datos de la NASA). "
                                 + "Tu terreno puede estar un poco distinto."));
             }
@@ -218,60 +218,116 @@ public class SupportActivity extends ActividadBase {
                 + "Toca un mes para ver qué hacer.");
         card("Tu parcela", activeParcel.getNombre() + " · " + zoneLabel() + " · "
                 + (activeParcel.isTieneRiego() ? "Con riego" : "Sin riego"));
-        text(content, "Elige un mes", 18, DARK, true);
-        Spinner picker = monthPicker(content);
+        text(content, "Tu año de un vistazo", 19, DARK, true);
+        leyenda(content);
         LinearLayout details = new LinearLayout(this);
         details.setOrientation(LinearLayout.VERTICAL);
-        content.addView(details, new LinearLayout.LayoutParams(-1, -2));
-        picker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> adapter, View v, int position, long id) {
-                details.removeAllViews();
-                JSONObject item = monthData(position + 1);
-                MotorSemaforo.Resultado risk = evaluate(item);
-                if (item == null || risk == null) { cardIn(details, "Aún no hay datos", "Todavía no tenemos información de este mes."); return; }
-                double humidity = item.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
-                LinearLayout box = cardContainer(details);
-                text(box, MONTHS[position], 18, DARK, true);
-                text(box, Formato.semaforo(risk.color), 17, colorFor(risk.color), true);
-                text(box, explanation(humidity, risk), 15, SECONDARY, false);
-                text(box, "👉 " + advice(humidity, risk), 15, DARK, false);
-                button(details, "Ver qué sembrar en " + MONTHS[position].toLowerCase(Locale.ROOT), true,
-                        () -> openScience(ScienceActivity.MODE_FUTURE));
+        View[] cuadros = new View[12];
+        LinearLayout fila = null;
+        for (int i = 0; i < 12; i++) {
+            if (i % 3 == 0) {
+                fila = new LinearLayout(this);
+                fila.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout.LayoutParams fl = new LinearLayout.LayoutParams(-1, -2);
+                fl.topMargin = dp(8);
+                content.addView(fila, fl);
             }
-            @Override public void onNothingSelected(AdapterView<?> parent) {}
-        });
-        picker.setSelection(Calendar.getInstance().get(Calendar.MONTH));
-        text(content, "Todo el año de un vistazo", 19, DARK, true);
-        for (int i = 1; i <= 12; i++) {
-            JSONObject item = monthData(i); MotorSemaforo.Resultado risk = evaluate(item);
-            if (item == null || risk == null) continue;
-            double humidity = item.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
-            LinearLayout box = cardContainer(content);
-            box.setOrientation(LinearLayout.HORIZONTAL);
-            box.setGravity(Gravity.CENTER_VERTICAL);
-            TextView mes = new TextView(this);
-            mes.setText(MONTHS[i - 1]); mes.setTextSize(17); mes.setTextColor(DARK);
-            mes.setTypeface(null, Typeface.BOLD);
-            box.addView(mes, new LinearLayout.LayoutParams(0, -2, 1f));
+            final int mes = i;
+            JSONObject item = monthData(i + 1);
+            MotorSemaforo.Resultado risk = evaluate(item);
+            LinearLayout cuadro = new LinearLayout(this);
+            cuadro.setOrientation(LinearLayout.VERTICAL);
+            cuadro.setGravity(Gravity.CENTER);
+            cuadro.setMinimumHeight(dp(84));
+            cuadro.setPadding(dp(6), dp(8), dp(6), dp(8));
+            cuadro.setClickable(true);
+            cuadro.setFocusable(true);
+            TextView nombre = new TextView(this);
+            nombre.setText(MONTHS[i].substring(0, 3));
+            nombre.setTextSize(18); nombre.setTypeface(null, Typeface.BOLD); nombre.setTextColor(DARK);
+            nombre.setGravity(Gravity.CENTER);
+            cuadro.addView(nombre);
             TextView estado = new TextView(this);
-            estado.setText(Formato.emojiSemaforo(risk.color) + " "
-                    + ("Verde".equalsIgnoreCase(risk.color) ? "Bueno"
-                        : "Amarillo".equalsIgnoreCase(risk.color) ? "Con cuidado" : "Arriesgado")
-                    + " · suelo " + Formato.humedadEnPalabras(humidity));
-            estado.setTextSize(14); estado.setTextColor(colorFor(risk.color));
-            estado.setGravity(Gravity.END);
-            box.addView(estado, new LinearLayout.LayoutParams(0, -2, 2f));
-            final int index = i - 1;
-            box.setOnClickListener(v -> {
-                picker.setSelection(index);
-                // Sube hasta el detalle del mes elegido.
-                if (content.getParent() instanceof android.widget.ScrollView) {
-                    ((android.widget.ScrollView) content.getParent()).smoothScrollTo(0, picker.getTop());
-                }
-            });
+            estado.setTextSize(13); estado.setGravity(Gravity.CENTER);
+            if (risk == null) {
+                estado.setText("Sin datos"); estado.setTextColor(SECONDARY);
+            } else {
+                estado.setText(palabraSemaforo(risk.color));
+                estado.setTextColor(colorFor(risk.color));
+                estado.setTypeface(null, Typeface.BOLD);
+            }
+            cuadro.addView(estado);
+            cuadro.setContentDescription(MONTHS[i] + ": " + estado.getText());
+            cuadros[i] = cuadro;
+            pintarCuadro(cuadro, risk == null ? null : risk.color, false);
+            LinearLayout.LayoutParams cl = new LinearLayout.LayoutParams(0, -2, 1f);
+            if (i % 3 != 0) cl.leftMargin = dp(8);
+            fila.addView(cuadro, cl);
+            cuadro.setOnClickListener(v -> mostrarMes(mes, cuadros, details));
         }
+        content.addView(details, new LinearLayout.LayoutParams(-1, -2));
+        mostrarMes(Calendar.getInstance().get(Calendar.MONTH), cuadros, details);
         text(content, "Es lo que suele pasar cada mes, no el pronóstico del tiempo. "
                 + "Los satélites miran toda la zona, no tu terreno exacto.", 14, SECONDARY, false);
+    }
+
+    /** Detalle del mes tocado; el cuadro elegido queda marcado con borde. */
+    private void mostrarMes(int mes, View[] cuadros, LinearLayout details) {
+        for (int i = 0; i < 12; i++) {
+            MotorSemaforo.Resultado r = evaluate(monthData(i + 1));
+            pintarCuadro(cuadros[i], r == null ? null : r.color, i == mes);
+        }
+        details.removeAllViews();
+        JSONObject item = monthData(mes + 1);
+        MotorSemaforo.Resultado risk = evaluate(item);
+        if (item == null || risk == null) { cardIn(details, MONTHS[mes], "Todavía no tenemos información de este mes."); return; }
+        double humidity = item.optJSONObject("humedad_raiz_predicha").optDouble("neutro");
+        LinearLayout box = cardContainer(details);
+        text(box, MONTHS[mes], 18, DARK, true);
+        text(box, Formato.semaforo(risk.color), 17, colorFor(risk.color), true);
+        text(box, explanation(humidity, risk), 15, SECONDARY, false);
+        text(box, "Qué hacer: " + advice(humidity, risk), 15, DARK, false);
+        text(box, "Lluvia normal: unos " + Formato.numero(item.optDouble("lluvia_mm")) + " mm · Humedad del suelo: "
+                + Formato.porcentaje(humidity), 14, SECONDARY, false);
+        button(details, "Ver qué sembrar en " + MONTHS[mes].toLowerCase(Locale.ROOT), true,
+                () -> openScience(ScienceActivity.MODE_FUTURE));
+    }
+
+    private void pintarCuadro(View cuadro, String color, boolean elegido) {
+        android.graphics.drawable.GradientDrawable fondo = new android.graphics.drawable.GradientDrawable();
+        fondo.setCornerRadius(dp(16));
+        fondo.setColor(color == null ? 0xFFF1F1EC
+                : "Verde".equalsIgnoreCase(color) ? 0xFFDDF0CF
+                : "Amarillo".equalsIgnoreCase(color) ? 0xFFFCEBB8 : 0xFFF8D3CC);
+        if (elegido) fondo.setStroke(dp(3), DARK);
+        cuadro.setBackground(fondo);
+    }
+
+    private String palabraSemaforo(String color) {
+        if ("Verde".equalsIgnoreCase(color)) return "Bueno";
+        if ("Amarillo".equalsIgnoreCase(color)) return "Con cuidado";
+        return "Arriesgado";
+    }
+
+    /** Explica los tres colores con muestras pequeñas. */
+    private void leyenda(LinearLayout parent) {
+        LinearLayout fila = new LinearLayout(this);
+        fila.setOrientation(LinearLayout.HORIZONTAL);
+        fila.setGravity(Gravity.CENTER_VERTICAL);
+        String[] colores = {"Verde", "Amarillo", "Rojo"};
+        for (String c : colores) {
+            View muestra = new View(this);
+            pintarCuadro(muestra, c, false);
+            LinearLayout.LayoutParams ml = new LinearLayout.LayoutParams(dp(18), dp(18));
+            ml.rightMargin = dp(6);
+            fila.addView(muestra, ml);
+            TextView t = new TextView(this);
+            t.setText(palabraSemaforo(c)); t.setTextSize(14); t.setTextColor(DARK);
+            LinearLayout.LayoutParams tl = new LinearLayout.LayoutParams(-2, -2);
+            tl.rightMargin = dp(16);
+            fila.addView(t, tl);
+        }
+        parent.addView(fila, new LinearLayout.LayoutParams(-1, -2));
     }
 
     private void showProfile(List<Parcela> parcels) {
@@ -288,7 +344,7 @@ public class SupportActivity extends ActividadBase {
             catch (Exception ignored) { }
         }
         boolean completos = available == REQUIRED.length;
-        card(completos ? "✅ Todo listo para usar sin internet" : "⚠️ Faltan datos en este teléfono",
+        card(completos ? "Todo listo para usar sin internet" : "Faltan datos en este teléfono",
                 (isOnline() ? "Ahora tienes internet. " : "Ahora no tienes internet. ")
                 + (completos ? "La información de tu zona ya está guardada en el teléfono: puedes usar Kallpa en el campo."
                              : "Faltan " + (REQUIRED.length - available) + " archivos de datos. Vuelve a instalar Kallpa."));
@@ -301,13 +357,23 @@ public class SupportActivity extends ActividadBase {
                 if (meta != null) periodo = meta.optString("periodo_analizado", periodo);
             } catch (Exception ignored) { }
             explicar("¿De dónde salen los datos?",
-                    "🛰️ Satélites de la NASA: lluvia, humedad del suelo y verdor de las plantas.\n"
-                    + "🌎 NOAA: los años de El Niño y La Niña.\n"
-                    + "🌱 INIAP y FAO: información de los cultivos.\n"
-                    + "💵 MAG: precio de referencia de la urea.\n\n"
+                    "Satélites de la NASA: lluvia, humedad del suelo y verdor de las plantas.\n"
+                    + "NOAA: los años de El Niño y La Niña.\n"
+                    + "INIAP y FAO: información de los cultivos.\n"
+                    + "MAG: precio de referencia de la urea.\n\n"
                     + "Años analizados: " + periodo + ". El equipo AgroByte juntó y revisó estos datos. "
                     + "Son una guía para tu zona, no una medición exacta de tu terreno.");
         });
+        button(content, "Cerrar sesión", false, () -> new AlertDialog.Builder(this)
+                .setTitle("¿Cerrar sesión?")
+                .setMessage("Tranquilo: tus parcelas y tu bitácora se quedan guardadas en este teléfono.")
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Sí, cerrar", (d, w) -> {
+                    auth.salir();
+                    startActivity(new Intent(this, LoginActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    finish();
+                }).show());
     }
 
     private boolean isOnline(){

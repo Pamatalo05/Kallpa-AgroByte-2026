@@ -66,7 +66,7 @@ public class MyParcelsActivity extends ActividadBase {
             binding.listContainer.addView(tarjeta, itemLp);
 
             if (activa) {
-                TextView etiqueta = texto("✓ La estás viendo ahora", 13, true);
+                TextView etiqueta = texto("La estás viendo ahora", 13, true);
                 etiqueta.setTextColor(0xFF0B5D2A);
                 tarjeta.addView(etiqueta);
             }

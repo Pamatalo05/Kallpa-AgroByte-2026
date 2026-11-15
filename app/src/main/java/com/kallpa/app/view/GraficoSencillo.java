@@ -33,6 +33,8 @@ public class GraficoSencillo extends View {
     private float franjaDesde = Float.NaN, franjaHasta = Float.NaN;
     private String franjaTexto;
     private int destacado = -1;
+    private String textoDestacado;
+    private boolean conPromedio;
 
     private final Paint pincel = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path camino = new Path();
@@ -86,6 +88,19 @@ public class GraficoSencillo extends View {
         return this;
     }
 
+    /** Resalta una posición y le pone un rótulo encima (por ejemplo, "Ahora"). */
+    public GraficoSencillo destacar(int indice, String rotulo) {
+        destacado = indice;
+        textoDestacado = rotulo;
+        return this;
+    }
+
+    /** Dibuja una línea punteada con el promedio, para comparar de un vistazo. */
+    public GraficoSencillo conPromedio() {
+        conPromedio = true;
+        return this;
+    }
+
     @Override protected void onMeasure(int anchoSpec, int altoSpec) {
         super.onMeasure(anchoSpec, MeasureSpec.makeMeasureSpec(dp(230), MeasureSpec.EXACTLY));
     }
@@ -120,6 +135,19 @@ public class GraficoSencillo extends View {
 
         int n = valores.length;
         float paso = (der - izq) / n;
+
+        if (conPromedio) {
+            float suma = 0;
+            for (float v : valores) suma += v;
+            float yp = y(suma / n, arriba, abajo);
+            pincel.setStyle(Paint.Style.STROKE);
+            pincel.setStrokeWidth(dp(1.5f));
+            pincel.setColor(0xFF8B6A4E);
+            pincel.setPathEffect(new android.graphics.DashPathEffect(new float[]{dp(6), dp(5)}, 0));
+            c.drawLine(izq, yp, der, yp, pincel);
+            pincel.setPathEffect(null);
+            texto(c, "Promedio " + etiqueta.texto(suma / n), izq + dp(4), yp - dp(5), 11, 0xFF8B6A4E, Paint.Align.LEFT, true);
+        }
         float anchoBarra = Math.min(paso * 0.62f, dp(26));
         boolean caben = paso >= dp(22);
         int indiceMax = 0, indiceMin = 0;
@@ -166,7 +194,10 @@ public class GraficoSencillo extends View {
                 }
                 if (i == indiceMax || i == indiceMin || i == destacado) {
                     float dy = i == indiceMin ? dp(16) : -dp(9);
-                    texto(c, etiqueta.texto(valores[i]), cx, cy + dy, 11, 0xFF16371E, Paint.Align.CENTER, true);
+                    String rotulo = i == destacado && textoDestacado != null
+                            ? textoDestacado + ": " + etiqueta.texto(valores[i]) : etiqueta.texto(valores[i]);
+                    Paint.Align alin = cx > der - dp(40) ? Paint.Align.RIGHT : (cx < izq + dp(40) ? Paint.Align.LEFT : Paint.Align.CENTER);
+                    texto(c, rotulo, cx, cy + dy, 11, 0xFF16371E, alin, true);
                 }
             }
         }

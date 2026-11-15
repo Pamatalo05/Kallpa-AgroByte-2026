@@ -146,23 +146,32 @@ public class ScienceActivity extends ActividadBase {
         texto(contenido, "Los satélites miran toda la zona, no cada metro de tu parcela. "
                 + "Compáralo con lo que ves en tu terreno.", 15, GRIS, false);
         double ndvi = info.optDouble("ndvi_ultimo");
-        bloque("🌿 Verdor de las plantas: " + Formato.verdor(ndvi),
+        bloque("Verdor de las plantas: " + Formato.verdor(ndvi),
                 info.optString("estado_cobertura") + "\nÚltima foto: " + fechaCorta(info.optString("fecha_ndvi")));
         double smap = info.optDouble("smap_humedad_ultima");
-        bloque("💧 Humedad en la superficie: " + Formato.porcentaje(smap),
+        bloque("Humedad en la superficie: " + Formato.porcentaje(smap),
                 "Es el agua en la capa de arriba del suelo.\nÚltima medición: " + fechaCorta(info.optString("fecha_smap")));
-        if (clima != null) bloque("🟫 Tipo de suelo de la zona", clima.optString("suelo_referencia")
+        if (clima != null) bloque("Tipo de suelo de la zona", clima.optString("suelo_referencia")
                 + "\nEs el suelo más común en tu cantón; el tuyo puede ser distinto.");
         // Mapa desactivado TEMPORALMENTE para separar el diagnóstico JSON de
         // los posibles bloqueos del visor OpenStreetMap en dispositivos físicos.
         // crearMapa();
-        graficoSatelital(dato, "serie_ndvi_modis", "ndvi", "🌿 Verdor durante el último año",
-                "Mientras más alta la línea, más plantas verdes había.", 0xFF4E9A2E,
-                v -> Math.round(v * 100) + "", "verde");
-        graficoSatelital(dato, "serie_humedad_smap", "humedad_m3_m3", "💧 Humedad en los últimos meses",
-                "Mientras más alta la línea, más mojada estaba la superficie.", 0xFF2A7FA8,
+        graficoSatelital(dato, "serie_ndvi_modis", "ndvi", "Verdor de las plantas en el último año",
+                "Cada punto es una foto del satélite. Más arriba = más plantas verdes. "
+                + "La línea punteada es el promedio.", 0xFF4E9A2E,
+                v -> Math.round(v * 100) + "/100", "verde");
+        graficoSatelital(dato, "serie_humedad_smap", "humedad_m3_m3", "Humedad de la superficie en los últimos meses",
+                "Cada punto es una medición. Más arriba = suelo más mojado. "
+                + "La línea punteada es el promedio.", 0xFF2A7FA8,
                 v -> Math.round(v * 100) + " %", "húmeda");
-        texto(contenido, "Datos de satélites de la NASA (MODIS y SMAP).", 13, GRIS, false);
+        enlace(contenido, "¿De dónde salen estos datos?", () -> explicar("¿De dónde salen estos datos?",
+                "Verdor de las plantas: satélite MODIS de la NASA. Toma una foto de tu zona "
+                + "cada 16 días y mira cuadros de unos 250 metros.\n\n"
+                + "Humedad de la superficie: satélite SMAP de la NASA. Mide el agua en los primeros "
+                + "centímetros del suelo cada 2 o 3 días, en cuadros de unos 9 kilómetros.\n\n"
+                + "Tipo de suelo: mapas de suelos del MAG y del INIAP para tu cantón.\n\n"
+                + "Por eso son datos de tu zona, no de tu parcela exacta. El equipo AgroByte "
+                + "descargó y revisó estos datos."));
         boton(contenido, "¿Qué siembro después?  ›", true, () -> mostrar(MODE_FUTURE));
     }
 
@@ -187,11 +196,18 @@ public class ScienceActivity extends ActividadBase {
         texto(contenido, ayuda, 14, GRIS, false);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.topMargin = dp(6);
-        contenido.addView(GraficoSencillo.linea(this, valores, fechas, color, etiqueta), lp);
-        texto(contenido, "Más " + palabra + ": " + fechaCorta(serie.optJSONObject(max).optString("fecha"))
-                + " (" + etiqueta.texto(valores[max]) + ")  ·  Menos " + palabra + ": "
-                + fechaCorta(serie.optJSONObject(min).optString("fecha"))
-                + " (" + etiqueta.texto(valores[min]) + ")", 14, OSCURO, false);
+        contenido.addView(GraficoSencillo.linea(this, valores, fechas, color, etiqueta)
+                .conPromedio().destacar(n - 1, "Ahora"), lp);
+        float suma = 0;
+        for (float v : valores) suma += v;
+        float promedio = suma / n;
+        float ahora = valores[n - 1];
+        String comparacion = Math.abs(ahora - promedio) < 0.03f ? "parecida al promedio"
+                : ahora > promedio ? "por encima del promedio" : "por debajo del promedio";
+        texto(contenido, "Ahora está " + comparacion + ". La más " + palabra + " fue en "
+                + fechaCorta(serie.optJSONObject(max).optString("fecha")) + " (" + etiqueta.texto(valores[max])
+                + ") y la menos " + palabra + " en " + fechaCorta(serie.optJSONObject(min).optString("fecha"))
+                + " (" + etiqueta.texto(valores[min]) + ").", 14, OSCURO, false);
     }
 
     /** "2025-10-16" -> "oct 2025". */
@@ -290,13 +306,13 @@ public class ScienceActivity extends ActividadBase {
 
         enlace(contenido, "¿De dónde salen estas cifras?", () -> explicar(
                 "¿De dónde salen estas cifras?",
-                "🌧️ El mes: miramos cómo estuvo el suelo de tu zona en ese mes durante "
+                "El mes: miramos cómo estuvo el suelo de tu zona en ese mes durante "
                 + "los últimos 20 años (datos de la NASA) y si tienes riego.\n\n"
-                + "🌱 Los cultivos: comparamos soya, fréjol caupí, maní y mucuna con fichas del INIAP "
+                + "Los cultivos: comparamos soya, fréjol caupí, maní y mucuna con fichas del INIAP "
                 + "y de la FAO.\n\n"
-                + "💵 El ahorro en urea: calculamos cuánta urea dejarías de poner gracias al "
+                + "El ahorro en urea: calculamos cuánta urea dejarías de poner gracias al "
                 + "nitrógeno que deja el cultivo, con el precio del MAG (unos $38 el saco de 50 kg).\n\n"
-                + "💰 La ganancia: es lo que podrías vender menos lo que gastarías en semillas e insumos. "
+                + "La ganancia: es lo que podrías vender menos lo que gastarías en semillas e insumos. "
                 + "No incluye todos los gastos (por ejemplo, mano de obra o transporte).\n\n"
                 + "Todo es aproximado. Es una guía para decidir mejor, no una promesa. "
                 + "Antes de invertir, revisa tu terreno y, si puedes, conversa con un técnico."));
@@ -378,7 +394,7 @@ public class ScienceActivity extends ActividadBase {
             double ingresoHa = opcion.optDouble("ingreso_bruto_ha", Double.NaN);
             LinearLayout card = tarjeta(destino);
             if (i == 0) {
-                TextView insignia = texto(card, "⭐ La que más te conviene", 13, 0xFF6B4E00, true);
+                TextView insignia = texto(card, "La que más te conviene", 13, 0xFF6B4E00, true);
                 insignia.setBackgroundResource(R.drawable.bg_chip_oro);
                 insignia.setPadding(dp(12), dp(4), dp(12), dp(4));
                 insignia.setLayoutParams(new LinearLayout.LayoutParams(-2, -2));
@@ -402,26 +418,26 @@ public class ScienceActivity extends ActividadBase {
                 MotorSemaforo.Economia economia = MotorSemaforo.calcular(
                         costoHa, ingresoHa, kgHa, ha, semaforo);
                 String enTuParcela = " en tus " + Formato.hectareas(ha);
-                texto(card, "💵 Ahorro en urea: " + Formato.unos(economia.ahorroUreaUsd), 16, VERDE, true);
+                texto(card, "Ahorro en urea: " + Formato.unos(economia.ahorroUreaUsd), 16, VERDE, true);
                 texto(card, "Dejarías de poner " + Formato.kilos(kgHa * ha) + " de urea"
                         + enTuParcela + ".", 14, OSCURO, false);
-                texto(card, "💰 Podrías ganar " + Formato.unos(economia.margenNetoUsd)
+                texto(card, "Podrías ganar " + Formato.unos(economia.margenNetoUsd)
                         + enTuParcela + ", después de pagar semillas e insumos (unos "
                         + Formato.dinero(economia.costoTotalUsd) + ").", 14, OSCURO, false);
                 texto(card, economia.capitalEnRiesgoUsd <= 0
-                        ? "🛡️ Ese mes se ve bien: es poco probable que pierdas lo invertido por falta o exceso de agua."
-                        : "⚠️ Si el clima sale mal ese mes, podrías perder " + Formato.unos(economia.capitalEnRiesgoUsd)
+                        ? "Ese mes se ve bien: es poco probable que pierdas lo invertido por falta o exceso de agua."
+                        : "Si el clima sale mal ese mes, podrías perder " + Formato.unos(economia.capitalEnRiesgoUsd)
                             + " de lo que inviertas.",
                         14, economia.capitalEnRiesgoUsd <= 0 ? VERDE : 0xFF865C21, false);
                 texto(card, Formato.NOTA_APROXIMADO, 13, GRIS, false);
                 enlace(card, "¿Cómo se calculó?", () -> explicar(cultivo,
-                        "💵 Ahorro en urea: este cultivo deja unos " + Formato.kilos(kgHa)
+                        "Ahorro en urea: este cultivo deja unos " + Formato.kilos(kgHa)
                         + " de nitrógeno por hectárea que ya no tendrías que comprar como urea. "
                         + "En tus " + Formato.hectareas(ha) + " son " + Formato.kilos(kgHa * ha)
                         + ", a unos $38 el saco de 50 kg: " + Formato.unos(economia.ahorroUreaUsd) + ".\n\n"
-                        + "💰 Ganancia: lo que podrías vender, menos semillas e insumos, más el ahorro en urea: "
+                        + "Ganancia: lo que podrías vender, menos semillas e insumos, más el ahorro en urea: "
                         + Formato.unos(economia.margenNetoUsd) + ". No incluye mano de obra ni transporte.\n\n"
-                        + "⚠️ Dinero en riesgo: depende del semáforo del mes. En verde casi no hay riesgo; "
+                        + "Dinero en riesgo: depende del semáforo del mes. En verde casi no hay riesgo; "
                         + "en amarillo podrías perder cerca de un tercio de lo invertido; en rojo, casi todo. "
                         + "Para ti sería " + Formato.unos(economia.capitalEnRiesgoUsd) + ".\n\n"
                         + "Son cuentas aproximadas con datos de años anteriores: no son ganancias "
@@ -435,12 +451,12 @@ public class ScienceActivity extends ActividadBase {
 
     /** Qué hacer según cómo suele estar el suelo ese mes. */
     private String consejoDelMes(double humedad, MotorSemaforo.Resultado semaforo) {
-        if (humedad > 0.78) return "👉 Revisa que el agua corra bien y no se encharque antes de sembrar.";
+        if (humedad > 0.78) return "Revisa que el agua corra bien y no se encharque antes de sembrar.";
         if (humedad < 0.55) return parcela.isTieneRiego()
-                ? "👉 Tu riego te ayuda. Revisa que funcione bien antes de sembrar."
-                : "👉 Podría faltar agua. Piensa en regar o en un cultivo que aguante la sequía.";
-        if (!"Verde".equals(semaforo.color)) return "👉 Revisa tu terreno con calma antes de invertir.";
-        return "👉 Igual revisa tu terreno antes de comprar semillas e insumos.";
+                ? "Tu riego te ayuda. Revisa que funcione bien antes de sembrar."
+                : "Podría faltar agua. Piensa en regar o en un cultivo que aguante la sequía.";
+        if (!"Verde".equals(semaforo.color)) return "Revisa tu terreno con calma antes de invertir.";
+        return "Igual revisa tu terreno antes de comprar semillas e insumos.";
     }
 
     /** Selector de opciones con letra grande y fondo claro. */
@@ -477,7 +493,7 @@ public class ScienceActivity extends ActividadBase {
         texto(contenido,"El Niño suele traer más lluvia y La Niña, menos. Aquí ves qué pasó en tu zona "
                 + "entre 2005 y 2025. Sirve para prepararte; no dice qué va a pasar este año.",15,GRIS,false);
         texto(contenido,"Elige qué tipo de año quieres ver",18,OSCURO,true);
-        String[] opciones={"🌱 Año normal","🌧️ Año de El Niño (más lluvia)","☀️ Año de La Niña (menos lluvia)"};
+        String[] opciones={"Año normal","Año de El Niño (más lluvia)","Año de La Niña (menos lluvia)"};
         String[] claves={"neutro","nino","nina"};
         Spinner selector=selectorGrande(contenido,opciones);
         LinearLayout resultado=new LinearLayout(this);
@@ -494,10 +510,10 @@ public class ScienceActivity extends ActividadBase {
                 bloqueEn(resultado,"Lo que pasó en tu zona", e.optString("resumen_impacto_suelo")
                         + (anios==null?"":"\n\nAños que tomamos en cuenta: "+unirAnios(anios)));
                 if(indicadores!=null) bloqueEn(resultado,"En un mes promedio de esos años",
-                        "🌧️ Lluvia: unos "+Formato.numero(indicadores.optDouble("lluvia_mensual_prom_mm"))+" mm\n"
-                        +"💧 Suelo "+Formato.humedadEnPalabras(indicadores.optDouble("humedad_raiz_prom"))
+                        "Lluvia: unos "+Formato.numero(indicadores.optDouble("lluvia_mensual_prom_mm"))+" mm\n"
+                        +"Suelo "+Formato.humedadEnPalabras(indicadores.optDouble("humedad_raiz_prom"))
                         +" (humedad cerca de "+Formato.porcentaje(indicadores.optDouble("humedad_raiz_prom"))+")\n"
-                        +"🌡️ Calor máximo: unos "+Formato.numero(indicadores.optDouble("temp_max_prom_c"))+" °C");
+                        +"Calor máximo: unos "+Formato.numero(indicadores.optDouble("temp_max_prom_c"))+" °C");
                 JSONArray perfil=e.optJSONArray("perfil_mensual");
                 if(perfil!=null){
                     graficosMensuales(resultado, perfil);
@@ -523,7 +539,7 @@ public class ScienceActivity extends ActividadBase {
             double ahorro=x.optDouble("ahorro_urea_kg_ha",0)*parcela.getHectareas()*MotorSemaforo.PRECIO_UREA_USD_KG;
             bloqueEn(padre,(i+1)+". "+x.optString("cultivo"),
                     Formato.evaluacionCultivo(x.optString("estado"))+"\n"
-                    +"💵 Ahorro en urea: "+Formato.unos(ahorro)+" en tus "+Formato.hectareas(parcela.getHectareas())+"\n"
+                    +"Ahorro en urea: "+Formato.unos(ahorro)+" en tus "+Formato.hectareas(parcela.getHectareas())+"\n"
                     +x.optString("nota_agronomica"));
         }
     }
@@ -531,7 +547,7 @@ public class ScienceActivity extends ActividadBase {
     private void compartirResumenEnso(JSONObject escenario, String nombreEscenario,
                                        JSONObject indicadores, JSONArray rotaciones) {
         StringBuilder mensaje = new StringBuilder();
-        mensaje.append("🌱 Kallpa\n")
+        mensaje.append("Kallpa\n")
                 .append("Parcela: ").append(parcela.getNombre()).append(" (")
                 .append(nombreCanton()).append(", ")
                 .append(Formato.hectareas(parcela.getHectareas())).append(", ")
@@ -625,7 +641,7 @@ public class ScienceActivity extends ActividadBase {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.topMargin = dp(6);
 
-        texto(padre, "🌧️ Lluvia de cada mes", 18, OSCURO, true);
+        texto(padre, "Lluvia de cada mes", 18, OSCURO, true);
         texto(padre, "Cada barra es un mes (E = enero … D = diciembre). El número es la lluvia en milímetros.",
                 14, GRIS, false);
         padre.addView(GraficoSencillo.barras(this, lluvia, GraficoSencillo.MESES_CORTOS, 0xFF2A7FA8,
@@ -634,7 +650,7 @@ public class ScienceActivity extends ActividadBase {
                 + " mm) y menos en " + meses[menosLluvia] + " (unos " + Math.round(lluvia[menosLluvia])
                 + " mm). Resaltado: " + meses[hoy] + ", el mes actual.", 14, OSCURO, false);
 
-        texto(padre, "💧 Humedad del suelo cada mes", 18, OSCURO, true);
+        texto(padre, "Humedad del suelo cada mes", 18, OSCURO, true);
         texto(padre, "La franja verde es la humedad buena para sembrar (entre 55 % y 78 %).",
                 14, GRIS, false);
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(-1, -2);

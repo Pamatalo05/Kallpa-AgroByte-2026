@@ -39,6 +39,7 @@ public class HomeActivity extends ActividadBase {
         accion(R.id.btnClimateCard, () -> abrirCiencia(ScienceActivity.MODE_PAST));
         accion(R.id.btnCalendarCard, () -> abrirSoporte(SupportActivity.MODE_CALENDAR));
         accion(R.id.btnDiaryCard, () -> abrirComplementario(CompanionActivity.MODE_LOG));
+        accion(R.id.btnResumenMes, () -> abrirSoporte(SupportActivity.MODE_ALERTS));
         activarBarraInferior(SECCION_INICIO, true);
     }
 
@@ -94,8 +95,56 @@ public class HomeActivity extends ActividadBase {
         ((TextView) findViewById(R.id.txtParcelCount)).setText(
                 parcelas.size() == 1 ? "Cambiar" : "Cambiar (" + parcelas.size() + ")");
 
+        mostrarResumenDelMes(activa);
+
         // Kallpa funciona sin internet: el aviso solo aparece si hace falta y no asusta.
         findViewById(R.id.txtConnection).setVisibility(hayInternet() ? View.GONE : View.VISIBLE);
+    }
+
+    /**
+     * Resumen del mes actual para la parcela activa: semáforo, lluvia y humedad típicas.
+     * Usa el mismo paquete_canton.json y la misma regla (MotorSemaforo) que Clima.
+     */
+    private void mostrarResumenDelMes(Parcela activa) {
+        View tarjeta = findViewById(R.id.btnResumenMes);
+        String canton = activa.getCanton() == null ? "" : activa.getCanton().trim().toLowerCase(Locale.ROOT);
+        int mes = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH) + 1;
+        try (java.io.InputStream entrada = getAssets().open("datos/paquete_canton.json")) {
+            java.io.ByteArrayOutputStream salida = new java.io.ByteArrayOutputStream();
+            byte[] bloque = new byte[8192];
+            int n;
+            while ((n = entrada.read(bloque)) != -1) salida.write(bloque, 0, n);
+            org.json.JSONObject raiz = new org.json.JSONObject(
+                    new String(salida.toByteArray(), java.nio.charset.StandardCharsets.UTF_8));
+            org.json.JSONArray serie = raiz.getJSONObject("cantones").getJSONObject(canton)
+                    .getJSONArray("serie_satelital_ml");
+            for (int i = 0; i < serie.length(); i++) {
+                org.json.JSONObject dato = serie.getJSONObject(i);
+                if (dato.optInt("mes") != mes) continue;
+                double humedad = dato.getJSONObject("humedad_raiz_predicha").getDouble("neutro");
+                com.kallpa.app.model.MotorSemaforo.Resultado r =
+                        com.kallpa.app.model.MotorSemaforo.evaluar(humedad, activa.isTieneRiego());
+                String[] meses = {"enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+                        "agosto", "septiembre", "octubre", "noviembre", "diciembre"};
+                ((TextView) findViewById(R.id.txtResumenTitulo)).setText(
+                        "Si siembras en " + meses[mes - 1] + " en " + ("babahoyo".equals(canton) ? "Babahoyo" : "Daule"));
+                TextView estado = findViewById(R.id.txtResumenEstado);
+                estado.setText(Formato.semaforo(r.color));
+                estado.setTextColor("Verde".equals(r.color) ? 0xFF0B5D2A
+                        : "Amarillo".equals(r.color) ? 0xFF916900 : 0xFFB24336);
+                ((TextView) findViewById(R.id.txtResumenDetalle)).setText(
+                        "Lluvia normal del mes: unos " + Formato.numero(dato.optDouble("lluvia_mm")) + " mm\n"
+                        + "Suelo " + Formato.humedadEnPalabras(humedad) + " (humedad cerca de "
+                        + Formato.porcentaje(humedad) + ")\n"
+                        + "Toca para ver qué hacer");
+                tarjeta.setVisibility(View.VISIBLE);
+                return;
+            }
+            tarjeta.setVisibility(View.GONE);
+        } catch (Exception sinDatos) {
+            // Cantón fuera del piloto o paquete ausente: no se muestra el resumen.
+            tarjeta.setVisibility(View.GONE);
+        }
     }
 
     private boolean hayInternet() {
