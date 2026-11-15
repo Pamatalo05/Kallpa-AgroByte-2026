@@ -1,0 +1,5 @@
+id,nombre,regiones,tipo,dias_ciclo,demanda_agua,tolera_encharcamiento,fija_nitrogeno,protege_suelo,costo_insumos_ha,ingreso_bruto_ha,ahorro_urea_ha,fuente
+soya_iniap_308,Soya de rotación (INIAP-308),costa_aluvial,leguminosa_grano,105,media,baja,85.0,alta,520.0,1180.0,185.0,INIAP Estación Experimental Boliche — Ficha Varietal Soya INIAP-308; FAO (2016) Fijación Biológica de Nitrógeno; MAG SIPA
+frejol_caupi_iniap_463,Fréjol Caupí (INIAP-463),costa_aluvial,leguminosa_grano,75,baja_media,media,68.0,alta,430.0,980.0,148.0,INIAP Programa Nacional de Leguminosas — Guía Técnica Caupí INIAP-463 (Litoral Ecuatoriano); MAG SIPA
+mani_iniap_381,Maní de rotación (INIAP-381),costa_aluvial,leguminosa_oleaginosa,115,baja,baja,72.0,media_alta,610.0,1420.0,156.0,INIAP Estación Experimental Portoviejo/Boliche — Variedad INIAP-381; MAG SIPA Boletín Precios Insumos
+mucuna_pruriens,Mucuna (Mucuna pruriens — Abono verde),costa_aluvial,abono_verde_cobertura,75,media_alta,media_alta,110.0,muy_alta,195.0,410.0,235.0,INIAP Estación Experimental Boliche/Pichilingue — Abonos Verdes (Mucuna pruriens) en Litoral; FAO (2016)

@@ -1,0 +1,91 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "P-DAULE-01",
+        "nombre": "Parcela Piloto Daule (Sector Los Lojas)",
+        "canton": "daule",
+        "provincia": "Guayas",
+        "cultivo_actual": "arroz",
+        "hectareas": 4.5,
+        "riego": true,
+        "suelo": "Franco-arcilloso aluvial",
+        "ndvi_modis": 0.216,
+        "estado_cobertura": "Suelo descubierto / post-cosecha inmediata",
+        "smap_humedad": 0.494
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.9835,
+              -1.858
+            ],
+            [
+              -79.9785,
+              -1.858
+            ],
+            [
+              -79.9785,
+              -1.862
+            ],
+            [
+              -79.9835,
+              -1.862
+            ],
+            [
+              -79.9835,
+              -1.858
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "P-BABAHOYO-01",
+        "nombre": "Parcela Piloto Babahoyo (Sector Pimocha)",
+        "canton": "babahoyo",
+        "provincia": "Los Ríos",
+        "cultivo_actual": "maiz_duro",
+        "hectareas": 5.0,
+        "riego": false,
+        "suelo": "Franco-arcilloso a franco-limoso aluvial",
+        "ndvi_modis": 0.141,
+        "estado_cobertura": "Suelo descubierto / post-cosecha inmediata",
+        "smap_humedad": 0.603
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.5335,
+              -1.798
+            ],
+            [
+              -79.528,
+              -1.798
+            ],
+            [
+              -79.528,
+              -1.8025
+            ],
+            [
+              -79.5335,
+              -1.8025
+            ],
+            [
+              -79.5335,
+              -1.798
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
