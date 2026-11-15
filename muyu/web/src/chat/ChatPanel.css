@@ -1,0 +1,305 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.7rem;
+}
+
+.chat__messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.25rem 0.25rem 0.25rem 0;
+}
+
+.chat__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.chat__row--user {
+  justify-content: flex-end;
+}
+
+.chat__burbuja {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  max-width: 85%;
+}
+
+.chat__row--user .chat__burbuja {
+  align-items: flex-end;
+}
+
+/* Sugerencias bajo la respuesta: una por línea, fáciles de tocar. */
+.chat__sugerencias {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.chat__sugerencia {
+  min-height: 40px;
+  padding: 0.4rem 0.8rem;
+  border: 1.5px solid var(--verde-hoja);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--verde-bosque);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chat__sugerencia:hover:not(:disabled) {
+  background: #eef6e4;
+}
+
+.chat__sugerencia:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.chat__sugerencia:focus-visible {
+  outline: 3px solid var(--oro);
+  outline-offset: 2px;
+}
+
+/* Botón pequeño para oír la respuesta: discreto, pero de 32 px para el dedo. */
+.chat__oir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 32px;
+  padding: 0 0.6rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tierra);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chat__oir:hover {
+  background: #eef6e4;
+  color: var(--verde-bosque);
+}
+
+.chat__oir svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bubble {
+  max-width: 100%;
+  margin: 0;
+  padding: 0.7rem 0.95rem;
+  border-radius: 18px;
+  font-size: 1rem;
+  line-height: 1.5;
+  /* Respeta los saltos de línea: una idea por línea. */
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.bubble--muyu {
+  background: var(--crema);
+  border: 1px solid var(--borde);
+  border-bottom-left-radius: 6px;
+}
+
+.bubble--user {
+  background: var(--verde-bosque);
+  color: #ffffff;
+  border-bottom-right-radius: 6px;
+}
+
+.bubble--thinking {
+  color: var(--tierra);
+}
+
+.dots span {
+  animation: chat-dot 1.2s infinite;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes chat-dot {
+  0%, 60%, 100% { opacity: 0.2; }
+  30% { opacity: 1; }
+}
+
+/* Aviso de conexión: discreto, no alarma ni ensucia las respuestas. */
+.chat__aviso {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  border-radius: 10px;
+  background: #fdf3d7;
+  color: #6b5332;
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+/* Preguntas rápidas: 2 × 2, botones grandes para el dedo (≥ 44 px). */
+.chat__quick {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.chat__quick-button {
+  min-height: 44px;
+  padding: 0.35rem 0.6rem;
+  border: 1.5px solid var(--verde-hoja);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--verde-bosque);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.chat__quick-button:hover:not(:disabled) {
+  background: #eef6e4;
+}
+
+.chat__quick-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.chat__form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.chat__input {
+  flex: 1;
+  resize: none;
+  min-height: 48px;
+  max-height: 120px;
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid var(--borde);
+  border-radius: 14px;
+  background: #ffffff;
+  font: inherit;
+  font-size: 1rem;
+  color: inherit;
+}
+
+.chat__input::placeholder {
+  color: #9a8a78;
+}
+
+.chat__send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--verde-bosque);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.chat__send svg {
+  width: 22px;
+  height: 22px;
+}
+
+.chat__send:disabled {
+  background: #c9d8c0;
+  cursor: not-allowed;
+}
+
+.chat__mic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: 1.5px solid var(--verde-hoja);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--verde-bosque);
+  cursor: pointer;
+}
+
+.chat__mic svg {
+  width: 22px;
+  height: 22px;
+}
+
+.chat__mic:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Escuchando: rojo suave y un pulso, para que se note que está grabando. */
+.chat__mic--activo {
+  border-color: #c8372d;
+  background: #c8372d;
+  color: #ffffff;
+  animation: chat-mic-pulso 1.2s ease-in-out infinite;
+}
+
+@keyframes chat-mic-pulso {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 55, 45, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(200, 55, 45, 0); }
+}
+
+.chat__restantes {
+  margin: -0.3rem 0 0;
+  font-size: 0.8rem;
+  color: var(--tierra);
+  text-align: right;
+}
+
+.chat__quick-button:focus-visible,
+.chat__oir:focus-visible,
+.chat__mic:focus-visible,
+.chat__input:focus-visible,
+.chat__send:focus-visible {
+  outline: 3px solid var(--oro);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots span,
+  .chat__mic--activo {
+    animation: none;
+  }
+}

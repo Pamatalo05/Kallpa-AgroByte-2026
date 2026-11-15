@@ -84,7 +84,8 @@ public class MuyuWebActivity extends ActividadBase {
 
             @Override public boolean shouldOverrideUrlLoading(WebView vista, WebResourceRequest pedido) {
                 Uri url = pedido.getUrl();
-                if (DOMINIO.equals(url.getHost())) return false;
+                if ("https".equals(url.getScheme()) && DOMINIO.equals(url.getHost()) && url.getPath() != null && url.getPath().startsWith("/assets/muyu/")) return false;
+                if (!"https".equals(url.getScheme()) && !"http".equals(url.getScheme())) return true;
                 // Cualquier enlace externo se abre en el navegador, nunca dentro de Muyu.
                 startActivity(new Intent(Intent.ACTION_VIEW, url));
                 return true;
@@ -165,6 +166,30 @@ public class MuyuWebActivity extends ActividadBase {
 
         @JavascriptInterface public void callar() {
             if (voz != null) runOnUiThread(voz::stop);
+        }
+
+        @JavascriptInterface public void navegar(String destino) {
+            runOnUiThread(() -> {
+                Intent intent;
+                if (destino == null) return;
+                switch (destino) {
+                    case "inicio": intent = new Intent(MuyuWebActivity.this, HomeActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); break;
+                    case "parcelas": intent = new Intent(MuyuWebActivity.this, MyParcelsActivity.class); break;
+                    case "parcela": intent = new Intent(MuyuWebActivity.this, ScienceActivity.class)
+                        .putExtra(ScienceActivity.EXTRA_MODE, ScienceActivity.MODE_PRESENT); break;
+                    case "siembra": intent = new Intent(MuyuWebActivity.this, ScienceActivity.class)
+                        .putExtra(ScienceActivity.EXTRA_MODE, ScienceActivity.MODE_FUTURE); break;
+                    case "clima": intent = new Intent(MuyuWebActivity.this, SupportActivity.class)
+                        .putExtra(SupportActivity.EXTRA_MODE, SupportActivity.MODE_ALERTS); break;
+                    case "bitacora": intent = new Intent(MuyuWebActivity.this, CompanionActivity.class)
+                        .putExtra(CompanionActivity.EXTRA_MODE, CompanionActivity.MODE_LOG); break;
+                    default: return;
+                }
+                if (voz != null) voz.stop();
+                startActivity(intent);
+                finish();
+            });
         }
 
         @JavascriptInterface public void cerrar() {

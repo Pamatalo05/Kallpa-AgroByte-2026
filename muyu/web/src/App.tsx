@@ -1,0 +1,177 @@
+import { android, contextoAndroid, destinoPedido } from "./kallpa/android";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Muyu, { type MuyuState } from "./character/Muyu";
+import MuyuDebugPanel from "./character/MuyuDebugPanel";
+import ChatPanel from "./chat/ChatPanel";
+import { elegirModo, responderHibrido, type ModoConexion } from "./chat/hibrido";
+import { responderGemini } from "./chat/responderGemini";
+import { responderOffline } from "./chat/respuestaOffline";
+import type { ChatReply, Responder } from "./chat/types";
+import { useChat } from "./chat/useChat";
+import { useEnLinea } from "./chat/useEnLinea";
+import ContextoSimulado from "./kallpa/ContextoSimulado";
+import SemaforoRiesgo from "./kallpa/SemaforoRiesgo";
+import { type MuyuContexto } from "./knowledge/contexto";
+import { evaluarSemaforo } from "./knowledge/semaforo";
+import { usePaquete } from "./knowledge/usePaquete";
+import { deriveMuyuState } from "./state/assistant";
+import { useLecturaAutomatica } from "./voz/useLecturaAutomatica";
+import { useVoz } from "./voz/useVoz";
+
+export default function App() {
+  const paquete = usePaquete();
+  const [contexto, setContexto] = useState<MuyuContexto>(contextoAndroid);
+
+  const enLinea = useEnLinea();
+  const [modo, setModo] = useState<ModoConexion>(android && !import.meta.env.VITE_MUYU_CHAT_URL ? "campo" : "en_vivo");
+  const ultimoFallo = useRef<number | null>(null);
+  const [falloReciente, setFalloReciente] = useState(false);
+
+  // K4: Gemini si hay internet; si no hay o falla, el modo campo responde con los mismos datos.
+  const responder = useCallback<Responder>(
+    async (pregunta, historial, accion) => {
+      const destino = destinoPedido(pregunta);
+      if (android && destino) {
+        android.navegar(destino);
+        return { text: "Listo, abrí esa sección de Kallpa.", emotion: "happy" };
+      }
+      const campo = (): ChatReply => {
+        if (paquete.estado === "cargando") {
+          return { text: "Estoy cargando los datos de tu cantón, pregúntame en un momento.", emotion: "neutral" };
+        }
+        if (paquete.estado === "error") throw new Error(paquete.mensaje);
+        if (!paquete.paquete.cantones[contexto.cantonId]) return {text: "Tu parcela está fuera de los cantones con datos disponibles. Puedes navegar por Kallpa; para consultar estimaciones elige Daule o Babahoyo.", emotion: "neutral"};
+        return responderOffline(paquete.paquete, contexto, pregunta, accion);
+      };
+      const elegido = elegirModo({ enLinea, accion, ultimoFalloMs: ultimoFallo.current, ahoraMs: Date.now() });
+      const resultado = await responderHibrido(
+        elegido,
+        () => responderGemini(pregunta, historial, contexto),
+        campo,
+      );
+      if (resultado.fallo) ultimoFallo.current = Date.now();
+      else if (resultado.modo === "en_vivo") ultimoFallo.current = null;
+      if (resultado.fallo || resultado.modo === "en_vivo") setFalloReciente(resultado.fallo);
+      // Los botones siempre van a campo: no cambian la etiqueta de conexión.
+      if (!accion) setModo(resultado.modo);
+      return resultado.reply;
+    },
+    [paquete, contexto, enLinea],
+  );
+  const modoVisible: ModoConexion = enLinea ? modo : "campo";
+  const aviso = !enLinea
+    ? "Estás sin internet. Te respondo con los datos guardados de tu cantón."
+    : falloReciente
+      ? "No pude conectarme con Muyu en línea. Te respondo con los datos guardados y lo intento de nuevo en un minuto."
+      : null;
+
+  const { messages, phase, isBusy, send } = useChat(responder);
+  const voz = useVoz(enLinea);
+  const [lecturaAutomatica, setLecturaAutomatica] = useLecturaAutomatica();
+  const fasePrevia = useRef(phase);
+
+  // Cuando Muyu termina de escribir una respuesta, la lee en voz alta (si está activado).
+  useEffect(() => {
+    const termino = fasePrevia.current === "speaking" && phase !== "speaking" && phase !== "error";
+    fasePrevia.current = phase;
+    const ultimo = messages[messages.length - 1];
+    if (termino && lecturaAutomatica && ultimo?.role === "muyu") voz.hablar(ultimo.text);
+  }, [phase, messages, lecturaAutomatica, voz]);
+
+  // Al preguntar algo nuevo, Muyu deja de hablar.
+  const enviar = useCallback<typeof send>(
+    async (texto, accion) => {
+      voz.callar();
+      await send(texto, accion);
+    },
+    [send, voz],
+  );
+  const [isUserTyping, setIsUserTyping] = useState(false);
+  // Solo en desarrollo: permite forzar un estado desde el panel de prueba.
+  const [forcedState, setForcedState] = useState<MuyuState | null>(null);
+
+  const semaforo = useMemo(
+    () => (paquete.estado === "listo" ? paquete.paquete.cantones[contexto.cantonId] ? evaluarSemaforo(paquete.paquete, contexto) : null : null),
+    [paquete, contexto],
+  );
+  // Mientras suena su voz, Muyu mueve la boca aunque el texto ya terminó de escribirse.
+  const hablaConVoz = voz.hablando && phase !== "thinking" && phase !== "error";
+  const muyuState =
+    forcedState ?? (hablaConVoz ? "speaking" : deriveMuyuState(phase, isUserTyping, semaforo?.color === "rojo"));
+
+  return (
+    <main className="layout">
+      <section className="character-area" aria-label="Muyu y tu parcela">
+        <Muyu state={muyuState} size={300} />
+        <div className="finca">
+          {!android && paquete.estado === "listo" && (
+            <ContextoSimulado paquete={paquete.paquete} contexto={contexto} onChange={setContexto} />
+          )}
+          {semaforo && <SemaforoRiesgo {...semaforo} />}
+        </div>
+        {import.meta.env.DEV && (
+          <details className="debug-toggle">
+            <summary>Probar estados</summary>
+            <MuyuDebugPanel value={forcedState} onChange={setForcedState} />
+          </details>
+        )}
+      </section>
+
+      <section className="chat-area" aria-label="Conversación">
+        <header className="chat-header">
+          <div>
+            <h1>Muyu</h1>
+            {android && <button type="button" className="voz-toggle" onClick={() => android?.cerrar()}>Volver a Kallpa</button>}
+            <p className="chat-header__sub">Tu asistente de siembra</p>
+          </div>
+          <div className="chat-header__acciones">
+            {voz.disponible && (
+              <button
+                type="button"
+                className="voz-toggle"
+                aria-pressed={lecturaAutomatica}
+                title={voz.nombreVoz ? `Voz: ${voz.nombreVoz}` : undefined}
+                onClick={() => {
+                  if (lecturaAutomatica) voz.callar();
+                  // Al activarla, Muyu saluda: así se comprueba al instante que suena.
+                  else voz.hablar("¡Hola! Soy Muyu. ¡Así suena mi voz!");
+                  setLecturaAutomatica(!lecturaAutomatica);
+                }}
+              >
+                <span aria-hidden="true">{lecturaAutomatica ? "🔊" : "🔇"}</span>
+                {lecturaAutomatica ? "Voz" : "Sin voz"}
+              </button>
+            )}
+            <p className={`conexion conexion--${modoVisible}`} role="status">
+              <span className="conexion__punto" aria-hidden="true" />
+              {modoVisible === "en_vivo" ? "En línea" : "Datos guardados"}
+            </p>
+          </div>
+        </header>
+        {paquete.estado === "error" && (
+          <p className="chat__error" role="alert">
+            No pude cargar los datos de los cantones. Recarga la página; si sigue, avisa al equipo.
+          </p>
+        )}
+
+        {android && <details style={{padding:"8px 16px"}}><summary>Ir a una sección</summary>
+          {["inicio","parcelas","parcela","siembra","clima","bitacora"].map(d =>
+            <button className="voz-toggle" key={d} onClick={() => android?.navegar(d)}>{d}</button>)}
+          <p>También puedes escribir: «abre mis parcelas».</p>
+        </details>}
+        <ChatPanel
+          messages={messages}
+          isThinking={phase === "thinking"}
+          isBusy={isBusy}
+          onSend={enviar}
+          onTypingChange={setIsUserTyping}
+          aviso={aviso}
+          puedeEscuchar={enLinea}
+          onEscuchar={voz.disponible ? voz.hablar : undefined}
+          onAntesDeEscuchar={voz.callar}
+          estadoMuyu={muyuState}
+        />
+      </section>
+    </main>
+  );
+}

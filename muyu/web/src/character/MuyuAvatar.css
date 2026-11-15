@@ -1,0 +1,35 @@
+/* Mini Muyu de cuerpo entero junto a sus mensajes, sobre un disco suave. */
+.muyu-avatar {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 56px;
+}
+
+.muyu-avatar::before {
+  content: "";
+  position: absolute;
+  inset: 10% 6% 0;
+  border-radius: 50%;
+  background: #eef6e4;
+}
+
+.muyu-avatar .muyu {
+  position: relative;
+}
+
+/* El de los mensajes anteriores se ve un poco más tenue: el protagonista es el actual. */
+.muyu-avatar:not(.muyu-avatar--vivo) {
+  opacity: 0.75;
+}
+
+@media (max-width: 768px) {
+  .muyu-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .muyu-avatar .muyu {
+    width: 44px;
+  }
+}

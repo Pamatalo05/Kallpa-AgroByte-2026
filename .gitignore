@@ -9,3 +9,8 @@ local.properties
 # Archivos del sistema
 .DS_Store
 Thumbs.db
+# Muyu
+**/node_modules/
+**/dist/
+**/.env
+**/.env.local
