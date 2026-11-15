@@ -1,4 +1,3 @@
-import { android } from "../kallpa/android";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { esNeuronal, ordenarVoces, partirEnFrases, prosodia, textoParaVoz } from "./textoParaVoz";
 
@@ -47,7 +46,6 @@ export function useVoz(enLinea = true): Voz {
   const voz = ordenadas[0] ?? null;
 
   const callar = useCallback(() => {
-    android?.callar();
     lectura.current += 1;
     sintesis()?.cancel();
     setHablando(false);
@@ -94,7 +92,6 @@ export function useVoz(enLinea = true): Voz {
 
   const hablar = useCallback(
     (texto: string) => {
-      if (android) { android.hablar(texto); return; }
       const s = sintesis();
       if (!s || !voz) return;
       s.cancel();
@@ -107,5 +104,5 @@ export function useVoz(enLinea = true): Voz {
     [voz, voces, leer],
   );
 
-  return { disponible: !!android || voz !== null, hablando, nombreVoz: voz?.name ?? null, hablar, callar };
+  return { disponible: voz !== null, hablando, nombreVoz: voz?.name ?? null, hablar, callar };
 }

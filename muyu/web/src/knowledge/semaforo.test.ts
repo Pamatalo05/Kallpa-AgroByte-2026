@@ -1,3 +1,4 @@
+import { responderOffline } from "../chat/respuestaOffline";
 import { describe, expect, it } from "vitest";
 import datosJson from "../../public/datos/paquete_canton.json";
 import { deriveMuyuState } from "../state/assistant";
@@ -37,4 +38,12 @@ describe("Muyu preocupado", () => {
     expect(deriveMuyuState("speaking", false, true)).toBe("speaking");
     expect(deriveMuyuState("idle", false, false)).toBe("idle");
   });
+});
+
+// Conserva la comprobación del aviso prioritario con el esquema vigente.
+it("la rotación avisa primero del riesgo alto de humedad, sin saludo previo", () => {
+  const r = responderOffline(paquete, { ...daule, escenario: "el_nino", mes: 3 }, "", "rotacion");
+  expect(r.text.startsWith("⚠️ Cuidado, el riesgo para sembrar es alto:")).toBe(true);
+  expect(r.text).toContain("encharcamiento");
+  expect(r.emotion).toBe("neutral");
 });

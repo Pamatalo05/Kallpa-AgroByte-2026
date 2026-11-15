@@ -1,4 +1,6 @@
-import { android, contextoAndroid, destinoPedido } from "./kallpa/android";
+import { destinoPedido } from "./kallpa/android";
+import { conSugerencias, leerPreferencias, resolverSeguimiento, type Preferencias } from "./chat/estilo";
+import { MemoriaConversacional, resolverConsulta } from "./knowledge/contextoConversacion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Muyu, { type MuyuState } from "./character/Muyu";
 import MuyuDebugPanel from "./character/MuyuDebugPanel";
@@ -11,62 +13,107 @@ import { useChat } from "./chat/useChat";
 import { useEnLinea } from "./chat/useEnLinea";
 import ContextoSimulado from "./kallpa/ContextoSimulado";
 import SemaforoRiesgo from "./kallpa/SemaforoRiesgo";
-import { type MuyuContexto } from "./knowledge/contexto";
+import { contextoDesdeKallpa, estaEnKallpa, leerParcelaKallpa, volverAKallpa } from "./kallpa/puente";
+import { CONTEXTO_INICIAL, type MuyuContexto } from "./knowledge/contexto";
 import { evaluarSemaforo } from "./knowledge/semaforo";
-import { usePaquete } from "./knowledge/usePaquete";
+import {
+  usePaquete,
+  usePaqueteNuevo,
+} from "./knowledge/usePaquete";
 import { deriveMuyuState } from "./state/assistant";
 import { useLecturaAutomatica } from "./voz/useLecturaAutomatica";
 import { useVoz } from "./voz/useVoz";
+import { useVozKallpa } from "./voz/useVozKallpa";
 
 export default function App() {
+  const [preferencias, setPreferencias] = useState<Preferencias>(leerPreferencias);
+  useEffect(() => { try { localStorage.setItem("muyu-estilo", JSON.stringify(preferencias)); } catch { /* Navegación privada: se conserva en sesión. */ } }, [preferencias]);
   const paquete = usePaquete();
-  const [contexto, setContexto] = useState<MuyuContexto>(contextoAndroid);
+  const paqueteNuevo = usePaqueteNuevo();
+  const [contexto, setContexto] = useState<MuyuContexto>(CONTEXTO_INICIAL);
+
+  const memoria = useRef(new MemoriaConversacional());
+  const cambiarParcela = useCallback((nuevo: MuyuContexto) => {
+    memoria.current.reiniciar();
+    setContexto(nuevo);
+  }, []);
+  // Dentro de la app Kallpa, Muyu arranca con la parcela que el agricultor tiene activa.
+  const enKallpa = useMemo(() => estaEnKallpa(), []);
+  const parcelaKallpa = useMemo(() => leerParcelaKallpa(), []);
+  useEffect(() => {
+    if (paquete.estado !== "listo" || !parcelaKallpa) return;
+    const cantones = Object.keys(paquete.paquete.cantones);
+    setContexto((actual) => contextoDesdeKallpa(actual, parcelaKallpa, cantones));
+  }, [paquete, parcelaKallpa]);
 
   const enLinea = useEnLinea();
-  const [modo, setModo] = useState<ModoConexion>(android && !import.meta.env.VITE_MUYU_CHAT_URL ? "campo" : "en_vivo");
+  const [modo, setModo] = useState<ModoConexion>("en_vivo");
   const ultimoFallo = useRef<number | null>(null);
   const [falloReciente, setFalloReciente] = useState(false);
 
   // K4: Gemini si hay internet; si no hay o falla, el modo campo responde con los mismos datos.
   const responder = useCallback<Responder>(
-    async (pregunta, historial, accion) => {
+    async (pregunta, historial, accion, signal) => {
       const destino = destinoPedido(pregunta);
-      if (android && destino) {
-        android.navegar(destino);
+      if (window.KallpaAndroid?.navegar && destino) {
+        window.KallpaAndroid.navegar(destino);
         return { text: "Listo, abrí esa sección de Kallpa.", emotion: "happy" };
+      }
+      pregunta = resolverSeguimiento(pregunta, historial);
+      const version = memoria.current.version();
+      const consulta = resolverConsulta(pregunta, contexto, memoria.current.leer(), paquete.estado === "listo" ? Object.keys(paquete.paquete.cantones) : undefined);
+      if (accion) consulta.tema = accion;
+      // El ahorro sigue pendiente aunque falte una aclaración o todavía no haya evidencia.
+      if (consulta.tema === "urea") memoria.current.recordarIntencion(version, consulta);
+      if (consulta.error) return { text: consulta.error, emotion: "neutral" };
+      const efectivo = consulta.contexto;
+      if (enKallpa && (!parcelaKallpa || (paquete.estado === "listo" && !paquete.paquete.cantones[parcelaKallpa.cantonId]))) {
+        return { text: "Tu parcela todavía no tiene datos cantonales disponibles. Puedes navegar por Kallpa; las consultas agrícolas están disponibles para Daule y Babahoyo.", emotion: "neutral" };
       }
       const campo = (): ChatReply => {
         if (paquete.estado === "cargando") {
           return { text: "Estoy cargando los datos de tu cantón, pregúntame en un momento.", emotion: "neutral" };
         }
         if (paquete.estado === "error") throw new Error(paquete.mensaje);
-        if (!paquete.paquete.cantones[contexto.cantonId]) return {text: "Tu parcela está fuera de los cantones con datos disponibles. Puedes navegar por Kallpa; para consultar estimaciones elige Daule o Babahoyo.", emotion: "neutral"};
-        return responderOffline(paquete.paquete, contexto, pregunta, accion);
+        return responderOffline(
+          paquete.paquete,
+          efectivo,
+          pregunta,
+          accion,
+          paqueteNuevo ?? undefined,
+          consulta.tema,
+          preferencias,
+        );
       };
       const elegido = elegirModo({ enLinea, accion, ultimoFalloMs: ultimoFallo.current, ahoraMs: Date.now() });
       const resultado = await responderHibrido(
         elegido,
-        () => responderGemini(pregunta, historial, contexto),
+        () => responderGemini(pregunta, historial, efectivo, undefined, consulta.tema, signal, preferencias),
         campo,
       );
+      if (signal?.aborted) throw new DOMException("Cancelada", "AbortError");
+      if (resultado.reply.evidencia) memoria.current.aceptar(version, {
+        contexto: resultado.reply.evidencia.contexto,
+        tema: resultado.reply.evidencia.tema,
+      });
       if (resultado.fallo) ultimoFallo.current = Date.now();
       else if (resultado.modo === "en_vivo") ultimoFallo.current = null;
       if (resultado.fallo || resultado.modo === "en_vivo") setFalloReciente(resultado.fallo);
       // Los botones siempre van a campo: no cambian la etiqueta de conexión.
       if (!accion) setModo(resultado.modo);
-      return resultado.reply;
+      return conSugerencias(resultado.reply);
     },
-    [paquete, contexto, enLinea],
+[paquete, paqueteNuevo, contexto, enLinea, preferencias, enKallpa, parcelaKallpa],
   );
   const modoVisible: ModoConexion = enLinea ? modo : "campo";
   const aviso = !enLinea
     ? "Estás sin internet. Te respondo con los datos guardados de tu cantón."
     : falloReciente
-      ? "No pude conectarme con Muyu en línea. Te respondo con los datos guardados y lo intento de nuevo en un minuto."
+      ? "No pude conectarme con Muyu en línea. Te respondo con los datos guardados. Puedes volver a consultar en línea dentro de un minuto."
       : null;
 
-  const { messages, phase, isBusy, send } = useChat(responder);
-  const voz = useVoz(enLinea);
+  const { messages, phase, isBusy, send, retry, canRetry } = useChat(responder);
+  const voz = useVozKallpa(useVoz(enLinea));
   const [lecturaAutomatica, setLecturaAutomatica] = useLecturaAutomatica();
   const fasePrevia = useRef(phase);
 
@@ -79,20 +126,20 @@ export default function App() {
   }, [phase, messages, lecturaAutomatica, voz]);
 
   // Al preguntar algo nuevo, Muyu deja de hablar.
-  const enviar = useCallback<typeof send>(
-    async (texto, accion) => {
-      voz.callar();
-      await send(texto, accion);
-    },
-    [send, voz],
-  );
+const enviar = useCallback<typeof send>(
+  async (texto, accion) => {
+    voz.callar();
+    await send(texto, accion);
+  },
+  [send, voz],
+);
   const [isUserTyping, setIsUserTyping] = useState(false);
   // Solo en desarrollo: permite forzar un estado desde el panel de prueba.
   const [forcedState, setForcedState] = useState<MuyuState | null>(null);
 
   const semaforo = useMemo(
-    () => (paquete.estado === "listo" ? paquete.paquete.cantones[contexto.cantonId] ? evaluarSemaforo(paquete.paquete, contexto) : null : null),
-    [paquete, contexto],
+    () => (paquete.estado === "listo" && (!enKallpa || (parcelaKallpa && paquete.paquete.cantones[parcelaKallpa.cantonId])) ? evaluarSemaforo(paquete.paquete, contexto) : null),
+    [paquete, contexto, enKallpa, parcelaKallpa],
   );
   // Mientras suena su voz, Muyu mueve la boca aunque el texto ya terminó de escribirse.
   const hablaConVoz = voz.hablando && phase !== "thinking" && phase !== "error";
@@ -100,16 +147,16 @@ export default function App() {
     forcedState ?? (hablaConVoz ? "speaking" : deriveMuyuState(phase, isUserTyping, semaforo?.color === "rojo"));
 
   return (
-    <main className="layout">
+    <main className={enKallpa ? "layout layout--kallpa" : "layout"}>
       <section className="character-area" aria-label="Muyu y tu parcela">
-        <Muyu state={muyuState} size={300} />
+        <Muyu state={muyuState} size={enKallpa ? 170 : 300} />
         <div className="finca">
-          {!android && paquete.estado === "listo" && (
-            <ContextoSimulado paquete={paquete.paquete} contexto={contexto} onChange={setContexto} />
+          {paquete.estado === "listo" && (
+            <ContextoSimulado paquete={paquete.paquete} contexto={contexto} onChange={cambiarParcela} />
           )}
-          {semaforo && <SemaforoRiesgo {...semaforo} />}
+          {semaforo && <SemaforoRiesgo {...semaforo} onConsultar={() => { if (!isBusy) void enviar("¿Qué significa el semáforo de mi parcela y qué puedo revisar?"); }} />}
         </div>
-        {import.meta.env.DEV && (
+        {import.meta.env.DEV && !enKallpa && (
           <details className="debug-toggle">
             <summary>Probar estados</summary>
             <MuyuDebugPanel value={forcedState} onChange={setForcedState} />
@@ -119,9 +166,13 @@ export default function App() {
 
       <section className="chat-area" aria-label="Conversación">
         <header className="chat-header">
-          <div>
+          {enKallpa && (
+            <button type="button" className="volver-kallpa" onClick={() => volverAKallpa()} aria-label="Volver a Kallpa">
+              ‹
+            </button>
+          )}
+          <div className="chat-header__titulo">
             <h1>Muyu</h1>
-            {android && <button type="button" className="voz-toggle" onClick={() => android?.cerrar()}>Volver a Kallpa</button>}
             <p className="chat-header__sub">Tu asistente de siembra</p>
           </div>
           <div className="chat-header__acciones">
@@ -130,11 +181,8 @@ export default function App() {
                 type="button"
                 className="voz-toggle"
                 aria-pressed={lecturaAutomatica}
-                title={voz.nombreVoz ? `Voz: ${voz.nombreVoz}` : undefined}
                 onClick={() => {
                   if (lecturaAutomatica) voz.callar();
-                  // Al activarla, Muyu saluda: así se comprueba al instante que suena.
-                  else voz.hablar("¡Hola! Soy Muyu. ¡Así suena mi voz!");
                   setLecturaAutomatica(!lecturaAutomatica);
                 }}
               >
@@ -154,13 +202,20 @@ export default function App() {
           </p>
         )}
 
-        {android && <details style={{padding:"8px 16px"}}><summary>Ir a una sección</summary>
-          {["inicio","parcelas","parcela","siembra","clima","bitacora"].map(d =>
-            <button className="voz-toggle" key={d} onClick={() => android?.navegar(d)}>{d}</button>)}
-          <p>También puedes escribir: «abre mis parcelas».</p>
+        {enKallpa && window.KallpaAndroid?.navegar && <details className="navegacion-kallpa">
+          <summary>Ir a una sección de Kallpa</summary>
+          {(["inicio","parcelas","parcela","siembra","clima","bitacora"] as const).map(destino =>
+            <button className="voz-toggle" type="button" key={destino} onClick={() => window.KallpaAndroid?.navegar?.(destino)}>
+              {({inicio:"Inicio",parcelas:"Mis parcelas",parcela:"Mi parcela",siembra:"Siembra",clima:"Clima",bitacora:"Bitácora"})[destino]}
+            </button>)}
+          <p>También puedes escribir «abre mis parcelas».</p>
         </details>}
         <ChatPanel
           messages={messages}
+          preferencias={preferencias}
+          onPreferencias={setPreferencias}
+          onRetry={retry}
+          canRetry={canRetry}
           isThinking={phase === "thinking"}
           isBusy={isBusy}
           onSend={enviar}
@@ -169,7 +224,6 @@ export default function App() {
           puedeEscuchar={enLinea}
           onEscuchar={voz.disponible ? voz.hablar : undefined}
           onAntesDeEscuchar={voz.callar}
-          estadoMuyu={muyuState}
         />
       </section>
     </main>

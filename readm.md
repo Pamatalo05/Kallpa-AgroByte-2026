@@ -56,7 +56,7 @@ La aplicación organiza su código en paquetes de vista, modelo y controlador. L
 2. `MuyuWebActivity` carga los archivos web incluidos en `app/src/main/assets/muyu`.
 3. El puente `KallpaAndroid` permite consultar el contexto de parcela y solicitar navegación nativa.
 4. Muyu utiliza el paquete agrícola y el modo campo para sus respuestas locales.
-5. Si se configura un servicio remoto, las preguntas compatibles pueden enviarse al backend de Gemini.
+5. Las preguntas en línea se envían al backend de Muyu mediante el transporte nativo; los fallos activan el modo campo.
 6. La navegación se traduce a destinos conocidos de la app; no es ejecución arbitraria de instrucciones.
 
 ## 5. Estructura del repositorio
@@ -141,7 +141,7 @@ El servidor de Vite permite revisar el frontend. La navegación Android y su pue
 
 ### Modo campo
 
-La versión Android inicia en modo campo cuando no existe `VITE_MUYU_CHAT_URL`. Ese modo utiliza información agrícola local y no debe presentarse como una conexión activa con Gemini.
+La versión Android conecta de forma predeterminada con https://muyu-agrobyte.netlify.app/api/chat mediante el transporte nativo MuyuApi. Ante falta de red o error pasa al modo campo con los datos locales. La conexión y una respuesta real del transporte Java fueron verificadas; falta validar el APK en dispositivo.
 
 Ejemplos de órdenes contempladas por las pruebas de navegación:
 
@@ -156,7 +156,7 @@ Ejemplos de órdenes contempladas por las pruebas de navegación:
 
 1. Publicar el backend de Muyu y configurar `GEMINI_API_KEY` únicamente en el servidor.
 2. Obtener la URL HTTPS real del endpoint de chat.
-3. Compilar el frontend Android con `VITE_MUYU_CHAT_URL`.
+3. El build Android usa el servidor Muyu existente. Para cambiarlo, configurar `VITE_MUYU_CHAT_URL` o `VITE_MUYU_API_BASE`; el transporte nativo solo admite el endpoint oficial fijado en MuyuApi.
 4. Comprobar que el backend acepte el origen utilizado por la WebView y responda al formato esperado.
 5. Recompilar Kallpa y probar conversación, recuperación ante fallos y modo campo en un dispositivo.
 
@@ -209,11 +209,11 @@ Verificación realizada el 15 de noviembre de 2026 sobre la copia integrada de e
 
 | Comprobación | Resultado |
 | --- | --- |
-| Pruebas de Muyu integrado | 73 pruebas aprobadas en 9 archivos. |
+| Pruebas de Muyu integrado | 210 pruebas aprobadas en 22 archivos. |
 | Compilación web y empaquetado Android de Muyu | Correctos mediante `npm run build:kallpa`. |
 | Navegación por órdenes | Casos de rutas conocidas y rechazo de órdenes no contempladas cubiertos por pruebas. |
 | Compilación APK en el Codespace revisado | Bloqueada por ausencia de Android SDK; no acredita un fallo funcional del código. |
-| Gemini dentro de Android | Pendiente de configurar y verificar una URL real del backend. |
+| Gemini dentro de Android | Endpoint y transporte Java verificados con HEAD y POST reales; ejecución del APK pendiente. |
 | Apertura, navegación, contexto y voz en teléfono | Pendientes de prueba integral en un dispositivo Android. |
 
 La copia de Muyu dentro de Kallpa tiene su propio código y pruebas. Un cambio publicado en el repositorio independiente `MUYU-Chatbot-Agrobyte` no se incorpora automáticamente a Kallpa: requiere integración, revisión y regeneración de assets. No confundir los resultados de pruebas de ambos repositorios.
@@ -236,7 +236,7 @@ La copia de Muyu dentro de Kallpa tiene su propio código y pruebas. Un cambio p
 | `SDK location not found` | Instalar Android SDK y configurar `ANDROID_HOME` o `sdk.dir`. |
 | Error de versión de Gradle o Java | Compatibilidad de Gradle con el plugin Android y uso de JDK 17. |
 | Cambios del chat no aparecen en el APK | Ejecutar `npm run build:kallpa` y volver a compilar Android. |
-| Muyu solo responde en modo campo | Configuración de `VITE_MUYU_CHAT_URL` y accesibilidad del backend. |
+| Muyu solo responde en modo campo | Revisar conectividad con el endpoint oficial y disponibilidad del backend. |
 | Fallo HTTP o CORS en el chat | URL HTTPS, configuración del servidor, origen de la WebView y logs del backend. |
 | Mapa sin imágenes | Conectividad, disponibilidad del proveedor y datos de ubicación. |
 | Datos distintos entre pantallas | Versiones de los paquetes en `datos/procesados`, `public/datos` y assets. |

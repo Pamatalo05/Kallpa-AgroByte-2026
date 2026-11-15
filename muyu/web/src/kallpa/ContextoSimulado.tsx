@@ -28,9 +28,11 @@ export default function ContextoSimulado({ paquete, contexto, onChange }: Contex
   const cambiar = <K extends keyof MuyuContexto>(campo: K, valor: MuyuContexto[K]) =>
     onChange({ ...contexto, [campo]: valor });
 
-  // Los cantones salen del paquete de Kallpa: si el equipo agrega uno, aparece solo.
+  // El catálogo de cultivos previos está separado de las rotaciones recomendadas.
+  const cambiarCanton = (cantonId: string) => cambiar("cantonId", cantonId);
+
   const canton = paquete.cantones[contexto.cantonId].nombre.split(",")[0];
-  const cultivo = CULTIVOS_PREVIOS.find((c) => c.id === contexto.cultivoPrevioId)?.nombre ?? "";
+  const cultivo = CULTIVOS_PREVIOS.find((c) => c.id === contexto.cultivoPrevioId)?.nombre.split(" (")[0] ?? "";
   const resumen = `${canton} · ${cultivo} · ${CLIMA[contexto.escenario]} · ${MESES[contexto.mes - 1]}`;
 
   // Plegado: se ve el resumen y se abre solo para cambiar algo.
@@ -39,16 +41,18 @@ export default function ContextoSimulado({ paquete, contexto, onChange }: Contex
       <summary className="parcela__resumen">
         <span className="parcela__titulo">Tu parcela</span>
         <span className="parcela__datos">{resumen}</span>
-        <span className="parcela__cambiar" aria-hidden="true">Cambiar</span>
+        <span className="parcela__cambiar" aria-hidden="true">Opciones ▾</span>
       </summary>
     <fieldset className="contexto">
       <legend className="visually-hidden">Datos de tu parcela</legend>
+      <p className="contexto__ayuda">Los cambios se aplican automáticamente a las próximas consultas.</p>
 
       <label>
         Cantón
-        <select value={contexto.cantonId} onChange={(e) => cambiar("cantonId", e.target.value)}>
-          {Object.entries(paquete.cantones).map(([id, canton]) => (
-            <option key={id} value={id}>
+        <select value={contexto.cantonId} onChange={(e) => cambiarCanton(e.target.value)}>
+{Object.entries(paquete.cantones)
+  .filter(([id]) => ["daule", "babahoyo"].includes(id))
+  .map(([id, canton]) => (            <option key={id} value={id}>
               {canton.nombre.replace(", ", " · ")}
             </option>
           ))}
@@ -58,9 +62,9 @@ export default function ContextoSimulado({ paquete, contexto, onChange }: Contex
       <label>
         Cosechaste
         <select value={contexto.cultivoPrevioId} onChange={(e) => cambiar("cultivoPrevioId", e.target.value)}>
-          {CULTIVOS_PREVIOS.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nombre}
+          {CULTIVOS_PREVIOS.map((cultivo) => (
+            <option key={cultivo.id} value={cultivo.id}>
+              {cultivo.nombre.split(" (")[0]}
             </option>
           ))}
         </select>

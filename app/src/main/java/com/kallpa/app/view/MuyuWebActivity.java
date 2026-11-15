@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -45,6 +46,7 @@ public class MuyuWebActivity extends ActividadBase {
     private static final String INICIO = "https://" + DOMINIO + "/assets/muyu/index.html";
 
     private WebView web;
+    private MuyuApi api;
     private TextToSpeech voz;
     private boolean vozLista;
 
@@ -91,6 +93,17 @@ public class MuyuWebActivity extends ActividadBase {
                 return true;
             }
         });
+        api = new MuyuApi((id, estado, cuerpo, error) -> {
+            JSONObject dato = new JSONObject();
+            try {
+                dato.put("id", id); dato.put("status", estado);
+                dato.put("cuerpo", cuerpo); dato.put("error", error);
+            } catch (Exception ignored) { return; }
+            runOnUiThread(() -> {
+                if (web != null && !isFinishing() && !isDestroyed())
+                    web.evaluateJavascript("window.dispatchEvent(new CustomEvent('muyu-respuesta',{detail:" + dato.toString() + "}))", null);
+            });
+        });
         web.addJavascriptInterface(new Puente(), "KallpaAndroid");
 
         voz = new TextToSpeech(this, estado -> {
@@ -104,7 +117,20 @@ public class MuyuWebActivity extends ActividadBase {
             vozLista = true;
         });
 
+        voz.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override public void onStart(String id) { notificarVoz(true); }
+            @Override public void onDone(String id) { notificarVoz(false); }
+            @Override public void onError(String id) { notificarVoz(false); }
+            @Override public void onStop(String id, boolean interrumpida) { notificarVoz(false); }
+        });
         web.loadUrl(INICIO);
+    }
+
+    private void notificarVoz(boolean hablando) {
+        runOnUiThread(() -> {
+            if (web != null && !isFinishing() && !isDestroyed())
+                web.evaluateJavascript("window.dispatchEvent(new CustomEvent('muyu-voz',{detail:" + hablando + "}))", null);
+        });
     }
 
     @Override public void onBackPressed() {
@@ -114,10 +140,12 @@ public class MuyuWebActivity extends ActividadBase {
 
     @Override protected void onPause() {
         if (voz != null) voz.stop();
+        notificarVoz(false);
         super.onPause();
     }
 
     @Override protected void onDestroy() {
+        if (api != null) api.close();
         if (voz != null) voz.shutdown();
         if (web != null) {
             web.removeJavascriptInterface("KallpaAndroid");
@@ -155,6 +183,13 @@ public class MuyuWebActivity extends ActividadBase {
 
     /** Lo que la web de Muyu puede pedirle a Kallpa. Solo se expone a la página local. */
     private final class Puente {
+        @JavascriptInterface public void solicitar(String id, String metodo, String cuerpo) {
+            if (api != null) api.solicitar(id, metodo, cuerpo);
+        }
+        @JavascriptInterface public void cancelar(String id) {
+            if (api != null) api.cancelar(id);
+        }
+
         @JavascriptInterface public String contexto() {
             return contextoParcela().toString();
         }

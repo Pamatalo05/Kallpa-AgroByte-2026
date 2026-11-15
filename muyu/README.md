@@ -1,21 +1,61 @@
-# Muyu dentro de Kallpa
-Fuente: Pamatalo05/MUYU-Chatbot-Agrobyte (main).
-El botón flotante existente abre el chat animado empaquetado en Android.
-Usa la parcela activa y permite escribir "abre mis parcelas", "abre siembra",
-"abre clima", "abre mi parcela", "abre bitácora" y "volver al inicio".
+# Muyu actualizado dentro de Kallpa
+
+Fuente integrada: MUYU-Chatbot-Agrobyte main, revisión 2f208d73728a491eee0f06cd57a0e6fc4930c49f.
+Se incorporan los componentes de Rita: memoria de conversación y de intención de
+ahorro de urea, respuestas conceptuales y seguimientos, sugerencias, preferencias
+de lenguaje y extensión, explicación del semáforo, detección de red, plazos,
+cancelación y reintento manual. Se conserva navegación por mensajes y por el menú
+desplegable de secciones.
 
 ## Compilar
-Desde muyu/web: npm ci && npm run build:kallpa
-Los assets compilados se incluyen en el repo para compilar Android sin Node.
-Los datos se copian desde app/src/main/assets/datos/paquete_canton.json.
 
-## Gemini
-Sin servidor configurado responde en modo campo, sin clave en Android.
-Para habilitar preguntas libres con Gemini, despliega muyu/ en Netlify con
-GEMINI_API_KEY solo en el servidor y recompila con
-VITE_MUYU_CHAT_URL=https://TU-SITIO.netlify.app/api/chat npm run build:kallpa.
-El servidor debe permitir CORS para https://appassets.androidplatform.net.
-No uses una URL temporal de Codespaces como servidor de producción.
+Desde la raíz de Kallpa:
+- npm --prefix muyu/web ci
+- npm --prefix muyu/web test
+- npm --prefix muyu/web run build:kallpa
 
-Versión original: 25ee2504c4b12ce465d9768a2487c18b84860ee1.
-Validación: 73 pruebas del chat aprobadas. APK pendiente: falta SDK Android en Codespaces.
+El build sincroniza los dos consumidores web con el paquete canónico de Android,
+valida TypeScript y regenera app/src/main/assets/muyu. Se eliminan bundles
+anteriores. El chat compilado lee ../datos/paquete_canton.json para ambos motores;
+las estimaciones no se duplican dentro de assets/muyu.
+
+## App Android y servidor
+
+El botón flotante existente abre MuyuWebActivity con la parcela activa. El puente
+entrega cantón, cultivo, mes, nombre, hectáreas y disponibilidad de riego.
+La pantalla no asigna estimaciones de Daule a una parcela fuera de cobertura.
+
+El endpoint predeterminado de la compilación Android es
+https://muyu-agrobyte.netlify.app/api/chat. VITE_MUYU_API_BASE permite configurar
+otra base y VITE_MUYU_CHAT_URL mantiene compatibilidad con una URL completa.
+
+MuyuApi ejecuta HEAD y POST por HTTPS al único endpoint nativo permitido. Esto
+permite conectar desde WebView aunque el servidor publicado todavía no tenga
+habilitado CORS para appassets.androidplatform.net. No admite URL arbitraria,
+credenciales ni redirecciones. No incluye la clave Gemini en el teléfono.
+HEAD solo verifica conectividad. POST envía pregunta, historial y contexto para
+responder. La interfaz de transporte identifica cada solicitud, limita la espera,
+cancela conexiones y descarta respuestas tardías. Al destruir la actividad se
+cierran las conexiones y el ejecutor.
+
+Sin red o ante un error del servidor, el modo campo conserva los datos locales y
+los componentes conversacionales. Las preferencias de respuesta se guardan
+localmente. La memoria conversacional dura la sesión; no se promete historial
+persistente entre reaperturas. La voz usa TextToSpeech de Android y comunica sus
+estados al personaje. El reconocimiento de voz depende de las capacidades del
+dispositivo; escribir preguntas siempre está disponible.
+
+## Verificación de esta integración
+
+- Build TypeScript/Vite y empaquetado Android: correctos.
+- 210 pruebas en 22 archivos: aprobadas, incluidas 7 de transporte nativo.
+- MuyuApi compilado con javac; HEAD real devuelve 405 y POST real devuelve 200
+  con una respuesta válida. HEAD 405 es el resultado esperado del endpoint.
+- Vista del contenido empaquetado probada en navegador en modo Kallpa, con parcela
+  de prueba de Babahoyo y maíz: definición de urea y seguimiento para arroz,
+  sugerencias y semáforo presentes, sin errores JavaScript capturados.
+- Pendiente: compilar el APK y validar WebView, teclado, navegación y voz en un
+  teléfono/emulador. El Codespace no dispone de Android SDK.
+
+El servidor de producción conserva su despliegue existente. Esta integración
+actualiza Kallpa; no realiza un nuevo despliegue de Netlify.

@@ -14,3 +14,6 @@ Thumbs.db
 **/dist/
 **/.env
 **/.env.local
+
+**/dist-kallpa/
+**/.env.*.local
