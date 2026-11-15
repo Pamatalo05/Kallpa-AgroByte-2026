@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_gravity="bottom"
+        android:src="@drawable/hills"
+        android:scaleType="fitXY"
+        android:contentDescription="@null" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:text="← Volver"
+            android:textColor="@color/forest"
+            android:textSize="16sp"
+            android:clickable="true"
+            android:focusable="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Mis parcelas"
+            android:textColor="@color/forest_dark"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Selecciona el terreno que deseas analizar."
+            android:textSize="14sp"
+            android:textColor="@color/muted" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="22dp"
+            android:fillViewport="true">
+            <LinearLayout
+                android:id="@+id/listContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:orientation="vertical" />
+        </ScrollView>
+        <Button
+            android:id="@+id/btnAddParcel"
+            style="@style/KallpaButton"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="+ Añadir parcela" />
+    </LinearLayout>
+</FrameLayout>

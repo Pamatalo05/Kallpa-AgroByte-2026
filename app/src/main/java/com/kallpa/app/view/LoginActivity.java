@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import com.kallpa.app.controller.ControladorAutenticacion;
-import com.kallpa.app.controller.ControladorUbicacion;
+import com.kallpa.app.model.RepositorioParcelasLocal;
 import com.kallpa.app.databinding.ActivityLoginBinding;
 
 /** VISTA: solo escucha eventos y muestra mensajes del controlador. */
@@ -28,9 +28,39 @@ public class LoginActivity extends ActividadBase {
                 .setMessage("Esta demostración solo admite cuentas locales. La recuperación segura de contraseña necesitará un servidor de autenticación en la versión real.")
                 .setPositiveButton("Entendido", null).show());
     }
+
     private void continuar() {
-        Class<?> pantalla = new ControladorUbicacion(this).existe() ? HomeActivity.class : LocationPermissionActivity.class;
-        startActivity(new Intent(this, pantalla).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+
+        // Obtener el correo del usuario que inició sesión
+        String correo = auth.usuarioActual().getCorreo();
+
+        // Consultar las parcelas guardadas en el teléfono
+        RepositorioParcelasLocal repo =
+                new RepositorioParcelasLocal(this);
+
+        Class<?> pantalla;
+
+        // Elegir la pantalla según las parcelas registradas
+        if (repo.tieneParcelas(correo)) {
+
+            // Ya tiene parcelas: ir al inicio
+            pantalla = HomeActivity.class;
+
+        } else {
+
+            // No tiene parcelas: mostrar bienvenida
+            pantalla = ParcelWelcomeActivity.class;
+        }
+
+        Intent intent = new Intent(this, pantalla);
+
+        intent.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+        );
+
+        startActivity(intent);
         finish();
     }
+
 }

@@ -12,7 +12,22 @@
         <activity android:name=".view.ManualMapActivity" android:exported="false" />
         <activity android:name=".view.LocationPermissionActivity" android:exported="false" />
         <activity android:name=".view.RegisterActivity" android:exported="false" />
+        <activity android:name=".view.ParcelWelcomeActivity" android:exported="false" />
+        <activity android:name=".view.ParcelFormActivity" android:exported="false" />
+        <activity
+            android:name=".view.ParcelSuccessActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.MyParcelsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.ParcelDetailsActivity"
+            android:exported="false" />
+
         <activity android:name=".view.LoginActivity" android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
